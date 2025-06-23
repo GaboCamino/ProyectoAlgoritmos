@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="12"/>
+    <PathDelim Value="\"/>
+    <General>
+      <Flags>
+        <MainUnitHasCreateFormStatements Value="False"/>
+        <MainUnitHasTitleStatement Value="False"/>
+        <MainUnitHasScaledStatement Value="False"/>
+      </Flags>
+      <SessionStorage Value="InProjectDir"/>
+      <Title Value="Scoring"/>
+      <UseAppBundle Value="False"/>
+      <ResourceType Value="res"/>
+    </General>
+    <BuildModes>
+      <Item Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+    <RunParams>
+      <FormatVersion Value="2"/>
+    </RunParams>
+    <Units>
+      <Unit>
+        <Filename Value="Scoring.lpr"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="interfazloggeo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="InterfazLoggeo"/>
+      </Unit>
+      <Unit>
+        <Filename Value="manejaarchivo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ManejaArchivo"/>
+      </Unit>
+      <Unit>
+        <Filename Value="menu.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Menus"/>
+      </Unit>
+      <Unit>
+        <Filename Value="estructurasarchivos.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="EstructurasArchivos"/>
+      </Unit>
+      <Unit>
+        <Filename Value="infracciones.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Infracciones"/>
+      </Unit>
+      <Unit>
+        <Filename Value="arboles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Arboles"/>
+      </Unit>
+      <Unit>
+        <Filename Value="informacion_usuario.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Informacion_Usuario"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utilidades_varias.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Utilidades_varias"/>
+      </Unit>
+      <Unit>
+        <Filename Value="descuentapuntos.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="DescuentaPuntos"/>
+      </Unit>
+      <Unit>
+        <Filename Value="maneja_arboles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Maneja_arboles"/>
+      </Unit>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="Scoring"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Linking>
+      <Debugging>
+        <DebugInfoType Value="dsDwarf2Set"/>
+      </Debugging>
+    </Linking>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions>
+      <Item>
+        <Name Value="EAbort"/>
+      </Item>
+      <Item>
+        <Name Value="ECodetoolError"/>
+      </Item>
+      <Item>
+        <Name Value="EFOpenError"/>
+      </Item>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
