@@ -2,7 +2,7 @@ unit maneja_archivo;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,Conductores,Infracciones,validaciones,usuario;
+    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario;
 
 {ambc}
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
@@ -16,7 +16,7 @@ implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);
 var
-   fech:String;
+   fecha:String;
 begin
      gotoxy(30,4); write('DNI: ', buscado);
      x.dni:=buscado;
@@ -27,7 +27,7 @@ begin
 
      x.Score:= 20;
      x.Hab:= 'S';
-     x.fecha_hab:= fecha;
+ //    x.fecha_hab:=fecha;
      x.Reincidencias:= 0;
      x.estado:= true;
 end;
@@ -39,7 +39,7 @@ var
    conf: char;
 begin
      ingresa_cond(x,buscado);
-     write('Confirmar Alta? S/N: '); readln(conf); bp();
+     write('Confirmar Alta? S/N: '); readln(conf); clrscr;
      if conf='s' then
      begin
           x1.pos:= filesize(Arch_C);
@@ -77,7 +77,7 @@ var
    x: T_Dato_Conductor;
 begin
 
-          read(Arch_C,pos);                                  {acá hay busqueda secuencial, usar buscado p/ obtener en el arbol pos y usar eso para acceder directo en archivo}
+          read(Arch_C,x);                                  {acá hay busqueda secuencial, usar buscado p/ obtener en el arbol pos y usar eso para acceder directo en archivo}
           mostrar_cond(arch_c,arbol_dni);
           seek(Arch_c, Filesize(Arch_C)-1);
 
@@ -99,7 +99,7 @@ Repeat
       gotoxy(30,14); writeln('3. Dirección de mail');
       gotoxy(30,16); writeln('4. Dar de baja');
       gotoxy(30,18); Writeln('5. Regresar');
-      gotoxy(30,20); write('Que desea modificar?: '); readln(op); bp();
+      gotoxy(30,20); write('Que desea modificar?: '); readln(op); clrscr;
       seek(arch_c,0);
 
       read(Arch_C,x);
@@ -140,7 +140,7 @@ var
    pos:longint;
 begin
      pos:=0;
-     Write('Búsqueda por DNI del conductor: '); Readln(Buscado); bp();
+     Write('Búsqueda por DNI del conductor: '); Readln(Buscado); clrscr;
      Busqueda(arbol_dni, buscado, pos);
      if pos=-1 then                                                           {siempre distinto de -1}
      begin

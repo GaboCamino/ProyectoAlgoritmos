@@ -5,15 +5,11 @@ uses
     crt,Maneja_arboles,arboles,conductores,infracciones,maneja_archivo, usuario;
 
 {titulos}
-procedure bp();
+
 procedure Menu();
 procedure Submenu_Listados();
 
 implementation
-procedure bp();
-begin
-     clrscr;
-end;
 
 procedure Menu();
 var
@@ -25,7 +21,7 @@ begin
     Crear_Arbol_DNI(Arch_C, Arbol_DNI);
      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
 
-     textbackground(LightGreen); TextColor(White); BP();
+     textbackground(LightGreen); TextColor(White); clrscr;
 Repeat
       gotoxy(30,4);writeln('1. ABMC Conductores');
       gotoxy(30,6);writeln('2. AMC Infracciones');
@@ -33,11 +29,11 @@ Repeat
       gotoxy(30,10);writeln('4. Listado de conductores');
       gotoxy(30,12);writeln('0. Salir');
       gotoxy(30,14); write('Opción: ');
-      gotoxy(38,14); readln(op); bp();
+      gotoxy(38,14); readln(op); clrscr;
 
       case op of
            1:begin
-                  ABMC(Arch_c,arbol_dni,arbol_apynom); bp();
+                  ABMC(Arch_c,arbol_dni,arbol_apynom); clrscr;
            end;
            2:begin
 
@@ -46,7 +42,7 @@ Repeat
 
            end;
            4:begin
-              Listado_Cond_Apynom(arch_c,arbol_dni);bp();
+              Listado_Cond_Apynom(arch_c,arbol_dni);clrscr;
            end;
            5:begin
 

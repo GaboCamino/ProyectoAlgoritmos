@@ -5,7 +5,7 @@ uses
     crt;
 Const
      N=100000;
-      Ruta1='C:\Users\gabit\OneDrive\Escritorio\UTN\CarpetaAlgoritmos\ProyectoFinal\Conductores.dat';   {gabo}
+      Ruta1='Conductores.dat';   {gabo}
      {Ruta1='C:\Users\User\Desktop\score2\Conductores.dat';    }                      {nehue}
 type
    T_Dato_Conductor= record

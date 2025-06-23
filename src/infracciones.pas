@@ -5,7 +5,7 @@ uses
     crt;
 Const
      N=100000;
-     Ruta2='C:\Users\gabit\OneDrive\Escritorio\ProyectoFinal\Infracciones.dat'; {gabo}
+     Ruta2='Infracciones.dat'; {gabo}
       {Ruta2='C:\Users\User\Desktop\score2\infracciones.dat';}                         {nehue}
 type
    T_Dato_Infraccion = record
