@@ -5,8 +5,7 @@ uses
     crt;
 Const
      N=100000;
-     Ruta2='Infracciones.dat'; {gabo}
-      {Ruta2='C:\Users\User\Desktop\score2\infracciones.dat';}                         {nehue}
+     Ruta2='Infracciones.dat';
 type
    T_Dato_Infraccion = record
       DNI:String[8];

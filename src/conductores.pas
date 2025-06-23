@@ -5,8 +5,7 @@ uses
     crt;
 Const
      N=100000;
-      Ruta1='Conductores.dat';   {gabo}
-     {Ruta1='C:\Users\User\Desktop\score2\Conductores.dat';    }                      {nehue}
+      Ruta1='Conductores.dat';
 type
    T_Dato_Conductor= record
       DNI:String[8];
