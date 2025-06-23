@@ -113,7 +113,7 @@ Repeat
       end;
 until op=5;
 end;
-
+   //hola manola
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:byte);
 begin
      case op of
