@@ -6,7 +6,7 @@ uses
 
 {ambc}
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
-procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
+procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:byte);
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
@@ -72,16 +72,20 @@ end;
 writeln('¡Baja registrada!'); readkey;
 end;
 
-procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
+procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 var
-   x: T_Dato_Conductor;
+  x: T_Dato_Conductor;
 begin
-
-          read(Arch_C,x);                                  {acá hay busqueda secuencial, usar buscado p/ obtener en el arbol pos y usar eso para acceder directo en archivo}
-          mostrar_cond(arch_c,arbol_dni);
-          seek(Arch_c, Filesize(Arch_C)-1);
-
+  if (pos >= 0) and (pos < FileSize(Arch_C)) then
+  begin
+    seek(Arch_C, pos);
+    read(Arch_C, x);
+    Mostrar_Cond_planilla(x);  // mostrar un solo registro
+  end
+  else
+    writeln('Posición inválida o no encontrada');
 end;
+
 
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
 var

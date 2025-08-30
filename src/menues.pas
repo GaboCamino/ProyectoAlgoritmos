@@ -17,7 +17,7 @@ var
    Arch_C: T_Archivo_C; Arch_I:T_Archivo_I;      {archivos}
    arbol_dni,arbol_apynom: t_punt;
 begin
-          AbrirCond(arch_c);
+     AbrirCond(arch_c);
     Crear_Arbol_DNI(Arch_C, Arbol_DNI);
      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
 
@@ -42,7 +42,7 @@ Repeat
 
            end;
            4:begin
-              Listado_Cond_Apynom(arch_c,arbol_dni);clrscr;
+              Listado_Cond_Apynom(arch_c,arbol_apynom);clrscr;
            end;
            5:begin
 
