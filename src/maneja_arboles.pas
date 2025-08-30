@@ -1,7 +1,4 @@
 unit Maneja_arboles;
-
-{$mode ObjFPC}{$H+}
-
 interface
 
 uses
