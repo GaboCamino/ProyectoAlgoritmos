@@ -2,23 +2,21 @@ unit menues;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,conductores,infracciones,maneja_archivo, usuario;
+    crt,Maneja_arboles,arboles,conductores,maneja_archivo, usuario;
 
-{titulos}
-
-procedure Menu();
-procedure Submenu_Listados();
+procedure Menu;
+procedure Submenu_Listados;
 
 implementation
 
-procedure Menu();
+procedure Menu;
 var
-   op:byte;
-   Arch_C: T_Archivo_C; Arch_I:T_Archivo_I;      {archivos}
+   op:char;
+   Arch_C: T_Archivo_C;      {archivos}
    arbol_dni,arbol_apynom: t_punt;
 begin
      Abrircond(arch_c);
-    Crear_Arbol_DNI(Arch_C, Arbol_DNI);
+     Crear_Arbol_DNI(Arch_C, Arbol_DNI);
      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
 
      textbackground(LightGreen); TextColor(White); clrscr;
@@ -32,29 +30,26 @@ Repeat
       gotoxy(38,14); readln(op); clrscr;
 
       case op of
-           1:begin
+           '1':begin
                   ABMC(Arch_c,arbol_dni,arbol_apynom); clrscr;
            end;
-           2:begin
-
+           '2':begin
+                  //AMC Infracciones
            end;
-           3:begin
-
+           '3':begin
+                  //Actualización por infracción
            end;
-           4:begin
-              Listado_Cond_Apynom(arch_c,arbol_apynom);clrscr;
-           end;
-           5:begin
-
+           '4':begin
+              Listado_Cond_Apynom(arch_c,arbol_apynom); clrscr;
            end;
       end;
-until op=0;
+until op='0';
 close(arch_c);
 end;
 
-procedure Submenu_Listados();
+procedure Submenu_Listados;
 var
-   op:byte;
+   op:char;
 begin
 Repeat
     gotoxy(30,5); Writeln('1. Conductores');
@@ -64,9 +59,7 @@ Repeat
     gotoxy(25,13); Writeln('5. Conductores con 0 scoring');
     gotoxy(35,15); Writeln('0. Regresar');
     gotoxy(35,15); Writeln('Opción: '); readln(op);
-until op=0;
+until op='0';
 end;
-
-
 
 end.
