@@ -79,7 +79,8 @@ begin
      begin
           seek(Arch_C, pos);
           read(Arch_C, x);
-          Mostrar_Cond_planilla(x);  // mostrar un solo registro
+          Titulos_List_Cond;
+          Mostrar_Cond_planilla(x,3);  // mostrar un solo registro
      end else
      writeln('Posición inválida o no encontrada');
 end;
