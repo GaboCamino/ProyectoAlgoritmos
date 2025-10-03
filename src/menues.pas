@@ -7,7 +7,7 @@ uses
 {titulos}
 
 procedure Menu();
-procedure Submenu_Listados();
+procedure Submenu_Listados(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 
 implementation
 
@@ -41,29 +41,58 @@ Repeat
            3:begin
 
            end;
-           4:begin
-              Listado_Cond_Apynom(arch_c,arbol_apynom);clrscr;
-           end;
+          4: begin
+             Submenu_Listados(Arch_C,arbol_dni,arbol_apynom);
+              end;
+
            5:begin
 
            end;
       end;
+      clrscr;
 until op=0;
 close(arch_c);
 end;
 
-procedure Submenu_Listados();
+procedure Submenu_Listados(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 var
    op:byte;
 begin
+
 Repeat
-    gotoxy(30,5); Writeln('1. Conductores');
-    gotoxy(25,7); Writeln('2. Conductores inhabilitados');
-    gotoxy(25,9); Writeln('3. Infracciones entre 2 fechas');
-    gotoxy(20,11); Writeln('4. Infracciones de un conductor entre 2 fechas');
-    gotoxy(25,13); Writeln('5. Conductores con 0 scoring');
-    gotoxy(35,15); Writeln('0. Regresar');
-    gotoxy(35,15); Writeln('Opción: '); readln(op);
+    gotoxy(10,5); Writeln('1. Conductores');
+    gotoxy(10,7); Writeln('2. Conductores inhabilitados');
+    gotoxy(10,9); Writeln('3. Infracciones entre 2 fechas');
+    gotoxy(10,11); Writeln('4. Infracciones de un conductor entre 2 fechas');
+    gotoxy(10,13); Writeln('5. Conductores con 0 scoring');
+    gotoxy(10,15); Writeln('0. Regresar');
+    gotoxy(10,15); Writeln('Opción: '); readln(op);
+    case op of
+         1:begin
+            clrscr;
+         Listado_Cond_Apynom(Arch_C,arbol_apynom);clrscr;
+         end;
+         2: begin
+          clrscr;
+
+          //Cond_In;
+          clrscr;
+         end;
+         3: begin   clrscr;
+           //inf_entre_fechas;
+           clrscr;
+          end;
+         4: begin
+           clrscr;
+           //inf_cond_fechas;
+          clrscr;
+         end;
+         5: begin
+           clrscr;
+          //Cond_sinpuntos;
+           clrscr;
+         end;
+    end;
 until op=0;
 end;
 

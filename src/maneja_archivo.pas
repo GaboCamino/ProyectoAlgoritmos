@@ -8,11 +8,10 @@ uses
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
-procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:byte);
+procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 
 implementation
-
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);
 var
@@ -27,11 +26,10 @@ begin
 
      x.Score:= 20;
      x.Hab:= 'S';
- //    x.fecha_hab:=fecha;
+ //  x.fecha_hab:=fecha;
      x.Reincidencias:= 0;
      x.estado:= true;
 end;
-
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring);
 var
    x: T_Dato_Conductor;
@@ -49,95 +47,101 @@ begin
           agregar(arbol_dni,x1);
           x1.clave:= x.apynom;
           agregar(arbol_apynom,x1);
-     end;
-writeln('¡Alta registrada!'); readkey;
+          writeln('¡Alta registrada!');
+     end else
+         writeln('No se pudo registrar al conductor.');
+readkey;
 end;
-
-
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 var
-   conf: char;
+   op: char;
 begin
      Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
-while not(eof(arch_c)or (conf <> 'n')) do
+<<<<<<< HEAD
+     writeln('confirmar baja?');
+     readln(op);
+
+if (upcase(op)='S') then
+=======
+while not(eof(arch_c)) do
+>>>>>>> parent of 67c0aa3 (a)
 begin
-     write('Confirmar baja? S/N: '); readln(conf);
-     if conf='S' then
-     begin
+          seek(arch_c,pos);
+          read(arch_c,x);
           x.estado:= false;
           x.Hab:='N';
+          seek(arch_c, pos);
           write(Arch_C,x);
-     end;
-end;
-writeln('¡Baja registrada!'); readkey;
-end;
+          writeln('¡Baja registrada!');
+          readkey;
+     end
+ else writeln('baja cancelada');
 
+readkey;
+end;
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 var
   x: T_Dato_Conductor;
 begin
-  if (pos >= 0) and (pos < FileSize(Arch_C)) then
-  begin
-    seek(Arch_C, pos);
-    read(Arch_C, x);
-    Mostrar_Cond_planilla(x);  // mostrar un solo registro
-  end
-  else
-    writeln('Posición inválida o no encontrada');
+begin
+     if (pos >= 0) and (pos < FileSize(Arch_C)) then
+     begin
+          seek(Arch_C, pos);
+          read(Arch_C, x);
+          Titulos_List_Cond;
+          Mostrar_Cond_planilla(x,3);  // mostrar un solo registro
+     end else
+     writeln('Posición inválida o no encontrada');
 end;
-
-
+end;
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
 var
    x: T_Dato_Conductor;
-   conf: char;
-   op:byte;
+   op:char;
 begin
-conf:=#0;
-Writeln('se encontró'); readkey;
-Repeat
-
       Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
-      gotoxy(30,10); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
-      gotoxy(30,12); writeln('2. Telefóno');
-      gotoxy(30,14); writeln('3. Dirección de mail');
-      gotoxy(30,16); writeln('4. Dar de baja');
-      gotoxy(30,18); Writeln('5. Regresar');
-      gotoxy(30,20); write('Que desea modificar?: '); readln(op); clrscr;
-      seek(arch_c,0);
-
-      read(Arch_C,x);
-      Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
-      writeln('Confirmar modificación? S/N: '); readln(conf);
-      if upcase(conf)='S' then
-      writeln('Modificación registrada'); readkey;
-      begin
-           seek(Arch_c, Filesize(Arch_C)-1);
+      gotoxy(1,6); writeln('MODIFICAR DATOS DEL CONDUCTOR');
+      gotoxy(1,10); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
+      gotoxy(1,12); writeln('2. Telefóno');
+      gotoxy(1,14); writeln('3. Dirección de mail');
+      gotoxy(1,16); writeln('4. Dar de baja');
+      gotoxy(1,18); Writeln('0. Regresar');
+      gotoxy(1,20); write('Que desea modificar? '); readln(op);
+     case op of
+    '1','2','3': begin
+        seek(Arch_C,pos);
+        read(Arch_C,x);
+        clrscr;
+        Actualizar_Cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
+        write('Confirmar modificación? S/N: '); readln(op);
+        if UpCase(op) = 'S' then
+        begin
+           seek(Arch_C,pos);
            write(Arch_C,x);
+           writeln('Modificación registrada');
+           readkey;
+        end;
       end;
-until op=5;
+    '4': begin
+        Baja_Cond(Arch_C,pos,x,arbol_dni,arbol_apynom);
+      end;
+  end;
+  clrscr;
 end;
-   //hola manola
-procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:byte);
+procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);
 begin
      case op of
-          1:begin
-                 gotoxy(30,10); write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.Nacim);
+          '1':begin
+                   write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.Nacim);
           end;
-          2:begin
-                 gotoxy(30,12); write('Telefono: '); readln(x.tel);
+          '2':begin
+                   write('Telefono: '); readln(x.tel);
           end;
-          3:begin
-                 gotoxy(30,14); write('Email: '); readln(x.mail);
-          end;
-          4:begin
-                 Baja_Cond(Arch_C, pos,x,arbol_dni,arbol_apynom);
+          '3':begin
+                   write('Email: '); readln(x.mail);
           end;
      end;
-      Mostrar_Cond(arch_c,arbol_dni);
 end;
-
-
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 var
    buscado:string[50];
@@ -156,6 +160,3 @@ begin
 end;
 
 end.
-
-
-
