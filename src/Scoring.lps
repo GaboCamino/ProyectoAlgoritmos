@@ -86,7 +86,7 @@
         <Filename Value="menues.pas"/>
         <EditorIndex Value="1"/>
         <TopLine Value="38"/>
-        <CursorPos X="76" Y="51"/>
+        <CursorPos X="45" Y="40"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -103,8 +103,8 @@
         <Filename Value="maneja_archivo.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="92"/>
-        <CursorPos X="69" Y="106"/>
+        <TopLine Value="46"/>
+        <CursorPos X="41" Y="67"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -112,17 +112,13 @@
         <Filename Value="usuario.pas"/>
         <UnitName Value="Usuario"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="16"/>
-        <CursorPos X="70" Y="26"/>
+        <TopLine Value="6"/>
+        <CursorPos X="51" Y="18"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="19" Column="9" TopLine="16"/>
-      </Position>
       <Position>
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="75" Column="48" TopLine="69"/>
@@ -238,6 +234,10 @@
       <Position>
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="137" Column="10" TopLine="121"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="7" Column="14"/>
       </Position>
     </JumpHistory>
     <RunParams>

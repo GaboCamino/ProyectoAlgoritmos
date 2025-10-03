@@ -59,7 +59,7 @@ var
    conf: char;
 begin
      Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
-while not(eof(arch_c)) do
+while not(eof(arch_c)or (conf <> 'n')) do
 begin
      write('Confirmar baja? S/N: '); readln(conf);
      if conf='S' then
