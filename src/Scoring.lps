@@ -8,6 +8,7 @@
       <Unit>
         <Filename Value="Scoring.lpr"/>
         <IsPartOfProject Value="True"/>
+        <CursorPos X="55" Y="8"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -40,8 +41,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Infracciones"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="7"/>
-        <CursorPos X="54" Y="19"/>
+        <TopLine Value="8"/>
+        <CursorPos X="66" Y="15"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -50,7 +51,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Arboles"/>
         <EditorIndex Value="5"/>
-        <CursorPos X="40" Y="14"/>
+        <CursorPos X="21" Y="17"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -78,19 +79,15 @@
         <UnitName Value="Maneja_arboles"/>
         <EditorIndex Value="4"/>
         <TopLine Value="91"/>
-        <CursorPos X="54" Y="102"/>
+        <CursorPos X="62" Y="101"/>
         <UsageCount Value="406"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="menues.pas"/>
         <EditorIndex Value="1"/>
-<<<<<<< HEAD
-        <CursorPos X="12" Y="59"/>
-=======
-        <TopLine Value="38"/>
-        <CursorPos X="76" Y="51"/>
->>>>>>> parent of 67c0aa3 (a)
+        <TopLine Value="57"/>
+        <CursorPos X="37" Y="45"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -98,70 +95,31 @@
         <Filename Value="conductores.pas"/>
         <UnitName Value="Conductores"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="17"/>
-        <CursorPos X="80" Y="36"/>
+        <TopLine Value="16"/>
+        <CursorPos X="14" Y="16"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="maneja_archivo.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-<<<<<<< HEAD
-        <TopLine Value="48"/>
-        <CursorPos X="20" Y="63"/>
-=======
-        <TopLine Value="92"/>
-        <CursorPos X="69" Y="106"/>
->>>>>>> parent of 67c0aa3 (a)
+        <TopLine Value="27"/>
+        <CursorPos X="45" Y="27"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="usuario.pas"/>
         <UnitName Value="Usuario"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-<<<<<<< HEAD
-        <TopLine Value="46"/>
-        <CursorPos X="5" Y="76"/>
-=======
-        <TopLine Value="16"/>
-        <CursorPos X="70" Y="26"/>
->>>>>>> parent of 67c0aa3 (a)
+        <TopLine Value="5"/>
+        <CursorPos X="53" Y="127"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-<<<<<<< HEAD
-        <Filename Value="menues.pas"/>
-        <Caret Line="70" Column="37" TopLine="55"/>
-=======
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="19" Column="9" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="75" Column="48" TopLine="69"/>
->>>>>>> parent of 67c0aa3 (a)
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="74" Column="10" TopLine="60"/>
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="78" Column="12" TopLine="63"/>
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="83" Column="12" TopLine="68"/>
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="89" Column="13" TopLine="67"/>
-      </Position>
       <Position>
         <Filename Value="menues.pas"/>
         <Caret Line="70" Column="30" TopLine="54"/>
@@ -242,7 +200,6 @@
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="61" Column="49" TopLine="51"/>
       </Position>
-<<<<<<< HEAD
       <Position>
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="62" Column="17" TopLine="48"/>
@@ -263,8 +220,26 @@
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="74" Column="7" TopLine="47"/>
       </Position>
-=======
->>>>>>> parent of 67c0aa3 (a)
+      <Position>
+        <Filename Value="usuario.pas"/>
+        <Caret Line="104" Column="41" TopLine="83"/>
+      </Position>
+      <Position>
+        <Filename Value="infracciones.pas"/>
+        <Caret Line="19" Column="73" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="infracciones.pas"/>
+        <Caret Line="15" Column="66" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="157" Column="62" TopLine="127"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="138" Column="37"/>
+      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

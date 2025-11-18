@@ -3,13 +3,15 @@ unit Usuario;
 interface
 
 uses
-    crt,Maneja_arboles,Arboles,Conductores;
+    crt,Maneja_arboles,Arboles,Conductores,infracciones;
 
 procedure Titulos_List_Cond;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure Listado_Cond_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
 procedure Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
+procedure registrarinf(var x: t_dato_conductor);
+procedure asignarDescuento(var inf: t_dato_infraccion);
 
 implementation
 
@@ -73,4 +75,66 @@ begin
           end;
      end;
 end;
+
+
+procedure asignarDescuento(var inf: t_dato_infraccion);
+begin
+  case inf.tipo of
+    1:  inf.descontar := 5;
+    2:  inf.descontar := 4;
+    3:  inf.descontar := 5;
+    4:  inf.descontar := 4;
+    5:  inf.descontar := 5;
+    6:  inf.descontar := 10;
+    7:  inf.descontar := 5;
+    8:  inf.descontar := 10;
+    9:  inf.descontar := 20;
+    10: inf.descontar := 20;
+
+  else
+    Inf.Descontar := 0;
+  end;
+
+end;
+procedure registrarinf(var x: t_dato_conductor);
+var
+  Inf: t_dato_infraccion;
+begin
+
+  writeln('infracciones');
+  writeln('1- licencia vencida');
+  writeln('2- circular sin RTO');
+  writeln('3- circular sin casco');
+  writeln('4- sin cinturón');
+  writeln('5- no respetar semáforos');
+  writeln('6- conducir con impedimientos fisicos y/o bajo de estupefacientes');
+  writeln('7- exceso velocidad (menos 30%)');
+  writeln('8- exceso velocidad (más 30%)');
+  writeln('9- conducir inhabilitado');
+  writeln('10- organizar y/o participar en competencias ilegales en via publica');
+  write('Ingrese el número de infracción: ');
+  readln(Inf.Tipo);
+
+  AsignarDescuento(Inf);
+
+  x.Score := x.Score - Inf.Descontar;
+
+  writeln;
+  writeln('infraccion penalizada por : ', inf.descontar, ' puntos.');
+  writeln('Score actual: ', x.Score);
+
+
+  if x.Score < 1 then
+    x.Estado := False
+  else
+    x.Estado := True;
+
+  writeln('Estado del conductor: ');
+  if x.Estado then
+    writeln('→ HABILITADO')
+  else
+    writeln('→ INHABILITADO');
+end;
+
+
 end.

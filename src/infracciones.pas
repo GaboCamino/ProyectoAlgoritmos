@@ -18,6 +18,7 @@ end;
    T_Archivo_I = file of T_Dato_Infraccion;
 
 Procedure AbrirInf(Var Arch_I:T_Archivo_I);
+
 implementation
 
 Procedure AbrirInf(Var Arch_I:T_Archivo_I);

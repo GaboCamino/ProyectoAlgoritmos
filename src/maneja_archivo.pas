@@ -57,14 +57,9 @@ var
    op: char;
 begin
      Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
-<<<<<<< HEAD
      writeln('confirmar baja?');
      readln(op);
-
 if (upcase(op)='S') then
-=======
-while not(eof(arch_c)) do
->>>>>>> parent of 67c0aa3 (a)
 begin
           seek(arch_c,pos);
           read(arch_c,x);
