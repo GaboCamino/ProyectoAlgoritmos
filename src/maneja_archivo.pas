@@ -15,7 +15,7 @@ implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);
 var
-   fecha:String;
+   fecha:String[10];
 begin
      gotoxy(30,4); write('DNI: ', buscado);
      x.dni:=buscado;
@@ -28,7 +28,7 @@ begin
      x.Hab:= 'S';
  //  x.fecha_hab:=fecha;
      x.Reincidencias:= 0;
-     x.estado:= true;
+     x.hab:='S';
 end;
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring);
 var
@@ -37,45 +37,39 @@ var
    conf: char;
 begin
      ingresa_cond(x,buscado);
-     write('Confirmar Alta? S/N: '); readln(conf); clrscr;
-     if conf='s' then
-     begin
           x1.pos:= filesize(Arch_C);
-          seek(arch_c,filesize(Arch_C));
+          seek(arch_c,x1.pos);
           write(arch_c,x);
           x1.clave:= x.dni;
           agregar(arbol_dni,x1);
           x1.clave:= x.apynom;
           agregar(arbol_apynom,x1);
           writeln('¡Alta registrada!');
-     end else
-         writeln('No se pudo registrar al conductor.');
-readkey;
+delay(1000);
 end;
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 var
    op: char;
 begin
      Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
-while not((eof(arch_c)) or (op<>'N')) do
-begin
+     writeln;
      write('Confirmar baja? S/N: '); readln(op);
-     if op='S' then
+     if upcase(op)='S' then
      begin
-          x.estado:= false;
           x.Hab:='N';
+          seek(arch_c,pos);
           write(Arch_C,x);
           writeln('¡Baja registrada!');
      end;
-end;
-readkey;
+delay(1000);
+clrscr;
 end;
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 var
   x: T_Dato_Conductor;
 begin
 begin
-     if (pos >= 0) and (pos < FileSize(Arch_C)) then
+     if (pos >= 0) then
      begin
           seek(Arch_C, pos);
           read(Arch_C, x);
@@ -103,16 +97,13 @@ begin
            seek(arch_c,0); read(Arch_C,x);
            clrscr;
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
-           write('Confirmar modificación? S/N: '); readln(op);
-           if upcase(op)='S' then
-           begin
-                 seek(Arch_c, Filesize(Arch_C)-1);
-                 write(Arch_C,x);
-                 writeln('Modificación registrada'); readkey;
-            end;
+           seek(Arch_c, Filesize(Arch_C)-1);
+           write(Arch_C,x);
+           writeln('Modificación registrada');
       end;
-clrscr;
+      delay(1000);clrscr;
 end;
+
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);
 begin
      case op of

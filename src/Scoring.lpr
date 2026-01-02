@@ -1,7 +1,5 @@
 program Scoring;
-
-uses Menues, crt;
-
+uses Menues;
 begin
   Menu;
 end.
