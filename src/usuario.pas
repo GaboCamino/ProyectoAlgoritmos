@@ -3,14 +3,14 @@ unit Usuario;
 interface
 
 uses
-    crt,Maneja_arboles,Arboles,Conductores,infracciones;
+    crt,Maneja_arboles,Arboles,Conductores,infracciones,manejo_lista,lista;
 
 procedure Titulos_List_Cond;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
-procedure conductores_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
-procedure conductores_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
-procedure Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
+procedure list_cond_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure list_cond_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure registrarinf(var x: t_dato_conductor);
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
@@ -40,34 +40,30 @@ begin
      gotoxy(105,Y); write(x.Tel);
 end;
 
-procedure conductores_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure list_cond_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
 var
    y:byte;
+   l:t_lista;
+   a:t_dato_lista;
 begin
   y:=2;
   Titulos_List_Cond;
-  seek(arch_c,0);
   Inorden_Listado_Apynom(arch_c,raiz,y);    //no filtra con el x.hab='S'
-  while not eof(arch_c) do
-  begin
-       read(arch_c,x);
-  end;
+  conductores_hab(arch_c,l,x,a);
   readkey;
 end;
 
-procedure conductores_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure list_cond_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
 var
    y:byte;
+   l:t_lista;
+   a:t_dato_lista;
 begin
   y:=2;
   Titulos_List_Cond;
-  seek(arch_c,0);
   Inorden_Listado_Apynom(arch_c,raiz,y);         //no filtra con el x.hab='N'
-  while not eof(arch_c) do
-  begin
-       read(arch_c,x);
-       end;
-readkey;
+  conductores_inhab(arch_c,l,x,a);
+  readkey;
 end;
 
 procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);

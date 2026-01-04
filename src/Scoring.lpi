@@ -79,6 +79,15 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Maneja_arboles"/>
       </Unit>
+      <Unit>
+        <Filename Value="lista.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Lista"/>
+      </Unit>
+      <Unit>
+        <Filename Value="manejo_lista.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
