@@ -58,9 +58,10 @@ end;
 procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt);
 var
    op:char;
+   x:t_dato_conductor;
 begin
 Repeat
-    gotoxy(30,4); Writeln('1. Conductores');
+    gotoxy(30,4); Writeln('1. Conductores habilitados');
     gotoxy(30,6); Writeln('2. Conductores inhabilitados');
     gotoxy(30,8); Writeln('3. Infracciones entre 2 fechas');
     gotoxy(30,10); Writeln('4. Infracciones de un conductor entre 2 fechas');
@@ -69,10 +70,10 @@ Repeat
     gotoxy(30,16); Write('Opción: '); readln(op); clrscr;
 case op of
 '1':begin
-         conductores_hab(arch_c,arbol_apynom); clrscr;
+         conductores_hab(arch_c,arbol_apynom,x); clrscr;
 end;
 '2':begin
-         conductores_inhab(arch_c,arbol_apynom);clrscr;
+         conductores_inhab(arch_c,arbol_apynom,x); clrscr;
 end;
 '3':begin
          //infracciones entre 2 fechas

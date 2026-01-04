@@ -8,8 +8,8 @@ uses
 procedure Titulos_List_Cond;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
-procedure conductores_hab(var arch_c: T_Archivo_C; var raiz: t_punt);
-procedure conductores_inhab(var arch_c: T_Archivo_C; var raiz: t_punt);
+procedure conductores_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure conductores_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
 procedure Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure registrarinf(var x: t_dato_conductor);
 procedure asignarDescuento(var inf: t_dato_infraccion);
@@ -40,39 +40,34 @@ begin
      gotoxy(105,Y); write(x.Tel);
 end;
 
-procedure conductores_hab(var arch_c: T_Archivo_C; var raiz: t_punt);
+procedure conductores_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
 var
-  Y: byte;
+   y:byte;
 begin
-  Y := 2;
+  y:=2;
   Titulos_List_Cond;
-
-  { Mostrar una sola vez, filtrando dentro del recorrido }
-  Inorden_Listado_Apynom(arch_c, raiz, Y);
-
-  ReadKey;
+  seek(arch_c,0);
+  Inorden_Listado_Apynom(arch_c,raiz,y);    //no filtra con el x.hab='S'
+  while not eof(arch_c) do
+  begin
+       read(arch_c,x);
+  end;
+  readkey;
 end;
 
-
-
-procedure conductores_inhab(var arch_c: T_Archivo_C; var raiz: t_punt);
+procedure conductores_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
 var
-  i,y:byte;
-  x:T_Dato_Conductor;
+   y:byte;
 begin
-     y:=2; i:=0;
-     Titulos_List_Cond;
-     for i:=0 to filesize(arch_c)-1 do
-     begin
-          seek(arch_c,i);
-          read(arch_c,x);
-          if x.hab='N' then
-          begin
-               Inorden_Listado_Apynom(arch_c,raiz,Y);
-               gotoxy(30,Y+1);
-          end;
-     end;
-     readkey;
+  y:=2;
+  Titulos_List_Cond;
+  seek(arch_c,0);
+  Inorden_Listado_Apynom(arch_c,raiz,y);         //no filtra con el x.hab='N'
+  while not eof(arch_c) do
+  begin
+       read(arch_c,x);
+       end;
+readkey;
 end;
 
 procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
@@ -80,7 +75,7 @@ begin
   if raiz <> nil then
   begin
     inorden_listado_apynom(arch_c,raiz^.sai,Y);
-    muestra_cond_apynom(arch_c,raiz,Y);
+    muestra_cond_apynom(arch_c,raiz,Y);                //recursividad aplicada
     inorden_listado_apynom(arch_c,raiz^.sad,Y);
   end;
 end;
@@ -94,52 +89,17 @@ begin
   pos := raiz^.info.pos;
   Seek(arch_c, pos);
   Read(arch_c, x);
-
-  { Filtrar: solo imprimir si está habilitado }
-  if (x.hab = 'S') then
+  Mostrar_Cond_planilla(x, Y);
+  inc(Y);
+  if (Y = 29) and ((raiz^.sai <> nil) or (raiz^.sad <> nil)) then
   begin
-    Mostrar_Cond_planilla(x, Y);
-    Inc(Y);
-
-    { Paginación }
-    if (Y = 29) and ((raiz^.sai <> nil) or (raiz^.sad <> nil)) then
-    begin
-      Gotoxy(5, 30); Writeln('PRESIONE UNA TECLA PARA VER MAS');
-      ReadKey;
-      ClrScr;              { limpiar pantalla }
-      Titulos_List_Cond;   { volver a dibujar encabezado }
-      Y := 2;
-    end;
+       gotoxy(5, 30); Writeln('PRESIONE UNA TECLA PARA VER MAS');
+       readKey; clrScr;
+       titulos_List_Cond;
+       y:= 2;
   end;
 end;
 
-
-procedure Muestra_Cond_Apynom_Inhab(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
-var
-  pos: cardinal;
-  x: T_Dato_Conductor;
-begin
-  pos := raiz^.info.pos;
-  Seek(arch_c, pos);
-  Read(arch_c, x);
-
-  { FILTRO: solo inhabilitados }
-  if UpCase(x.hab) = 'N' then
-  begin
-    Mostrar_Cond_planilla(x, Y);  { esta rutina NO debe imprimir si x.hab<>'N' }
-    Inc(Y);
-
-    { paginación simple }
-    if (Y = 29) and ((raiz^.sai <> nil) or (raiz^.sad <> nil)) then
-    begin
-      Gotoxy(5, 30); Writeln('PRESIONE UNA TECLA PARA VER MAS');
-      ReadKey;
-      ClrScr;
-      Titulos_List_Cond;  { reponer encabezado }
-      Y := 2;
-    end;
-  end;
-end;
 
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
 var

@@ -12,7 +12,16 @@ procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: 
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 
 implementation
-
+{
+function validarDni(x:T_Dato_Conductor):boolean;
+begin
+     if x.dni in [1..9] then
+     begin
+          validarDni:=true;
+     end else
+         validarDni:=false;
+end;
+}
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);
 var
    fecha:String[10];
@@ -37,14 +46,14 @@ var
    conf: char;
 begin
      ingresa_cond(x,buscado);
-          x1.pos:= filesize(Arch_C);
-          seek(arch_c,x1.pos);
-          write(arch_c,x);
-          x1.clave:= x.dni;
-          agregar(arbol_dni,x1);
-          x1.clave:= x.apynom;
-          agregar(arbol_apynom,x1);
-          writeln('¡Alta registrada!');
+     x1.pos:= filesize(Arch_C);
+     seek(arch_c,x1.pos);
+     write(arch_c,x);
+     x1.clave:= x.dni;
+     agregar(arbol_dni,x1);
+     x1.clave:= x.apynom;
+     agregar(arbol_apynom,x1);
+     writeln('¡Alta registrada!');
 delay(1000);
 end;
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
