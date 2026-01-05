@@ -70,10 +70,10 @@ Repeat
     gotoxy(30,16); Write('Opción: '); readln(op); clrscr;
 case op of
 '1':begin
-         list_cond_hab(arch_c,arbol_apynom,x); clrscr;
+         conductores_hab(arch_c); clrscr;
 end;
 '2':begin
-         list_cond_inhab(arch_c,arbol_apynom,x); clrscr;
+         conductores_inhab(arch_c); clrscr;
 end;
 '3':begin
          //infracciones entre 2 fechas

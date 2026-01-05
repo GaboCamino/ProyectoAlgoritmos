@@ -8,8 +8,8 @@ uses
 procedure Titulos_List_Cond;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
-procedure list_cond_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
-procedure list_cond_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure conductores_hab(var arch_c: T_Archivo_C);
+procedure conductores_inhab(var arch_c: T_Archivo_C);
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure registrarinf(var x: t_dato_conductor);
 procedure asignarDescuento(var inf: t_dato_infraccion);
@@ -40,29 +40,48 @@ begin
      gotoxy(105,Y); write(x.Tel);
 end;
 
-procedure list_cond_hab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+procedure conductores_hab(var arch_c: T_Archivo_C);
 var
-   y:byte;
-   l:t_lista;
-   a:t_dato_lista;
+  x: T_Dato_Conductor;
+  y: byte;
 begin
-  y:=2;
+  y := 2;
   Titulos_List_Cond;
-  Inorden_Listado_Apynom(arch_c,raiz,y);    //no filtra con el x.hab='S'
-  conductores_hab(arch_c,l,x,a);
+  seek(arch_c, 0);
+
+  while not eof(arch_c) do
+  begin
+    read(arch_c, x);
+    if x.Hab = 'S' then
+    begin
+      Mostrar_Cond_planilla(x, y);
+      inc(y);
+    end;
+  end;
+
   readkey;
 end;
 
-procedure list_cond_inhab(var arch_c: T_Archivo_C; var raiz: t_punt;var x:t_dato_conductor);
+
+procedure conductores_inhab(var arch_c: T_Archivo_C);
 var
-   y:byte;
-   l:t_lista;
-   a:t_dato_lista;
+  x: T_Dato_Conductor;
+  y: byte;
 begin
-  y:=2;
+  y := 2;
   Titulos_List_Cond;
-  Inorden_Listado_Apynom(arch_c,raiz,y);         //no filtra con el x.hab='N'
-  conductores_inhab(arch_c,l,x,a);
+  seek(arch_c, 0);
+
+  while not eof(arch_c) do
+  begin
+    read(arch_c, x);
+    if x.Hab = 'N' then
+    begin
+      Mostrar_Cond_planilla(x, y);
+      inc(y);
+    end;
+  end;
+
   readkey;
 end;
 
