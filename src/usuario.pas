@@ -181,7 +181,7 @@ begin
   writeln('Score actual: ', x.Score);
 
 
-  if x.Score < 1 then
+  if x.Score = 0 then
     x.hab :='N'
   else
     x.hab := 'S';
@@ -189,9 +189,9 @@ begin
   writeln('Estado del conductor: ');
   if x.hab='S' then
   begin
-       writeln('→ HABILITADO')
+       writeln(' Conductor Habilitado')
   end else
-      writeln('→ INHABILITADO');
+      writeln('Conductor Inhabilitado');
 end;
 
 
