@@ -200,7 +200,7 @@ var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
 begin
-  write('Ingrese DNI del conductor: ');       //convendría hacer un procedimiento nuevo para lograr reutilización
+  write('Ingrese DNI del conductor: ');
   readln(dni_bus);
 
   Busqueda(arbol_dni, dni_bus, pos);
@@ -212,15 +212,15 @@ begin
   else
   begin
     seek(Arch_C, pos);
-    read(Arch_C, x);                     //al menos hasta acá
+    read(Arch_C, x);
     clrscr;
 
     registrarinf(x, inf);
     inf.DNI := x.DNI;
     inf.Apelada := 'N';
-    //IngresaFecha(inf);
-    write('Ingrese fecha (DD/MM/AAAA): ');  //esto
-    readln(inf.Fecha);   //y esto se iría
+
+    write('Ingrese fecha (DD/MM/AAAA): ');
+    readln(inf.Fecha);
     seek(Arch_C, pos);
     write(Arch_C, x);
 
