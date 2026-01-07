@@ -5,6 +5,9 @@ uses
     crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario;
 
 {ambc}
+{Procedure IngresaFecha(inf: T_Dato_Infraccion);
+function EsNumero(s: string): boolean;
+function validarDni(x:T_Dato_Conductor):boolean;}
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
@@ -12,6 +15,37 @@ procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: 
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 
 implementation
+{Procedure IngresaFecha(inf: T_Dato_Infraccion);
+var f,m,a: integer;
+begin
+     Writeln('Ingrese fecha: ');
+     repeat
+           readln(f)
+     Until (Length(d) = 2) and EsNumero(d) and (d >= 1) and (d <= 31);
+     Write('/');
+     repeat
+           readln(m);
+     Until (Length(m) = 2) and EsNumero(m) and (m >= 1) and (m <= 12);
+     Write('/');
+     repeat
+           readln(a);
+     Until (Length(a) = 4) and EsNumero(a) and (a >= 1900) and (a <= 2026);
+     inf.Fecha:= IntToStr(a)+ IntToStr(m)+ IntToStr(a);
+end;
+
+function EsNumero(s: string): boolean;
+  var
+    i: integer;
+  begin
+    EsNumero := true;
+    for i := 1 to Length(s) do
+      if not (s[i] in ['0'..'9']) then
+      begin
+        EsNumero := false;
+        exit;
+      end;
+  end;
+   }
 {
 function validarDni(x:T_Dato_Conductor):boolean;
 begin
