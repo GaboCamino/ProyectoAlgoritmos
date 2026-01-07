@@ -2,7 +2,7 @@ unit menues;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,conductores,maneja_archivo, usuario;
+    crt,Maneja_arboles,arboles,conductores,maneja_archivo, usuario, infracciones;
 
 procedure Menu;
 procedure Submenu_Listados(var arch_c:T_Archivo_C; var arbol_apynom:t_punt);
@@ -14,8 +14,10 @@ var
    op:char;
    Arch_C: T_Archivo_C;      {archivos}
    arbol_dni,arbol_apynom: t_punt;
+   Arch_I: T_Archivo_I;
 begin
      Abrircond(arch_c);
+     Abririnf(Arch_I);
      Crear_Arbol_DNI(Arch_C, Arbol_DNI);
      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
 
@@ -34,7 +36,7 @@ Repeat
                   ABMC(Arch_c,arbol_dni,arbol_apynom); clrscr;
            end;
            '2':begin
-                  //AMC Infracciones
+                   Alta_Infraccion(Arch_C, Arch_I, arbol_dni); clrscr;
            end;
            '3':begin
                   //Actualización por infracción

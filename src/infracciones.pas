@@ -18,6 +18,7 @@ end;
    T_Archivo_I = file of T_Dato_Infraccion;
 
 Procedure AbrirInf(Var Arch_I:T_Archivo_I);
+procedure cerrarinf(var arch_inf: T_Archivo_I);
 
 implementation
 
@@ -33,6 +34,12 @@ begin
      end;
 end;
 
+
+procedure cerrarinf(var arch_inf: T_Archivo_I);
+begin
+     close(arch_inf);    // Cierra
+end;
+end.
 end.
 
 

@@ -3,7 +3,7 @@ unit Usuario;
 interface
 
 uses
-    crt,Maneja_arboles,Arboles,Conductores,infracciones,manejo_lista,lista;
+    crt,Maneja_arboles,Arboles,Conductores,infracciones;
 
 procedure Titulos_List_Cond;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
@@ -11,9 +11,10 @@ procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var 
 procedure conductores_hab(var arch_c: T_Archivo_C);
 procedure conductores_inhab(var arch_c: T_Archivo_C);
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
-procedure registrarinf(var x: t_dato_conductor);
+procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion );
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; var arbol_dni: t_punt);
 
 implementation
 
@@ -128,6 +129,7 @@ begin
           read(arch_c,x);
           if x.Score=0 then
           Mostrar_Cond_planilla(x,y);
+          inc(y);
      end;
      readkey;
 end;
@@ -148,14 +150,12 @@ begin
     10: inf.descontar := 20;
 
   else
-    Inf.Descontar := 1;
+    Inf.Descontar := 0;
   end;
 
 end;
 
-procedure registrarinf(var x: t_dato_conductor);
-var
-  Inf: t_dato_infraccion;
+procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 begin
 
   writeln('infracciones');
@@ -181,7 +181,7 @@ begin
   writeln('Score actual: ', x.Score);
 
 
-  if x.Score = 0 then
+  if x.Score <= 0 then
     x.hab :='N'
   else
     x.hab := 'S';
@@ -193,6 +193,48 @@ begin
   end else
       writeln('Conductor Inhabilitado');
 end;
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; var arbol_dni: t_punt);
+var
+  dni_bus: string[8];
+  pos: longint;
+  x: T_Dato_Conductor;
+  inf: T_Dato_Infraccion;
+begin
+  write('Ingrese DNI del conductor: ');
+  readln(dni_bus);
+
+  Busqueda(arbol_dni, dni_bus, pos);
+
+  if pos = -1 then
+  begin
+    writeln('Conductor no encontrado');
+  end
+  else
+  begin
+    seek(Arch_C, pos);
+    read(Arch_C, x);
+    clrscr;
+
+    registrarinf(x, inf);
+    inf.DNI := x.DNI;
+    inf.Apelada := 'N';
+
+    write('Ingrese fecha (DD/MM/AAAA): ');
+    readln(inf.Fecha);
+    seek(Arch_C, pos);
+    write(Arch_C, x);
+
+    seek(Arch_I, filesize(Arch_I));
+    write(Arch_I, inf);
+
+    writeln;
+    writeln('Infracción registrada correctamente');
+  end;
+
+  delay(1500);
+  clrscr;
+end;
+
 
 
 end.

@@ -37,7 +37,7 @@ begin
      x.Hab:= 'S';
  //  x.fecha_hab:=fecha;
      x.Reincidencias:= 0;
-     x.hab:='S';
+
 end;
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring);
 var
@@ -103,10 +103,10 @@ begin
       gotoxy(1,20); write('Que desea modificar? '); readln(op);
       if op in ['1'..'4'] then
       begin
-           seek(arch_c,0); read(Arch_C,x);
+           seek(arch_c, pos);read(arch_c, x);
            clrscr;
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
-           seek(Arch_c, Filesize(Arch_C)-1);
+           seek(Arch_c, pos);
            write(Arch_C,x);
            writeln('Modificación registrada');
       end;
