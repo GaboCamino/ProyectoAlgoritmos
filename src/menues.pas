@@ -36,7 +36,7 @@ Repeat
                   ABMC(Arch_c,arbol_dni,arbol_apynom); clrscr;
            end;
            '2':begin
-                   Alta_Infraccion(Arch_C, Arch_I, arbol_dni); clrscr;
+                  AMC (Arch_C, Arch_I,arbol_dni,arbol_apynom); clrscr;
            end;
            '3':begin
                   //Actualización por infracción

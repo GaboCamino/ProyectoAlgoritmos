@@ -11,10 +11,8 @@ procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var 
 procedure conductores_hab(var arch_c: T_Archivo_C);
 procedure conductores_inhab(var arch_c: T_Archivo_C);
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
-procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion );
-procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; var arbol_dni: t_punt);
+
 
 implementation
 
@@ -135,105 +133,6 @@ begin
 end;
 
 
-procedure asignarDescuento(var inf: t_dato_infraccion);
-begin
-  case inf.tipo of
-    1:  inf.descontar := 5;
-    2:  inf.descontar := 4;
-    3:  inf.descontar := 5;
-    4:  inf.descontar := 4;
-    5:  inf.descontar := 5;
-    6:  inf.descontar := 10;
-    7:  inf.descontar := 5;
-    8:  inf.descontar := 10;
-    9:  inf.descontar := 20;
-    10: inf.descontar := 20;
-
-  else
-    Inf.Descontar := 0;
-  end;
-
-end;
-
-procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
-begin
-
-  writeln('infracciones');
-  writeln('1- licencia vencida');
-  writeln('2- circular sin RTO');
-  writeln('3- circular sin casco');
-  writeln('4- sin cinturón');
-  writeln('5- no respetar semáforos');
-  writeln('6- conducir con impedimientos fisicos y/o bajo de estupefacientes');
-  writeln('7- exceso velocidad (menos 30%)');
-  writeln('8- exceso velocidad (más 30%)');
-  writeln('9- conducir inhabilitado');
-  writeln('10- organizar y/o participar en competencias ilegales en via publica');
-  write('Ingrese el número de infracción: ');
-  readln(Inf.Tipo);
-
-  AsignarDescuento(Inf);
-
-  x.Score := x.Score - Inf.Descontar;
-
-  writeln;
-  writeln('infraccion penalizada por : ', inf.descontar, ' puntos.');
-  writeln('Score actual: ', x.Score);
-
-
-  if x.Score <= 0 then
-    x.hab :='N'
-  else
-    x.hab := 'S';
-
-  writeln('Estado del conductor: ');
-  if x.hab='S' then
-  begin
-       writeln(' Conductor Habilitado')
-  end else
-      writeln('Conductor Inhabilitado');
-end;
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; var arbol_dni: t_punt);
-var
-  dni_bus: string[8];
-  pos: longint;
-  x: T_Dato_Conductor;
-  inf: T_Dato_Infraccion;
-begin
-  write('Ingrese DNI del conductor: ');
-  readln(dni_bus);
-
-  Busqueda(arbol_dni, dni_bus, pos);
-
-  if pos = -1 then
-  begin
-    writeln('Conductor no encontrado');
-  end
-  else
-  begin
-    seek(Arch_C, pos);
-    read(Arch_C, x);
-    clrscr;
-
-    registrarinf(x, inf);
-    inf.DNI := x.DNI;
-    inf.Apelada := 'N';
-
-    write('Ingrese fecha (DD/MM/AAAA): ');
-    readln(inf.Fecha);
-    seek(Arch_C, pos);
-    write(Arch_C, x);
-
-    seek(Arch_I, filesize(Arch_I));
-    write(Arch_I, inf);
-
-    writeln;
-    writeln('Infracción registrada correctamente');
-  end;
-
-  delay(1500);
-  clrscr;
-end;
 
 
 

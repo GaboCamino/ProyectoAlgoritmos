@@ -12,7 +12,7 @@ type
       Descontar:1..20;
       Fecha:string[10];
       Tipo:1..27;
-      apelada:char;
+      Apelada:char;
 end;
 
    T_Archivo_I = file of T_Dato_Infraccion;
