@@ -5,6 +5,7 @@ uses
     crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario;
 
 {ambc}
+//function validarDni(x:T_Dato_Conductor):boolean;
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
@@ -16,6 +17,8 @@ procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
 
 implementation
+
+
 {
 function validarDni(x:T_Dato_Conductor):boolean;
 begin
