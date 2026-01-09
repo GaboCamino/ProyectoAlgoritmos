@@ -20,7 +20,7 @@ implementation
 
 
 {
-function validarDni(x:T_Dato_Conductor):boolean;
+function validarDni(x:T_Dato_Conductor):boolean;            {esta validacion va en una unit aparte}
 begin
      if x.dni in [1..9] then
      begin
@@ -29,7 +29,7 @@ begin
          validarDni:=false;
 end;
 }
-procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);
+procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
 var
    fecha:String[10];
 begin
@@ -46,7 +46,7 @@ begin
      x.Reincidencias:= 0;
 
 end;
-procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring);
+procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring);     {crea un nuevo conductor en el archivo de conductores}
 var
    x: T_Dato_Conductor;
    x1: t_dato_arbol;
@@ -64,7 +64,7 @@ begin
 
 delay(1000);
 end;
-procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
+procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);   {inhabilita un conductor en el archivo de conductores}
 var
    op: char;
 begin
@@ -83,7 +83,7 @@ begin
 delay(1000);
 clrscr;
 end;
-procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
+procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);      {consultar datos sobre un conductor}
 var
   x: T_Dato_Conductor;
 begin
@@ -98,7 +98,7 @@ begin
      writeln('Posición inválida o no encontrada');
 end;
 end;
-procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
+procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);    {modificar datos de un conductor}
 var
    x: T_Dato_Conductor;
    op:char;
@@ -123,7 +123,7 @@ begin
       delay(1000);clrscr;
 end;
 
-procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);
+procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);     {actualiza los datos de un conductor en el archivo}
 begin
      case op of
           '1':begin
@@ -140,7 +140,7 @@ begin
           end;
      end;
 end;
-Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
+Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);                       {menú de alta-baja-modificacion-consulta}
 var
    buscado:string[50];
    pos:longint;
@@ -157,7 +157,7 @@ begin
          end;
 end;
 
-procedure asignarDescuento(var inf: t_dato_infraccion);
+procedure asignarDescuento(var inf: t_dato_infraccion);                      {asignar infraccion a un conductor con dicho puntaje}
 begin
   case inf.tipo of
     1:  inf.descontar := 5;
@@ -177,7 +177,7 @@ begin
 
 end;
 
-procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
+procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);     {registrar infracción a un conductor}
 begin
 
   writeln('infracciones');
@@ -215,7 +215,7 @@ begin
   end else
       writeln('Conductor Inhabilitado');
 end;
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);      {generar infraccion a un conductor}
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
@@ -245,7 +245,7 @@ begin
   clrscr;
 end;
 
-procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
+procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);      {menú alta-modificacion-consulta del archivo de infracciones}
 var
    buscado:string[50];
    pos:longint;

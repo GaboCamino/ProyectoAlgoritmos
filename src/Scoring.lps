@@ -41,7 +41,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Infracciones"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="20" Y="15"/>
+        <CursorPos X="27" Y="8"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -101,9 +101,11 @@
       </Unit>
       <Unit>
         <Filename Value="menues.pas"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="61"/>
-        <CursorPos X="61" Y="39"/>
+        <TopLine Value="55"/>
+        <CursorPos X="7" Y="103"/>
+        <FoldState Value=" T3iJ0Xs"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -117,9 +119,8 @@
       </Unit>
       <Unit>
         <Filename Value="maneja_archivo.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="247"/>
+        <TopLine Value="220"/>
         <CursorPos X="76" Y="266"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
@@ -169,26 +170,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="12" Column="93"/>
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="73" Column="60" TopLine="64"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="13" Column="59"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="71" Column="47" TopLine="55"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_arboles.pas"/>
-        <Caret Line="75" Column="53" TopLine="64"/>
-      </Position>
       <Position>
         <Filename Value="arboles.pas"/>
         <Caret Line="5" Column="37"/>
@@ -288,6 +269,26 @@
       <Position>
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="16" Column="90"/>
+      </Position>
+      <Position>
+        <Filename Value="menues.pas"/>
+        <Caret Line="113" Column="10" TopLine="60"/>
+      </Position>
+      <Position>
+        <Filename Value="menues.pas"/>
+        <Caret Line="95" Column="83" TopLine="60"/>
+      </Position>
+      <Position>
+        <Filename Value="menues.pas"/>
+        <Caret Line="97" Column="12" TopLine="60"/>
+      </Position>
+      <Position>
+        <Filename Value="menues.pas"/>
+        <Caret Line="9" Column="83"/>
+      </Position>
+      <Position>
+        <Filename Value="menues.pas"/>
+        <Caret Line="34" Column="19" TopLine="26"/>
       </Position>
     </JumpHistory>
     <RunParams>
