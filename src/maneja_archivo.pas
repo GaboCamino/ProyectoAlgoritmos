@@ -6,6 +6,7 @@ uses
 
 {ambc}
 //function validarDni(x:T_Dato_Conductor):boolean;
+procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
@@ -32,10 +33,31 @@ end;
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
 var
    fecha:String[10];
+   i:longint;
+   op:boolean;
 begin
-     gotoxy(30,4); write('DNI: ', buscado);
-     x.dni:=buscado;
-     gotoxy(30,6); write('Apellido y nombre: '); readln(x.apynom);
+     for i:=1 to length(buscado) do
+     begin                                                     {itera para validar si es de tipo caracter el buscado}
+          if buscado[i] in ['a'..'z'] then
+          begin
+               op:=true;
+          end else
+          op:=false;
+     end;
+
+     if op=true then
+     begin
+          x.Apynom:=buscado;
+          gotoxy(30,4); write('Apellido y nombre: ',buscado);        {en el caso de ser caracter considera que es un apynom}
+          gotoxy(30,6); write('DNI: '); readln(x.dni)
+     end else
+     if op=false then
+     begin
+          gotoxy(30,4); write('DNI: ', buscado);
+          x.dni:=buscado;                                                   {si es numerico es el dni}
+          gotoxy(30,6); write('Apellido y nombre: '); readln(x.apynom);
+     end;
+
      gotoxy(30,8); write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.nacim);
      gotoxy(30,10); write('Telefono: '); readln(x.tel);
      gotoxy(30,12); write('Email: '); readln(x.mail);
@@ -44,23 +66,24 @@ begin
      x.Hab:= 'S';
  //  x.fecha_hab:=fecha;
      x.Reincidencias:= 0;
-
 end;
-procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring);     {crea un nuevo conductor en el archivo de conductores}
+
+procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);     {crea un nuevo conductor en el archivo de conductores}
 var
    x: T_Dato_Conductor;
    x1: t_dato_arbol;
    conf: char;
 begin
-     ingresa_cond(x,buscado);
-     x1.pos:= filesize(Arch_C);
+     ingresa_cond(x,buscado);         {el buscado se podría usar para agregar mediante el arbol de apynom}
+     x1.pos:= filesize(Arch_C);  //indica la posición donde se agregará el último registro
      seek(arch_c,x1.pos);
      write(arch_c,x);
      x1.clave:= x.dni;
      agregar(arbol_dni,x1);
-     x1.clave:= x.apynom;
+     x1.clave:= x.dni;
      agregar(arbol_apynom,x1);
-     writeln('¡Alta registrada!');
+
+     gotoxy(30,14); writeln('¡Alta registrada!');
 
 delay(1000);
 end;
@@ -143,14 +166,22 @@ end;
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);                       {menú de alta-baja-modificacion-consulta}
 var
    buscado:string[50];
-   pos:longint;
+   i,pos:longint;
+   op:boolean;
 begin
      pos:=0;
-     Write('Búsqueda por DNI del conductor: '); Readln(Buscado); clrscr;
-     Busqueda(arbol_dni, buscado, pos);
-     if pos=-1 then                                                           {siempre distinto de -1}
+     Write('Búsqueda por DNI/Apellido y nombre: '); Readln(Buscado); clrscr;
+     Busqueda(arbol_dni, buscado, pos);  //dni               {buscar forma para que si existe no se haga la alta nuevamente}
+     if pos=-1 then
      begin
-          Alta_Cond(Arch_C,arbol_dni,arbol_apynom, buscado)
+          busqueda(arbol_apynom,buscado,pos); //apynom
+     end;
+
+
+
+     if (pos=-1) and (op=true) then                                                           {siempre distinto de -1}
+     begin
+          Alta_Cond(Arch_C,arbol_dni,arbol_apynom, buscado,op)
      end else
          begin
               Modifica_Cond(Arch_C, pos,arbol_dni,arbol_apynom)
