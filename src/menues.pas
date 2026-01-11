@@ -6,7 +6,7 @@ uses
 
 procedure Menu;
 procedure Submenu_Listados(var arch_c:T_Archivo_C; var arbol_apynom:t_punt);
-procedure submenu_estadisticas(var arch_i:T_Archivo_I);
+procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);
 
 implementation
 
@@ -52,7 +52,7 @@ Repeat
            end;
            '5':begin
                     //estadisticas
-                    submenu_estadisticas(arch_i);
+                    submenu_estadisticas(arch_i,arch_c);
            end;
 
       end;
@@ -95,9 +95,10 @@ until op='0';
 
 end;
 
-procedure submenu_estadisticas(var arch_i:T_Archivo_I);   {submenú de las estadísticas de un conductor respecto a las infracciones otorgadas}
+procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);   {submenú de las estadísticas de un conductor respecto a las infracciones otorgadas}
 var
    op:char;
+   x:T_Dato_Conductor;
 begin
 
 Repeat
@@ -114,9 +115,11 @@ Repeat
      end;
      '2':begin
               //porcentaje de conductores con reincidencia
+              writeln('Porcentaje de conductores con reincidencias: ',conductoresPorcentajeReincidencias(arch_c,x):0:2,'%'); readkey; clrscr;
      end;
      '3':begin
               //porcentaje de conductores con scoring 0
+              writeln('Porcentaje de Conductores con score 0: ', conductoresScoreCero(arch_c,x):0:2, '%'); readkey; clrscr;
      end;
      '4':begin
               //total

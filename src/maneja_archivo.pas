@@ -4,32 +4,30 @@ interface
 uses
     crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario;
 
-{ambc}
-//function validarDni(x:T_Dato_Conductor):boolean;
+{ambc conductores}
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
 procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbol_apynom: t_punt);
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
+
+{amc infracciones}
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
 
+{estadisticas}
+function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
+function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
+
+{validación}
+function esNumerico(x:T_Dato_Conductor):boolean;
 implementation
 
 
-{
-function validarDni(x:T_Dato_Conductor):boolean;            {esta validacion va en una unit aparte}
-begin
-     if x.dni in [1..9] then
-     begin
-          validarDni:=true;
-     end else
-         validarDni:=false;
-end;
-}
+
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
 var
    fecha:String[10];
@@ -49,7 +47,7 @@ begin
      begin
           x.Apynom:=buscado;
           gotoxy(30,4); write('Apellido y nombre: ',buscado);        {en el caso de ser caracter considera que es un apynom}
-          gotoxy(30,6); write('DNI: '); readln(x.dni)
+          gotoxy(30,6); write('DNI: '); readln(x.dni);
      end else
      if op=false then
      begin
@@ -294,11 +292,12 @@ begin
              begin
          Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
 
-          writeln('1: Agregar infraccion');
-          writeln('2: Modificar infraccion');
-          writeln('3: Consultar infracciones');
-          writeln('0: volver');
-          readln(op);
+          gotoxy(30,6); writeln('1: Agregar infraccion');
+          gotoxy(30,8); writeln('2: Modificar infraccion');
+          gotoxy(30,10); writeln('3: Consultar infracciones');
+          gotoxy(30,12);writeln('0: Regresar');
+          gotoxy(30,14); write('Opción: ');
+          gotoxy(38,14); readln(op);
           case op of
               1: begin
                   clrscr;
@@ -309,9 +308,77 @@ begin
             3:}
           end;
              end;
-
 end;
 
+
+{estadísticas debe ir en otra unit, de momento lo pongo acá, luego organizamos bien}
+
+function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
+var
+	cant_personas,contador:integer;
+begin
+        cant_personas:=0; contador:=0;
+	seek(arch_c,0);
+	while not eof(arch_c) do
+	begin
+		read(arch_c,x);
+		if x.score = 0 then
+		begin
+			inc(contador);                  {incrementa el contador solo si la persona tuvo score 0}
+		end;
+	inc(cant_personas);                             {incrementa en +1 la cant de personas}
+	end;
+if cant_personas<>0 then
+begin
+	conductoresScoreCero:=(contador*100)/cant_personas;
+end else
+	conductoresScoreCero:=0;
+end;
+
+function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
+var
+	cant_personas,contador:integer;
+begin
+        cant_personas:=0; contador:=0;
+	seek(arch_c,0);
+	while not eof(arch_c) do
+	begin
+		read(arch_c,x);
+		if x.Reincidencias>0 then
+		begin
+			inc(contador);                  {incrementa el contador solo si la persona tuvo reincidencias mayor qué 0}
+		end;
+	inc(cant_personas);                             {incrementa en +1 la cant de personas}
+	end;
+if cant_personas<>0 then
+begin
+	conductoresPorcentajeReincidencias:=(contador*100)/cant_personas;
+end else
+	conductoresPorcentajeReincidencias:=0;
+end;
+
+{validaciones}
+
+function esNumerico(x:T_Dato_Conductor):boolean;
+var
+   i:byte;
+   estado:boolean;
+begin
+     i:=1;
+     if (length(x.dni)=7) or (length(x.dni)=8) then        {dni de 7 u 8 digitos}
+     begin
+          estado:=true;
+          for i:=1 to length(x.dni) do                    {hasta la longitud del dni}
+          begin
+               if not(x.dni[i] in ['0'..'9']) then         {rango numerico del dni}
+               begin
+                    estado:=false;
+               end;
+          end;
+     end else
+         estado:=false;
+esNumerico:=estado
+end;
 
 end.
 
