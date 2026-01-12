@@ -8,7 +8,7 @@ procedure crear_arbol(var raiz: t_punt);
 procedure agregar(var raiz: t_punt; x:t_dato_arbol);
 
 function preorden(var raiz: t_punt; buscado:string): t_punt;                     {ordena}
-procedure Busqueda(arbol: t_punt; buscado: string; var pos: longint);            {buscado}
+procedure Busqueda(arbol: t_punt; buscado: string; var pos: longint; op:boolean);            {buscado}
 
 procedure Crear_Arbol_DNI(var Arch_C: T_Archivo_C; var arbol: t_punt);
 procedure Crear_Arbol_Apynom(var Arch_C: T_Archivo_C; var arbol: t_punt);
@@ -101,16 +101,18 @@ begin
 end;
 end;
 
-procedure Busqueda(arbol: t_punt; buscado: string; var pos: longint);
+procedure Busqueda(arbol: t_punt; buscado: string; var pos: longint; op:boolean);
 var aux: t_punt;
 begin
      aux:= preorden(arbol,buscado);
      if aux = nil then
      Begin
-        pos:= -1
+        pos:= -1;
+        op:=false;
        end else
        begin
             pos:= aux^.info.pos;
+            op:=true;
        end;
 end;
 

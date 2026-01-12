@@ -2,7 +2,7 @@ unit maneja_archivo;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario;
+    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos, SysUtils;
 
 {ambc conductores}
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
@@ -21,22 +21,21 @@ procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arb
 {estadisticas}
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
 function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
+procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
+
 
 {validación}
 function esNumerico(x:T_Dato_Conductor):boolean;
 implementation
 
-
-
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
 var
-   fecha:String[10];
    i:longint;
    op:boolean;
 begin
      for i:=1 to length(buscado) do
      begin                                                     {itera para validar si es de tipo caracter el buscado}
-          if buscado[i] in ['a'..'z'] then
+          if buscado[i] in ['a'..'z','A'..'Z'] then
           begin
                op:=true;
           end else
@@ -70,7 +69,6 @@ procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt;
 var
    x: T_Dato_Conductor;
    x1: t_dato_arbol;
-   conf: char;
 begin
      ingresa_cond(x,buscado);         {el buscado se podría usar para agregar mediante el arbol de apynom}
      x1.pos:= filesize(Arch_C);  //indica la posición donde se agregará el último registro
@@ -78,7 +76,7 @@ begin
      write(arch_c,x);
      x1.clave:= x.dni;
      agregar(arbol_dni,x1);
-     x1.clave:= x.dni;
+     x1.clave:= x.apynom;
      agregar(arbol_apynom,x1);
 
      gotoxy(30,14); writeln('¡Alta registrada!');
@@ -164,19 +162,17 @@ end;
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);                       {menú de alta-baja-modificacion-consulta}
 var
    buscado:string[50];
-   i,pos:longint;
+   pos:longint;
    op:boolean;
 begin
      pos:=0;
      Write('Búsqueda por DNI/Apellido y nombre: '); Readln(Buscado); clrscr;
-     Busqueda(arbol_dni, buscado, pos);  //dni               {buscar forma para que si existe no se haga la alta nuevamente}
+     Busqueda(arbol_dni, buscado, pos,op);  //dni               {buscar forma para que si existe no se haga la alta nuevamente}
      if pos=-1 then
      begin
-          busqueda(arbol_apynom,buscado,pos); //apynom
+          busqueda(arbol_apynom,buscado,pos,op); //apynom
      end;
-
-
-
+     op:=true;
      if (pos=-1) and (op=true) then                                                           {siempre distinto de -1}
      begin
           Alta_Cond(Arch_C,arbol_dni,arbol_apynom, buscado,op)
@@ -278,11 +274,12 @@ procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arb
 var
    buscado:string[50];
    pos:longint;
-   op:byte;
+   op:boolean;
+   op2:char;
 begin
      pos:=0;
      Write('Búsqueda por DNI del conductor: '); Readln(Buscado); clrscr;
-     Busqueda(arbol_dni, buscado, pos);
+     Busqueda(arbol_dni, buscado, pos,op);
      if pos=-1 then                                                           {siempre distinto de -1}
      begin
        writeln('conductor no encontrado');
@@ -297,9 +294,9 @@ begin
           gotoxy(30,10); writeln('3: Consultar infracciones');
           gotoxy(30,12);writeln('0: Regresar');
           gotoxy(30,14); write('Opción: ');
-          gotoxy(38,14); readln(op);
-          case op of
-              1: begin
+          gotoxy(38,14); readln(op2);
+          case op2 of
+              '1': begin
                   clrscr;
                   Alta_Infraccion(Arch_C, Arch_I, pos);
                   clrscr;
@@ -355,6 +352,54 @@ begin
 	conductoresPorcentajeReincidencias:=(contador*100)/cant_personas;
 end else
 	conductoresPorcentajeReincidencias:=0;
+end;
+
+{function infraccionMasComun(arch_i:T_Archivo_I; inf:T_Dato_Infraccion);
+var
+   contador_inf:byte;
+begin
+     contador_inf:=0;
+     seek(arch_i,0);
+     while not eof(arch_i) do
+     begin
+          read(arch_i,inf);
+          if inf.Tipo then
+     end;
+
+end;      }     //no me dio la cabeza para seguirlo
+
+
+procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
+var
+        cont1,cont2,cont3,edad:integer;
+        year,mont,mday,wday:word;
+        nac:word;
+        anioNac:shortstring;
+begin
+     cont1:=0; cont2:=0; cont3:=0;
+     getdate(year,mont,mday,wday);           {funcion que obtiene el año}
+     seek(arch_c,0);
+     while not eof(arch_c) do
+     begin
+          read(arch_c,x);
+          anioNac:=copy(x.nacim,7,10);             {extraigo el año}
+          edad:=year-StrToInt(anioNac);            {calculo la edad actual y a su vez convierto la cadena en un entero}
+          if (edad>=18) and (edad<=30) then
+          begin
+               inc(cont1);
+          end else
+          if (edad>31) and (edad<=50) then
+          begin
+               inc(cont2);
+          end else
+          if (edad>50) and (edad<=110) then
+          begin
+               inc(cont3);
+          end;
+     end;
+     writeln('Cantidad de infracciones a menores de 30 años: ',cont1);
+     writeln('Cantidad de infracciones entre 31 a 50 años: ',cont2);
+     writeln('Cantidad de infracciones a mayores de 50 años: ',cont3);
 end;
 
 {validaciones}
