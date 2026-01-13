@@ -17,6 +17,7 @@ procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
+Procedure IngresaFecha(inf: T_Dato_Infraccion);
 
 {estadisticas}
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
@@ -26,6 +27,8 @@ procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
 
 {validación}
 function esNumerico(x:T_Dato_Conductor):boolean;
+function EsNumero(s: string): boolean;
+function ComparadorFecha(sa,sm,sd:word):string;
 implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
@@ -254,8 +257,9 @@ begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
 
-  write('Ingrese fecha (DD/MM/AAAA): ');
-  readln(inf.Fecha);
+ { write('Ingrese fecha (DD/MM/AAAA): ');
+  readln(inf.Fecha);} //viejo, lo dejo por las dudas si lo mío no funca
+  IngresaFecha(inf);
 
   seek(Arch_C, pos);
   write(Arch_C, x);
@@ -425,6 +429,56 @@ begin
 esNumerico:=estado
 end;
 
+Procedure IngresaFecha(inf: T_Dato_Infraccion);
+var d,m,a,comp,f: string;
+  sd,sm,sa:word;
+begin
+  comp:='1';
+  f:='0';
+  DecodeDate(Date,sa,sm,sd);
+  repeat
+     Writeln('Ingrese fecha: ');
+     if (StrToInt(f))>(StrToInt(comp)) then
+     begin
+          clrscr;
+          Writeln('Ingrese la fecha actual o una pasada.');
+          readkey;
+     end;
+           repeat
+                 read(d);
+           until (Length(d) = 2) and EsNumero(d) and (StrToInt(d) >= 1) and (StrToInt(d) <= 31);
+     Write('/');
+           repeat
+                  read(m);
+           until (Length(m) = 2) and EsNumero(m) and (StrToInt(m) >= 1) and (StrToInt(m) <= 12);
+     Write('/');
+           repeat
+                  read(a);
+           until (Length(a) = 4) and EsNumero(a) and (StrToInt(a) >= 1900) and (StrToInt(a) <=sa);
+     f:= a+m+d;
+     comp:=ComparadorFecha(sa,sm,sd);
+     until (StrToInt(f))<=(StrToInt(comp));
+     inf.Fecha:=f;
+end;
+
+function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vemos como unificar
+  var
+    i: integer;
+  begin
+    EsNumero := true;
+    for i := 1 to Length(s) do
+      if not (s[i] in ['0'..'9']) then
+      begin
+        EsNumero := false;
+        exit;
+      end;
+  end;
+ function ComparadorFecha(sa,sm,sd:word):string;
+ begin
+ ComparadorFecha:=IntToStr(sa) +
+  Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
+  Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
+ end;
 end.
 
 
