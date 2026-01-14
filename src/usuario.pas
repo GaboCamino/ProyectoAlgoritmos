@@ -21,7 +21,7 @@ begin
   clrscr;
   textcolor(black);
   gotoxy(1,1); Write('APELLIDO Y NOMBRE');
-  gotoxy(30,1); Write('DNI');
+  gotoxy(33,1); Write('DNI');
   gotoxy(45,1); Write('SCORING');
   gotoxy(65,1); Write('HABILITADO');
   gotoxy(85,1); Write('CANT. REINC.');
