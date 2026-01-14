@@ -41,7 +41,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Infracciones"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="20" Y="15"/>
+        <CursorPos X="39" Y="28"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -50,7 +50,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Arboles"/>
         <EditorIndex Value="5"/>
-        <CursorPos X="47"/>
+        <CursorPos X="49" Y="15"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -78,7 +78,7 @@
         <UnitName Value="Maneja_arboles"/>
         <EditorIndex Value="4"/>
         <TopLine Value="88"/>
-        <CursorPos X="47" Y="98"/>
+        <CursorPos X="44" Y="97"/>
         <UsageCount Value="406"/>
         <Loaded Value="True"/>
       </Unit>
@@ -90,14 +90,14 @@
         <TopLine Value="53"/>
         <CursorPos Y="96"/>
         <FoldState Value=" T3g05812 PiHj00z"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="34"/>
       </Unit>
       <Unit>
         <Filename Value="manejo_lista.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="110" Y="7"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="34"/>
       </Unit>
       <Unit>
         <Filename Value="menues.pas"/>
@@ -111,7 +111,8 @@
         <Filename Value="conductores.pas"/>
         <UnitName Value="Conductores"/>
         <EditorIndex Value="6"/>
-        <CursorPos X="39" Y="21"/>
+        <TopLine Value="16"/>
+        <CursorPos X="57" Y="35"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -119,8 +120,8 @@
         <Filename Value="maneja_archivo.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="247"/>
-        <CursorPos X="76" Y="266"/>
+        <TopLine Value="253"/>
+        <CursorPos X="17" Y="264"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -128,7 +129,8 @@
         <Filename Value="usuario.pas"/>
         <UnitName Value="Usuario"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="55" Y="14"/>
+        <TopLine Value="14"/>
+        <CursorPos X="27" Y="26"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -169,50 +171,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="12" Column="93"/>
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="73" Column="60" TopLine="64"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="13" Column="59"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="71" Column="47" TopLine="55"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_arboles.pas"/>
-        <Caret Line="75" Column="53" TopLine="64"/>
-      </Position>
-      <Position>
-        <Filename Value="arboles.pas"/>
-        <Caret Line="5" Column="37"/>
-      </Position>
-      <Position>
-        <Filename Value="conductores.pas"/>
-        <Caret Line="10" Column="49"/>
-      </Position>
-      <Position>
-        <Filename Value="infracciones.pas"/>
-        <Caret Line="12" Column="57"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="11" Column="53"/>
-      </Position>
-      <Position>
-        <Filename Value="menues.pas"/>
-        <Caret Line="73" Column="26" TopLine="58"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="123" Column="38" TopLine="103"/>
-      </Position>
       <Position>
         <Filename Value="maneja_arboles.pas"/>
         <Caret Line="115" Column="42" TopLine="88"/>
@@ -288,6 +246,50 @@
       <Position>
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="16" Column="90"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_arboles.pas"/>
+        <Caret Line="106" Column="101" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="185" Column="75" TopLine="173"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="280" Column="55" TopLine="259"/>
+      </Position>
+      <Position>
+        <Filename Value="infracciones.pas"/>
+        <Caret Line="13" Column="63"/>
+      </Position>
+      <Position>
+        <Filename Value="conductores.pas"/>
+        <Caret Line="18" Column="67"/>
+      </Position>
+      <Position>
+        <Filename Value="arboles.pas"/>
+        <Caret Column="47"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_arboles.pas"/>
+        <Caret Line="96" Column="51"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="265" Column="31" TopLine="259"/>
+      </Position>
+      <Position>
+        <Filename Value="usuario.pas"/>
+        <Caret Line="37" Column="43"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="330" TopLine="303"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="18" Column="76"/>
       </Position>
     </JumpHistory>
     <RunParams>
