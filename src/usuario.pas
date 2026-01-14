@@ -121,7 +121,8 @@ var
     x:T_Dato_Conductor;
 begin
      y:=2;
-     Titulos_List_Cond;;
+     Titulos_List_Cond;
+     seek(arch_c,0);
      while not eof(arch_c) do
      begin
           read(arch_c,x);

@@ -16,6 +16,7 @@ Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
+procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
 Procedure IngresaFecha(inf: T_Dato_Infraccion);
 
@@ -273,6 +274,50 @@ begin
   delay(1500);
   clrscr;
 end;
+procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
+var
+  inf: T_Dato_Infraccion;
+  infraccion: boolean;
+  y: byte;
+begin
+  infraccion := false;
+  y := 3;
+
+  clrscr;
+  textcolor(black);
+  gotoxy(1,1); Write('DNI');
+  gotoxy(22,1); Write('FECHA');
+  gotoxy(37,1); Write('INFRACCION');
+  gotoxy(52,1); Write('DESCUENTO');
+  gotoxy(57,1); Write('APELADA');
+  textcolor(15);
+  seek(Arch_I, 0);
+  while not eof(Arch_I) do
+  begin
+    read(Arch_I, inf);
+    if inf.DNI = dni_bus then
+    begin
+      infraccion := true;
+      gotoxy(1, y);  write(inf.DNI);
+      gotoxy(19, y); write(inf.Fecha);
+      gotoxy(39, y); write(inf.Tipo);
+      gotoxy(56, y); write(inf.Descontar);
+      gotoxy(60, y); write(inf.Apelada);
+      inc(y);
+    end;
+
+ end;
+
+  if not infraccion then
+  begin
+    writeln;
+    writeln('El conductor no posee infracciones registradas.');
+  end;
+
+  writeln;
+  writeln('Presione una tecla para continuar...');
+  readkey;
+end;
 
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);      {menú alta-modificacion-consulta del archivo de infracciones}
 var
@@ -305,11 +350,15 @@ begin
                   Alta_Infraccion(Arch_C, Arch_I, pos);
                   clrscr;
                  end;
-           { 2:
-            3:}
+           { 2:   }
+            '3': begin
+              clrscr;
+                consulta_infracciones(Arch_I,buscado);
+               clrscr;
+               end;
+            end;
           end;
              end;
-end;
 
 
 {estadísticas debe ir en otra unit, de momento lo pongo acá, luego organizamos bien}
