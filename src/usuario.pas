@@ -21,7 +21,7 @@ begin
   clrscr;
   textcolor(black);
   gotoxy(1,1); Write('APELLIDO Y NOMBRE');
-  gotoxy(33,1); Write('DNI');
+  gotoxy(30,1); Write('DNI');
   gotoxy(45,1); Write('SCORING');
   gotoxy(65,1); Write('HABILITADO');
   gotoxy(85,1); Write('CANT. REINC.');
@@ -29,7 +29,7 @@ begin
   textcolor(15);
 end;
 
-procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
+procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);   {planilla por filas}
 begin
      gotoxy(1,Y); write(x.Apynom);
      gotoxy(30,Y); write(x.DNI);
@@ -39,7 +39,7 @@ begin
      gotoxy(105,Y); write(x.Tel);
 end;
 
-procedure conductores_hab(var arch_c: T_Archivo_C);
+procedure conductores_hab(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
 var
   x: T_Dato_Conductor;
   y: byte;
@@ -62,7 +62,7 @@ begin
 end;
 
 
-procedure conductores_inhab(var arch_c: T_Archivo_C);
+procedure conductores_inhab(var arch_c: T_Archivo_C);      {evalúa si un conductor se halla inhabilitado}
 var
   x: T_Dato_Conductor;
   y: byte;
@@ -84,7 +84,7 @@ begin
   readkey;
 end;
 
-procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
+procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);   {recorre el arbol y muestra de SAI-Raiz-SAD}
 begin
   if raiz <> nil then
   begin
@@ -95,7 +95,7 @@ begin
 end;
 
 
-procedure Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
+procedure Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);   {muestra un unico conductor de la planilla}
 var
   pos: cardinal;
   x: T_Dato_Conductor;
@@ -115,7 +115,7 @@ begin
 end;
 
 
-procedure conductores_Scoring(var arch_c:T_Archivo_C);
+procedure conductores_Scoring(var arch_c:T_Archivo_C);      {evalúa si un conductor tuvo scoring = 0}
 var
    y:byte;
     x:T_Dato_Conductor;

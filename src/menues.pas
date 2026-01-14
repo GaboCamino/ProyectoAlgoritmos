@@ -6,10 +6,11 @@ uses
 
 procedure Menu;
 procedure Submenu_Listados(var arch_c:T_Archivo_C; var arbol_apynom:t_punt);
+procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);
 
 implementation
 
-procedure Menu;
+procedure Menu;       {menú principal del programa}
 var
    op:char;
    Arch_C: T_Archivo_C;      {archivos}
@@ -27,9 +28,10 @@ Repeat
       gotoxy(30,6);writeln('2. AMC Infracciones');
       gotoxy(30,8);writeln('3. Actualización por infracción');
       gotoxy(30,10);writeln('4. Listados conductores/infracciones');
-      gotoxy(30,12);writeln('0. Salir');
-      gotoxy(30,14); write('Opción: ');
-      gotoxy(38,14); readln(op); clrscr;
+      gotoxy(30,12); writeln('5. Estadísticas');
+      gotoxy(30,14);writeln('0. Salir');
+      gotoxy(30,16); write('Opción: ');
+      gotoxy(38,16); readln(op); clrscr;
 
       case op of
            '1':begin
@@ -50,6 +52,7 @@ Repeat
            end;
            '5':begin
                     //estadisticas
+                    submenu_estadisticas(arch_i,arch_c);
            end;
 
       end;
@@ -57,7 +60,7 @@ until op='0';
 close(arch_c);
 end;
 
-procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt);
+procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt); {submenú de los listados de un conductores-infracción}
 var
    op:char;
    x:t_dato_conductor;
@@ -92,5 +95,41 @@ until op='0';
 
 end;
 
+procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);   {submenú de las estadísticas de un conductor respecto a las infracciones otorgadas}
+var
+   op:char;
+   x:T_Dato_Conductor;
+begin
+
+Repeat
+     gotoxy(30,4); writeln('1. Infracciones entre fechas');
+     gotoxy(30,6); writeln('2. Porcentaje de conductores con reincidencia');
+     gotoxy(30,8); writeln('3. Porcentaje de conductores con scoring 0');
+     gotoxy(30,10); writeln('4. Total'); // elegir entre los 3 una estadistica a implementar para el municipio
+     gotoxy(30,12); writeln('5. Rango etario con más infracciones');
+     gotoxy(30,14); writeln('0. Regresar');
+     gotoxy(30,16); write('Opción: '); readln(op); clrscr;
+     case op of
+     '1':begin
+              //infracciones entre 2 fechas
+     end;
+     '2':begin
+              //porcentaje de conductores con reincidencia
+              writeln('Porcentaje de conductores con reincidencias: ',conductoresPorcentajeReincidencias(arch_c,x):0:2,'%'); readkey; clrscr;
+     end;
+     '3':begin
+              //porcentaje de conductores con scoring 0
+              writeln('Porcentaje de Conductores con score 0: ', conductoresScoreCero(arch_c,x):0:2, '%'); readkey; clrscr;
+     end;
+     '4':begin
+              //total
+     end;
+     '5':begin
+              //rango etario con mas infracciones
+              rangoEtario(arch_c, x); readkey; clrscr;
+     end;
+     end;
+until op='0';
+end;
 
 end.
