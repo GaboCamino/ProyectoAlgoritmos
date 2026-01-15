@@ -88,6 +88,11 @@
         <Filename Value="manejo_lista.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="lista_fecha.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Lista_fecha"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

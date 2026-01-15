@@ -2,7 +2,7 @@ unit menues;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,conductores,maneja_archivo, usuario, infracciones;
+    crt,Maneja_arboles,arboles,conductores,maneja_archivo,usuario,infracciones,Lista_fecha;
 
 procedure Menu;
 procedure Submenu_Listados(var arch_c:T_Archivo_C; var arbol_apynom:t_punt);
@@ -16,12 +16,13 @@ var
    Arch_C: T_Archivo_C;      {archivos}
    arbol_dni,arbol_apynom: t_punt;
    Arch_I: T_Archivo_I;
+   l:T_lista;
 begin
      Abrircond(arch_c);
      Abririnf(Arch_I);
      Crear_Arbol_DNI(Arch_C, Arbol_DNI);
      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
-
+     Crear_Lista_Fecha(l,Arch_I);
      textbackground(LightGreen); TextColor(White); clrscr;
 Repeat
       gotoxy(30,4);writeln('1. ABMC Conductores');

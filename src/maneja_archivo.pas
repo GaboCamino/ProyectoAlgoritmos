@@ -18,7 +18,7 @@ procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
-Procedure IngresaFecha(inf: T_Dato_Infraccion);
+Procedure IngresaFecha(var inf: T_Dato_Infraccion);
 
 {estadisticas}
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
@@ -59,7 +59,7 @@ begin
           gotoxy(30,6); write('Apellido y nombre: '); readln(x.apynom);
      end;
 
-     gotoxy(30,8); write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.nacim);
+     gotoxy(30,8); write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.nacim);     //ver cómo usar IngresaFecha
      gotoxy(30,10); write('Telefono: '); readln(x.tel);
      gotoxy(30,12); write('Email: '); readln(x.mail);
 
@@ -478,7 +478,7 @@ begin
 esNumerico:=estado
 end;
 
-Procedure IngresaFecha(inf: T_Dato_Infraccion);
+Procedure IngresaFecha(var inf: T_Dato_Infraccion);
 var d,m,a,comp,f: string;
   sd,sm,sa:word;
 begin
@@ -519,7 +519,6 @@ function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vem
       if not (s[i] in ['0'..'9']) then
       begin
         EsNumero := false;
-        exit;
       end;
   end;
  function ComparadorFecha(sa,sm,sd:word):string;
