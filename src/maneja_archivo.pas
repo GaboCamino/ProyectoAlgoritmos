@@ -132,9 +132,10 @@ begin
       gotoxy(1,12); writeln('2. Telefóno');
       gotoxy(1,14); writeln('3. Dirección de mail');
       gotoxy(1,16); writeln('4. Dar de baja');
-      gotoxy(1,18); Writeln('0. Regresar');
-      gotoxy(1,20); write('Que desea modificar? '); readln(op);
-      if op in ['1'..'4'] then
+      gotoxy(1,18); writeln('5. Aplicar reincidencia');
+      gotoxy(1,20); Writeln('0. Regresar');
+      gotoxy(1,22); write('Que desea modificar? '); readln(op);
+      if op in ['1'..'5'] then
       begin
            seek(arch_c, pos);read(arch_c, x);
            clrscr;
@@ -144,6 +145,37 @@ begin
            writeln('Modificación registrada');
       end;
       delay(1000);clrscr;
+end;
+procedure reincidencia_cond(var x: T_Dato_Conductor);
+var
+  op: char;
+begin
+  if x.Score <= 0 then
+  begin
+
+    writeln('El conductor posee score 0.');
+    gotoxy(2,13);
+    writeln('¿Cumplió con los cursos obligatorios?');
+    readln(op);
+    if (upcase(op)) = 'S' then
+    begin
+      x.Score := 20;
+      x.Hab := 'S';
+      x.Reincidencias:= x.Reincidencias + 1;
+      writeln('Reincidencia aplicada correctamente.');
+      writeln('Score restaurado a 20.');
+    end
+    else
+    begin
+      writeln('No se aplicó la reincidencia.');
+    end;
+  end
+  else
+  begin
+    writeln('El conductor no posee score 0, No requiere reincidencia');
+  end;
+
+  readkey;
 end;
 
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);     {actualiza los datos de un conductor en el archivo}
@@ -160,6 +192,9 @@ begin
           end;
           '4':begin
                    Baja_Cond(Arch_C, pos,x,arbol_dni,arbol_apynom);
+          end;
+          '5':begin
+                   reincidencia_cond (x);
           end;
      end;
 end;
@@ -229,13 +264,19 @@ begin
 
   writeln;
   writeln('infraccion penalizada por : ', inf.descontar, ' puntos.');
-  writeln('Score actual: ', x.Score);
 
 
   if x.Score <= 0 then
+  begin
+    writeln('Score restante: 0');
     x.hab :='N'
+  end
+
   else
+  begin
     x.hab := 'S';
+    writeln('Score restante: ',x.score);
+  end;
 
   writeln('Estado del conductor: ');
   if x.hab='S' then
@@ -494,15 +535,15 @@ begin
           readkey;
      end;
            repeat
-                 read(d);
+                 readln(d);
            until (Length(d) = 2) and EsNumero(d) and (StrToInt(d) >= 1) and (StrToInt(d) <= 31);
      Write('/');
            repeat
-                  read(m);
+                  readln(m);
            until (Length(m) = 2) and EsNumero(m) and (StrToInt(m) >= 1) and (StrToInt(m) <= 12);
      Write('/');
            repeat
-                  read(a);
+                  readln(a);
            until (Length(a) = 4) and EsNumero(a) and (StrToInt(a) >= 1900) and (StrToInt(a) <=sa);
      f:= a+m+d;
      comp:=ComparadorFecha(sa,sm,sd);
