@@ -98,7 +98,6 @@ begin
      if upcase(op)='S' then
      begin
           x.Hab:='N';
-          x.Reincidencias:= x.Reincidencias + 1;
           seek(arch_c,pos);
           write(Arch_C,x);
           writeln('¡Baja registrada!');
@@ -242,6 +241,7 @@ begin
 end;
 
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);     {registrar infracción a un conductor}
+var total:byte;
 begin
 
   writeln('infracciones');
@@ -255,36 +255,35 @@ begin
   writeln('8- exceso velocidad (más 30%)');
   writeln('9- conducir inhabilitado');
   writeln('10- organizar y/o participar en competencias ilegales en via publica');
+  writeln('0: volver');
   write('Ingrese el número de infracción: ');
   readln(Inf.Tipo);
-
   AsignarDescuento(Inf);
 
   x.Score := x.Score - Inf.Descontar;
 
   writeln;
-  writeln('infraccion penalizada por : ', inf.descontar, ' puntos.');
-
+  writeln('Infracción penalizada por: ', inf.Descontar, ' puntos.');
 
   if x.Score <= 0 then
   begin
+    x.Score := 0;
+    x.Hab := 'N';
     writeln('Score restante: 0');
-    x.hab :='N'
   end
-
   else
   begin
-    x.hab := 'S';
-    writeln('Score restante: ',x.score);
+    x.Hab := 'S';
+    writeln('Score restante: ', x.Score);
   end;
 
   writeln('Estado del conductor: ');
-  if x.hab='S' then
-  begin
-       writeln(' Conductor Habilitado')
-  end else
-      writeln('Conductor Inhabilitado');
+  if x.Hab = 'S' then
+    writeln('Conductor habilitado')
+  else
+    writeln('Conductor inhabilitado');
 end;
+
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);      {generar infraccion a un conductor}
 var
   x: T_Dato_Conductor;
