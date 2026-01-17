@@ -18,7 +18,7 @@ procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
 procedure Buscar_Infraccion_ID(var Arch_I: T_Archivo_I;id_bus: string;var pos: longint;var encontrado: boolean);
-procedure Modificar_Datos_Infraccion(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
+procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
@@ -386,8 +386,12 @@ begin
   begin
     read(Arch_I, inf);
     if (inf.ID = id_bus) then
+    begin
       pos := FilePos(Arch_I) - 1;
-      encontrado := true
+
+
+      encontrado := true;
+      end
     else
       inc(pos);
   end;
@@ -395,8 +399,8 @@ begin
   if not encontrado then
     pos := -1;
 end;
-procedure Modificar_Datos_Infraccion(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
-var op1;byte;
+procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
+var op1:byte;
 begin
 
   writeln('1 Cambiar tipo de infraccion');
@@ -445,7 +449,7 @@ begin
     readln(op);
 
   case op of
-   1: begin
+   '1': begin
       pos_c := 0;
       seek(Arch_C, 0);
       while not eof(Arch_C) do
@@ -469,24 +473,23 @@ begin
       write(Arch_I, inf);
       writeln('Apelación aceptada');
       readkey;
-    end
+    end;
 
-  2:  begin
+  '2':  begin
       inf.Apelada := 'S';
       seek(Arch_I, pos_i);
       write(Arch_I, inf);
       writeln('Apelación rechazada');
       readkey;
-    end;
-  end
-  else
+       end;
+  end;
+  end else
   begin
     writeln('La infracción ya fue apelada');
     readkey;
   end;
   clrscr;
  end;
-end;
 
 
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
@@ -515,7 +518,7 @@ begin
 
     case op of
       '1': Apelar_Infraccion(Arch_C, Arch_I, inf, pos);
-      '2': Modificar_Datos_Inf(Arch_I, inf, pos);
+      '2': Modificar_datosinf(Arch_I, inf, pos);
     end;
   end
   else
@@ -560,7 +563,9 @@ begin
                  end;
               '2': begin
                    clrscr;
-                   Modificar_Infraccion(Arch_C,Arch_I)
+                   Modificar_Infraccion(Arch_C,Arch_I);
+                   clrscr;
+              end;
             '3': begin
               clrscr;
                 consulta_infracciones(Arch_I,buscado);
@@ -634,7 +639,7 @@ begin
   end;
 
   if cantpersonas <> 0 then
-    porcentaje_infapeladas := (apeladas * 100) / cantpersonas;
+    porcentaje_infapeladas := (apeladas * 100) / cantpersonas
   else
     porcentaje_infapeladas := 0;
 end;

@@ -41,7 +41,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Infracciones"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="9" Y="11"/>
+        <CursorPos X="17" Y="15"/>
         <UsageCount Value="234"/>
         <Loaded Value="True"/>
       </Unit>
@@ -90,26 +90,26 @@
         <TopLine Value="53"/>
         <CursorPos Y="96"/>
         <FoldState Value=" T3g05812 PiHj00z"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="45"/>
       </Unit>
       <Unit>
         <Filename Value="manejo_lista.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="110" Y="7"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="45"/>
       </Unit>
       <Unit>
         <Filename Value="lista_fecha.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Lista_fecha"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="menues.pas"/>
         <EditorIndex Value="1"/>
         <TopLine Value="107"/>
-        <CursorPos X="47" Y="113"/>
+        <CursorPos X="86" Y="127"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -126,8 +126,8 @@
         <Filename Value="maneja_archivo.pas"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="293"/>
-        <CursorPos X="44" Y="308"/>
+        <TopLine Value="629"/>
+        <CursorPos X="62" Y="642"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
       </Unit>
@@ -135,7 +135,6 @@
         <Filename Value="usuario.pas"/>
         <UnitName Value="Usuario"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="21"/>
         <CursorPos X="65" Y="34"/>
         <UsageCount Value="117"/>
         <Loaded Value="True"/>
@@ -143,7 +142,7 @@
       <Unit>
         <Filename Value="Scoring.exe"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
       <Unit>
@@ -152,20 +151,20 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="74" Y="21"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\AppData\Local\Temp\9e978ac3-a3c5-4e2b-b0c2-e2d14f0f873a_TP_Scoring-main.zip.TP_Scoring-main.zip\TP_Scoring-main\manejo_infracciones.pas"/>
         <UnitName Value="Manejo_Infracciones"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\AppData\Local\Temp\a58e2b41-091e-4260-8491-b844f5c781b4_TP_Scoring-main.zip.TP_Scoring-main.zip\TP_Scoring-main\florituras.pas"/>
         <UnitName Value="FLORITURAS"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="112"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\AppData\Local\Temp\1eb529ef-1ee5-49f2-9eb7-a3eaf810bdef_TP_Scoring-main.zip.TP_Scoring-main.zip\TP_Scoring-main\amc_infracciones.pas"/>
@@ -173,7 +172,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
         <CursorPos X="74" Y="99"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\AppData\Local\Temp\9264f34f-7d49-484b-8ed8-ba1bd883800c_TP_Scoring-main.zip.TP_Scoring-main.zip\TP_Scoring-main\amc_infracciones.pas"/>
@@ -181,78 +180,10 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="220"/>
         <CursorPos Y="246"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="355" Column="20" TopLine="341"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="323" Column="6" TopLine="309"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="356" Column="14" TopLine="341"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="287" Column="54" TopLine="263"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="536" Column="63" TopLine="504"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="26" Column="41" TopLine="14"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="125" Column="21"/>
-      </Position>
-      <Position>
-        <Filename Value="infracciones.pas"/>
-        <Caret Line="28" Column="39" TopLine="5"/>
-      </Position>
-      <Position>
-        <Filename Value="conductores.pas"/>
-        <Caret Line="13" Column="56"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="420" Column="67" TopLine="407"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="134" Column="53" TopLine="122"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="161" Column="65" TopLine="146"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="13" Column="54"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="521" Column="69" TopLine="512"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="278" Column="41" TopLine="260"/>
-      </Position>
-      <Position>
-        <Filename Value="maneja_archivo.pas"/>
-        <Caret Line="271" Column="34" TopLine="101"/>
-      </Position>
-      <Position>
-        <Filename Value="usuario.pas"/>
-        <Caret Line="40" Column="6" TopLine="16"/>
-      </Position>
       <Position>
         <Filename Value="usuario.pas"/>
         <Caret Line="38" Column="9" TopLine="23"/>
@@ -304,6 +235,74 @@
       <Position>
         <Filename Value="maneja_archivo.pas"/>
         <Caret Line="337" Column="43" TopLine="338"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="403" Column="10" TopLine="384"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="448" Column="31" TopLine="432"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="39" Column="85" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="622" Column="50" TopLine="595"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="241" Column="10" TopLine="299"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="390" Column="26" TopLine="376"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="391" Column="5" TopLine="376"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="389" Column="10" TopLine="380"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="403" Column="9" TopLine="388"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="478" Column="5" TopLine="453"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="476" Column="9" TopLine="463"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="485" Column="7" TopLine="471"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="486" Column="7" TopLine="468"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="492" Column="6" TopLine="479"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="521" Column="12" TopLine="507"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="21" Column="29" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="maneja_archivo.pas"/>
+        <Caret Line="567" Column="27" TopLine="552"/>
       </Position>
     </JumpHistory>
     <RunParams>
