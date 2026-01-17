@@ -8,10 +8,11 @@ Const
      Ruta2='Infracciones.dat';
 type
    T_Dato_Infraccion = record
+      ID:string[8];
       DNI:String[8];
       Descontar:1..20;
       Fecha:string[10];
-      Tipo:1..27;
+      Tipo:1..20;
       Apelada:char;
 end;
 

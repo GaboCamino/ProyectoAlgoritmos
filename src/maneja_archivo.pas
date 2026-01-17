@@ -17,12 +17,17 @@ procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
+procedure Buscar_Infraccion_ID(var Arch_I: T_Archivo_I;id_bus: string;var pos: longint;var encontrado: boolean);
+procedure Modificar_Datos_Infraccion(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
+procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
+procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
 Procedure IngresaFecha(var inf: T_Dato_Infraccion);
 
 {estadisticas}
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
 function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
+function porcentaje_infapeladas(var Arch_I: T_Archivo_I): real;
 procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
 
 
@@ -223,39 +228,46 @@ end;
 procedure asignarDescuento(var inf: t_dato_infraccion);                      {asignar infraccion a un conductor con dicho puntaje}
 begin
   case inf.tipo of
-    1:  inf.descontar := 5;
-    2:  inf.descontar := 4;
-    3:  inf.descontar := 5;
-    4:  inf.descontar := 4;
-    5:  inf.descontar := 5;
-    6:  inf.descontar := 10;
-    7:  inf.descontar := 5;
-    8:  inf.descontar := 10;
-    9:  inf.descontar := 20;
-    10: inf.descontar := 20;
+    1, 2: inf.Descontar := 2;
 
+    3..6: inf.Descontar := 4;
+
+    7..12: inf.Descontar := 5;
+
+    13..18: inf.Descontar := 10;
+
+    19, 20: inf.Descontar := 20;
   else
-    Inf.Descontar := 0;
+    inf.Descontar := 0;
   end;
 
 end;
 
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);     {registrar infracción a un conductor}
-var total:byte;
 begin
 
   writeln('infracciones');
-  writeln('1- licencia vencida');
-  writeln('2- circular sin RTO');
-  writeln('3- circular sin casco');
-  writeln('4- sin cinturón');
-  writeln('5- no respetar semáforos');
-  writeln('6- conducir con impedimientos fisicos y/o bajo de estupefacientes');
-  writeln('7- exceso velocidad (menos 30%)');
-  writeln('8- exceso velocidad (más 30%)');
-  writeln('9- conducir inhabilitado');
-  writeln('10- organizar y/o participar en competencias ilegales en via publica');
-  writeln('0: volver');
+   writeln('1- Circular sin placas de identificación');
+   writeln('2- Estacionar en lugares prohibidos');
+   writeln('3- Circular sin Revisión Técnica Obligatoria (RTO/VTV)');
+   writeln('4- No utilizar cinturón de seguridad');
+   writeln('5- Transportar menores sin sistema de retención');
+   writeln('6- No respetar prioridad de peatones o emergencias');
+   writeln('7- No respetar semáforos');
+   writeln('8- Circular con licencia vencida');
+   writeln('9- Motociclistas sin casco reglamentario');
+   writeln('10- Utilizar teléfono celular durante la conducción');
+   writeln('11- Circular en contramano');
+   writeln('12- Exceso de velocidad (hasta 30%)');
+   writeln('13- Conducir bajo efectos de alcohol y/o estupefacientes');
+   writeln('14- Conducir con impedimentos físicos o psíquicos');
+   writeln('15- Exceso de velocidad (más del 30%)');
+   writeln('16- Conducción peligrosa o temeraria');
+   writeln('17- Negarse a control de alcoholemia');
+   writeln('18- Conducir transporte sin habilitación');
+   writeln('19- Conducir con licencia suspendida o inhabilitado');
+   writeln('20- Competencias ilegales en vía pública');
+   writeln('0- Volver');
   write('Ingrese el número de infracción: ');
   readln(Inf.Tipo);
   AsignarDescuento(Inf);
@@ -265,17 +277,17 @@ begin
   writeln;
   writeln('Infracción penalizada por: ', inf.Descontar, ' puntos.');
 
-  if x.Score <= 0 then
-  begin
-    x.Score := 0;
-    x.Hab := 'N';
-    writeln('Score restante: 0');
-  end
-  else
-  begin
-    x.Hab := 'S';
-    writeln('Score restante: ', x.Score);
-  end;
+     if x.Score <= 0 then
+     begin
+       x.Score := 0;
+       x.Hab := 'N';
+       writeln('Score restante: 0');
+     end
+     else
+     begin
+       x.Hab := 'S';
+       writeln('Score restante: ', x.Score);
+     end;
 
   writeln('Estado del conductor: ');
   if x.Hab = 'S' then
@@ -305,8 +317,10 @@ begin
   seek(Arch_C, pos);
   write(Arch_C, x);
 
-  seek(Arch_I, filesize(Arch_I));
+  inf.Id := IntToStr(FileSize(Arch_I) + 1);
+  seek(Arch_I, FileSize(Arch_I));
   write(Arch_I, inf);
+
 
   writeln;
   writeln('Infracción registrada correctamente');
@@ -325,11 +339,12 @@ begin
 
   clrscr;
   textcolor(black);
-  gotoxy(1,1); Write('DNI');
-  gotoxy(22,1); Write('FECHA');
-  gotoxy(37,1); Write('INFRACCION');
-  gotoxy(52,1); Write('DESCUENTO');
-  gotoxy(57,1); Write('APELADA');
+  gotoxy(1,1); Write('ID');
+  gotoxy(22,1); Write('DNI');
+  gotoxy(37,1); Write('FECHA');
+  gotoxy(52,1); Write('INFRACCION');
+  gotoxy(67,1); Write('DESCUENTO');
+  gotoxy(72,1); Write('APELADA');
   textcolor(15);
   seek(Arch_I, 0);
   while not eof(Arch_I) do
@@ -338,11 +353,12 @@ begin
     if inf.DNI = dni_bus then
     begin
       infraccion := true;
-      gotoxy(1, y);  write(inf.DNI);
-      gotoxy(19, y); write(inf.Fecha);
-      gotoxy(39, y); write(inf.Tipo);
-      gotoxy(56, y); write(inf.Descontar);
-      gotoxy(60, y); write(inf.Apelada);
+      gotoxy(1, y);  write(inf.ID);
+      gotoxy(19, y);  write(inf.DNI);
+      gotoxy(36, y); write(inf.Fecha);
+      gotoxy(56, y); write(inf.Tipo);
+      gotoxy(71, y); write(inf.Descontar);
+      gotoxy(75, y); write(inf.Apelada);
       inc(y);
     end;
 
@@ -358,6 +374,158 @@ begin
   writeln('Presione una tecla para continuar...');
   readkey;
 end;
+procedure Buscar_Infraccion_ID(var Arch_I: T_Archivo_I;id_bus: string;var pos: longint;var encontrado: boolean);
+var
+  inf: T_Dato_Infraccion;
+begin
+  encontrado := false;
+  pos := 0;
+  seek(Arch_I, 0);
+
+  while not eof(Arch_I) and not encontrado do
+  begin
+    read(Arch_I, inf);
+    if (inf.ID = id_bus) then
+      pos := FilePos(Arch_I) - 1;
+      encontrado := true
+    else
+      inc(pos);
+  end;
+
+  if not encontrado then
+    pos := -1;
+end;
+procedure Modificar_Datos_Infraccion(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
+var op1;byte;
+begin
+
+  writeln('1 Cambiar tipo de infraccion');
+  writeln('2 modificar fecha de infraccion');
+  readln(op1);
+  case op1 of
+     1: begin clrscr;
+        write('Nuevo tipo de infracción: ');
+        readln(inf.Tipo);
+        AsignarDescuento(inf);
+        seek(Arch_I, pos_i);
+        write(Arch_I, inf); writeln('Infracción modificada');readkey;
+        clrscr;
+        end;
+
+      2: begin
+         clrscr;
+         IngresaFecha(inf);
+         seek(Arch_I, pos_i);
+         write(Arch_I, inf);
+         writeln;
+         writeln('Fecha de infracción modificada');
+         readkey;
+       end;
+  end;
+
+  clrscr;
+end;
+procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
+var
+  x: T_Dato_Conductor;
+  pos_c: longint;
+  op: char;
+begin
+  clrscr;
+
+  if inf.Apelada = 'N' then
+  begin
+    writeln('Procesando apelación ');
+    delay(1500);
+    writeln;
+    writeln('Resultado de la apelación');
+    writeln('1- Aceptada');
+    writeln('2- Rechazada');
+    write('Opción: ');
+    readln(op);
+
+  case op of
+   1: begin
+      pos_c := 0;
+      seek(Arch_C, 0);
+      while not eof(Arch_C) do
+      begin
+        read(Arch_C, x);
+        if x.DNI = inf.DNI then
+        begin
+          x.Score := x.Score + inf.Descontar;
+          if x.Score > 20 then
+            x.Score := 20;
+
+            x.Hab := 'S';
+
+            seek(Arch_C, pos_c);
+            write(Arch_C, x);
+        end;
+        inc(pos_c);
+      end;
+      inf.Apelada := 'S';
+      seek(Arch_I, pos_i);
+      write(Arch_I, inf);
+      writeln('Apelación aceptada');
+      readkey;
+    end
+
+  2:  begin
+      inf.Apelada := 'S';
+      seek(Arch_I, pos_i);
+      write(Arch_I, inf);
+      writeln('Apelación rechazada');
+      readkey;
+    end;
+  end
+  else
+  begin
+    writeln('La infracción ya fue apelada');
+    readkey;
+  end;
+  clrscr;
+ end;
+end;
+
+
+procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
+var
+  id_bus: string;
+  pos: longint;
+  encontrado: boolean;
+  inf: T_Dato_Infraccion;
+  op: char;
+begin
+  write('Ingrese ID de la infracción: ');
+  readln(id_bus);
+
+  Buscar_Infraccion_ID(Arch_I, id_bus, pos, encontrado);
+
+  if encontrado then
+  begin
+    seek(Arch_I, pos);
+    read(Arch_I, inf);
+
+    writeln;
+    writeln('1: Apelar infracción');
+    writeln('2: Modificar datos');
+    writeln('0: Volver');
+    readln(op);
+
+    case op of
+      '1': Apelar_Infraccion(Arch_C, Arch_I, inf, pos);
+      '2': Modificar_Datos_Inf(Arch_I, inf, pos);
+    end;
+  end
+  else
+  begin
+    writeln('ID inexistente');
+    readkey;
+  end;
+end;
+
+
 
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);      {menú alta-modificacion-consulta del archivo de infracciones}
 var
@@ -390,7 +558,9 @@ begin
                   Alta_Infraccion(Arch_C, Arch_I, pos);
                   clrscr;
                  end;
-           { 2:   }
+              '2': begin
+                   clrscr;
+                   Modificar_Infraccion(Arch_C,Arch_I)
             '3': begin
               clrscr;
                 consulta_infracciones(Arch_I,buscado);
@@ -447,19 +617,27 @@ end else
 	conductoresPorcentajeReincidencias:=0;
 end;
 
-{function infraccionMasComun(arch_i:T_Archivo_I; inf:T_Dato_Infraccion);
+function porcentaje_infapeladas(var Arch_I: T_Archivo_I): real;
 var
-   contador_inf:byte;
+  cantpersonas, apeladas: integer;
+  inf: T_Dato_Infraccion;
 begin
-     contador_inf:=0;
-     seek(arch_i,0);
-     while not eof(arch_i) do
-     begin
-          read(arch_i,inf);
-          if inf.Tipo then
-     end;
+  cantpersonas := 0; apeladas := 0;
+  seek(Arch_I, 0);
+  while not eof(Arch_I) do
+  begin
+    read(Arch_I, inf);
+    inc(cantpersonas);
 
-end;      }     //no me dio la cabeza para seguirlo
+    if inf.Apelada = 'S' then
+      inc(apeladas);
+  end;
+
+  if cantpersonas <> 0 then
+    porcentaje_infapeladas := (apeladas * 100) / cantpersonas;
+  else
+    porcentaje_infapeladas := 0;
+end;
 
 
 procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);

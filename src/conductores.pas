@@ -13,7 +13,7 @@ type
       Nacim:string[10];
       Tel:string[11];
       Mail:string[80];
-      Score:0..20;
+      Score:integer;
       Hab:char;
       Fecha_hab:string[10];
       Reincidencias:byte;

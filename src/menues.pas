@@ -123,7 +123,9 @@ Repeat
               writeln('Porcentaje de Conductores con score 0: ', conductoresScoreCero(arch_c,x):0:2, '%'); readkey; clrscr;
      end;
      '4':begin
-              //total
+              //porcentaje de infracciones apeladas
+              writeln('Porcentaje de infracciones apeladas: ', porcentaje_infapeladas(Arch_I):0:2, '%');
+
      end;
      '5':begin
               //rango etario con mas infracciones
