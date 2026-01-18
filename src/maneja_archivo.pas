@@ -2,7 +2,7 @@ unit maneja_archivo;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos, SysUtils;
+    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos,Sysutils;
 
 {ambc conductores}
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
@@ -22,7 +22,6 @@ procedure Modificar_Datos_Infraccion(var Arch_I: T_Archivo_I;var inf: T_Dato_Inf
 procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
-Procedure IngresaFecha(var inf: T_Dato_Infraccion);
 
 {estadisticas}
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
@@ -30,11 +29,9 @@ function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Con
 function porcentaje_infapeladas(var Arch_I: T_Archivo_I): real;
 procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
 
-
 {validación}
 function esNumerico(x:T_Dato_Conductor):boolean;
-function EsNumero(s: string): boolean;
-function ComparadorFecha(sa,sm,sd:word):string;
+
 implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
@@ -300,6 +297,7 @@ procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
+  f: string;
 begin
   seek(Arch_C, pos);
   read(Arch_C, x);
@@ -310,9 +308,9 @@ begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
 
- { write('Ingrese fecha (DD/MM/AAAA): ');
-  readln(inf.Fecha);} //viejo, lo dejo por las dudas si lo mío no funca
-  IngresaFecha(inf);
+  f:=#0;
+  IngresaFecha(f);
+  inf.Fecha:=f;
 
   seek(Arch_C, pos);
   write(Arch_C, x);
@@ -336,7 +334,6 @@ var
 begin
   infraccion := false;
   y := 3;
-
   clrscr;
   textcolor(black);
   gotoxy(1,1); Write('ID');
@@ -346,6 +343,7 @@ begin
   gotoxy(67,1); Write('DESCUENTO');
   gotoxy(72,1); Write('APELADA');
   textcolor(15);
+  Titulos_List_Inf;
   seek(Arch_I, 0);
   while not eof(Arch_I) do
   begin
@@ -359,6 +357,7 @@ begin
       gotoxy(56, y); write(inf.Tipo);
       gotoxy(71, y); write(inf.Descontar);
       gotoxy(75, y); write(inf.Apelada);
+      Mostrar_Inf_planilla(inf,Y);
       inc(y);
     end;
 
@@ -386,8 +385,10 @@ begin
   begin
     read(Arch_I, inf);
     if (inf.ID = id_bus) then
+    begin
       pos := FilePos(Arch_I) - 1;
-      encontrado := true
+      encontrado := true;
+    end
     else
       inc(pos);
   end;
@@ -396,7 +397,8 @@ begin
     pos := -1;
 end;
 procedure Modificar_Datos_Infraccion(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
-var op1;byte;
+var op1:byte;
+  f:string;
 begin
 
   writeln('1 Cambiar tipo de infraccion');
@@ -414,7 +416,8 @@ begin
 
       2: begin
          clrscr;
-         IngresaFecha(inf);
+         IngresaFecha(f);
+         inf.Fecha:=f;
          seek(Arch_I, pos_i);
          write(Arch_I, inf);
          writeln;
@@ -445,7 +448,7 @@ begin
     readln(op);
 
   case op of
-   1: begin
+   '1': begin
       pos_c := 0;
       seek(Arch_C, 0);
       while not eof(Arch_C) do
@@ -469,16 +472,15 @@ begin
       write(Arch_I, inf);
       writeln('Apelación aceptada');
       readkey;
-    end
+    end;
 
-  2:  begin
+  '2':  begin
       inf.Apelada := 'S';
       seek(Arch_I, pos_i);
       write(Arch_I, inf);
       writeln('Apelación rechazada');
       readkey;
     end;
-  end
   else
   begin
     writeln('La infracción ya fue apelada');
@@ -487,7 +489,7 @@ begin
   clrscr;
  end;
 end;
-
+end;
 
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
 var
@@ -515,7 +517,7 @@ begin
 
     case op of
       '1': Apelar_Infraccion(Arch_C, Arch_I, inf, pos);
-      '2': Modificar_Datos_Inf(Arch_I, inf, pos);
+      '2': Modificar_Datos_Infraccion(Arch_I, inf, pos);
     end;
   end
   else
@@ -540,12 +542,10 @@ begin
      if pos=-1 then                                                           {siempre distinto de -1}
      begin
        writeln('conductor no encontrado');
-
          end
              else
              begin
          Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
-
           gotoxy(30,6); writeln('1: Agregar infraccion');
           gotoxy(30,8); writeln('2: Modificar infraccion');
           gotoxy(30,10); writeln('3: Consultar infracciones');
@@ -553,19 +553,20 @@ begin
           gotoxy(30,14); write('Opción: ');
           gotoxy(38,14); readln(op2);
           case op2 of
-              '1': begin
+            '1': begin
                   clrscr;
                   Alta_Infraccion(Arch_C, Arch_I, pos);
                   clrscr;
                  end;
-              '2': begin
+            '2': begin
                    clrscr;
-                   Modificar_Infraccion(Arch_C,Arch_I)
+                   Modificar_Infraccion(Arch_C,Arch_I);
+                 end;
             '3': begin
-              clrscr;
-                consulta_infracciones(Arch_I,buscado);
-               clrscr;
-               end;
+                 clrscr;
+                 consulta_infracciones(Arch_I,buscado);
+                 clrscr;
+                 end;
             end;
           end;
              end;
@@ -634,9 +635,10 @@ begin
   end;
 
   if cantpersonas <> 0 then
-    porcentaje_infapeladas := (apeladas * 100) / cantpersonas;
+    porcentaje_infapeladas := (apeladas * 100) / cantpersonas
   else
     porcentaje_infapeladas := 0;
+
 end;
 
 
@@ -696,55 +698,7 @@ begin
 esNumerico:=estado
 end;
 
-Procedure IngresaFecha(var inf: T_Dato_Infraccion);
-var d,m,a,comp,f: string;
-  sd,sm,sa:word;
-begin
-  comp:='1';
-  f:='0';
-  DecodeDate(Date,sa,sm,sd);
-  repeat
-     Writeln('Ingrese fecha: ');
-     if (StrToInt(f))>(StrToInt(comp)) then
-     begin
-          clrscr;
-          Writeln('Ingrese la fecha actual o una pasada.');
-          readkey;
-     end;
-           repeat
-                 readln(d);
-           until (Length(d) = 2) and EsNumero(d) and (StrToInt(d) >= 1) and (StrToInt(d) <= 31);
-     Write('/');
-           repeat
-                  readln(m);
-           until (Length(m) = 2) and EsNumero(m) and (StrToInt(m) >= 1) and (StrToInt(m) <= 12);
-     Write('/');
-           repeat
-                  readln(a);
-           until (Length(a) = 4) and EsNumero(a) and (StrToInt(a) >= 1900) and (StrToInt(a) <=sa);
-     f:= a+m+d;
-     comp:=ComparadorFecha(sa,sm,sd);
-     until (StrToInt(f))<=(StrToInt(comp));
-     inf.Fecha:=f;
-end;
 
-function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vemos como unificar
-  var
-    i: integer;
-  begin
-    EsNumero := true;
-    for i := 1 to Length(s) do
-      if not (s[i] in ['0'..'9']) then
-      begin
-        EsNumero := false;
-      end;
-  end;
- function ComparadorFecha(sa,sm,sd:word):string;
- begin
- ComparadorFecha:=IntToStr(sa) +
-  Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
-  Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
- end;
 end.
 
 
