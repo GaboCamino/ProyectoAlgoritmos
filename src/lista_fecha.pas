@@ -6,15 +6,11 @@ uses crt,infracciones;
 const
   N=10000;
 type
- T_dato_lista=record
-   Fecha:string;
-   pos:integer;
- end;
 
  T_punt_F=^T_nodo;
 
  T_nodo=record
-   info:T_dato_lista;
+   info:T_Dato_Infraccion;
    sig:T_punt_F;
  end;
 
@@ -26,11 +22,10 @@ type
  Procedure CrearLista(var l:T_lista);
  Procedure siguiente(var l:T_lista);
  Procedure Crear_Lista_Fecha(var l:T_lista;var Arch_I:T_Archivo_I);
- Procedure Agregar_A_Lista(var l:T_lista;var Arch_I:T_Archivo_I;x:T_dato_lista);
- procedure Transf_Dato_Fecha(var Arch_I: T_Archivo_I; var x: t_dato_lista);
+ Procedure Agregar_A_Lista(var l:T_lista;var Arch_I:T_Archivo_I;x:T_Dato_Infraccion);
  procedure buscar(var l: t_lista; buscado: string; var enc: boolean);
  procedure primero( var l:t_lista);
- procedure recuperar(l:t_lista;var x:T_dato_lista);
+ procedure recuperar(l:t_lista;var x:T_Dato_Infraccion);
  function fin_lista(l:t_lista):boolean;
 implementation
 
@@ -45,17 +40,17 @@ begin
 end;
 Procedure Crear_Lista_Fecha(var l:T_lista;var Arch_I:T_Archivo_I);
 var
-  x:T_dato_lista;
+  x:T_Dato_Infraccion;
     begin
          CrearLista(l);
          seek(Arch_I,0);
          while filepos(Arch_I) < filesize(Arch_I) do
                begin
-                    Transf_Dato_Fecha(Arch_I,x);
+                    read(Arch_I,x);
                     Agregar_A_Lista(l,Arch_I,x);
                     end;
          end;
-Procedure Agregar_A_Lista(var l:T_lista;var Arch_I:T_Archivo_I;x:T_dato_lista);
+Procedure Agregar_A_Lista(var l:T_lista;var Arch_I:T_Archivo_I;x:T_Dato_Infraccion);
 var nodo,ant:T_punt_F;
 begin
      new(nodo);
@@ -78,17 +73,10 @@ begin
      end;
      l.tam:=l.tam+1;
 end;
-procedure Transf_Dato_Fecha(var Arch_I: T_Archivo_I; var x: t_dato_lista);
-var
-   x1: T_Dato_Infraccion;
-begin
-  read(Arch_I,x1);
-  x.Fecha:= x1.Fecha;
-  x.pos:= filepos(Arch_I) - 1;
-end;
+
 procedure buscar(var l: t_lista; buscado: string; var enc: boolean);
 var
-    x: t_dato_lista;
+    x: T_Dato_Infraccion;
 begin
     primero(l);
     enc := false;
@@ -106,7 +94,7 @@ procedure primero( var l:t_lista);
 begin
      l.act:=l.cab;
 end;
-procedure recuperar(l:t_lista;var x:T_dato_lista);
+procedure recuperar(l:t_lista;var x:T_Dato_Infraccion);
 begin
      x:=l.act^.info;
 end;

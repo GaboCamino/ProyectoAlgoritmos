@@ -5,7 +5,7 @@ uses
     crt,Maneja_arboles,arboles,conductores,maneja_archivo,usuario,infracciones,Lista_fecha;
 
 procedure Menu;
-procedure Submenu_Listados(var arch_c:T_Archivo_C; var arbol_apynom:t_punt);
+procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt;l:T_lista);
 procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);
 
 implementation
@@ -45,7 +45,7 @@ Repeat
                   //Actualización por infracción
            end;
            '4':begin
-                    Submenu_Listados(arch_c,arbol_apynom); clrscr;
+                    Submenu_Listados(arch_c,arbol_apynom,l); clrscr;
                     //listado fecha infracciones
                     //por período
                     //por período de un conductor
@@ -61,11 +61,15 @@ until op='0';
 close(arch_c);
 end;
 
-procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt); {submenú de los listados de un conductores-infracción}
+procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt;l:T_lista); {submenú de los listados de un conductores-infracción}
 var
+   p:T_punt_F;
    op:char;
    x:t_dato_conductor;
+   fecha_desde,fecha_hasta:string;
 begin
+     fecha_desde:=#0;                                  //necesito la variable antes para poder detectar si ya se habían ingresado datos en el primer procedimiento
+     fecha_hasta:=#0;
 Repeat
     gotoxy(30,4); Writeln('1. Conductores habilitados');
     gotoxy(30,6); Writeln('2. Conductores inhabilitados');
@@ -82,9 +86,11 @@ end;
          conductores_inhab(arch_c); clrscr;
 end;
 '3':begin
+         InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta);
          //infracciones entre 2 fechas
 end;
 '4':begin
+         InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta);
          //infracciones conductor 2 fechas
 end;
 '5':begin
