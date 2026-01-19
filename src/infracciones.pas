@@ -12,7 +12,7 @@ type
       DNI:String[8];
       Descontar:1..20;
       Fecha:string[10];
-      Tipo:1..20;
+      Tipo:0..20;
       Apelada:char;
 end;
 

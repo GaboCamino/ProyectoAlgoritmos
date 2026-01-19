@@ -3,7 +3,7 @@ unit Usuario;
 interface
 
 uses
-    crt,Arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
+    crt,dos,Arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
 
 procedure Titulos_List_Cond;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
@@ -19,6 +19,8 @@ procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
 Procedure IngresaFecha(var f: string);
 function EsNumero(s: string): boolean;
 function ComparadorFecha(sa,sm,sd:word):string;
+procedure muestraFecha(inf:T_Dato_Infraccion);
+
 implementation
 
 procedure Titulos_List_Cond;           {títulos arriba de todo en la pantalla}
@@ -146,49 +148,60 @@ end;
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);    //evalua si es el conductor buscado, falta hacer busqueda por nombre
 var conductor:string[8];                                                             //relacionando DNI en Arch_C con DNI en Arch_I
     f:string;
-    begin
-      p:=l.cab;
+begin
       conductor:=#0;
-      Writeln('Ingrese fecha inicial: ');
+      Write('Ingrese fecha inicial (DD/MM/AAAA): ');
       IngresaFecha(f);
       fecha_desde:=f;
-      Writeln('Ingrese fecha final: ');
+      Write('Ingrese fecha final (DD/MM/AAAA): ');
       IngresaFecha(f);
       fecha_hasta:=f;
       Writeln('Ingrese DNI del conductor: '); Readln(conductor);
-      while (p <> nil) and (p^.info.DNI <> conductor) do
-        p := p^.sig;
-      while (p <> nil) and (p^.info.DNI = conductor) do
-    begin
-        InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta);                                                     //pasa a evaluar si pertenece al rango de fechas
-    end;
-    end;
+      while not fin_lista(l) do
+           begin
+           if (p^.info.DNI <> conductor) then
+              p := p^.sig
+           else
+           if (p^.info.DNI = conductor) then
+           InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta);                                                     //pasa a evaluar si pertenece al rango de fechas
+      end;
+      readkey;
+end;
 
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 var inf:T_Dato_Infraccion;
     Y:byte;
     f:string;
 begin
-  If fecha_desde<>#0 then                 //si no se ingresaron datos en el anterior procedimiento de conductor, significa que esto
+
+  If fecha_desde=#0 then                 //si no se ingresaron datos en el anterior procedimiento de conductor, significa que esto
   begin                                      //es listado general entre fechas, debe detectar que no haya datos ingresados y permitir
-  Writeln('Ingrese fecha inicial: ');        //que ahora se ingresen datos
+  Write('Ingrese fecha inicial (DD/MM/AAAA): ');        //que ahora se ingresen datos
   IngresaFecha(f);
   fecha_desde:=f;
-  Writeln('Ingrese fecha final: ');
+  Write('Ingrese fecha final (DD/MM/AAAA): ');
   IngresaFecha(f);
   fecha_hasta:=f;
   end;
   clrscr;
   Titulos_List_Inf;
-  while (p <> nil) and (p^.info.Fecha < fecha_desde) do
-        p := p^.sig;
-  while (p <> nil) and (p^.info.Fecha <= fecha_hasta) do
-    begin
+  writeln;
+  y:=3;
+  while not fin_lista(l) do
+  begin
+  if  (p^.info.Fecha < fecha_desde) then
+  begin
+       p := p^.sig
+  end;
+  if  (p^.info.Fecha <= fecha_hasta) then
+  begin
         Recuperar(l,Inf);
         Mostrar_Inf_planilla(Inf,Y);
         Inc(Y);
         p := p^.sig;
     end;
+end;
+readkey;
 end;
 procedure Titulos_List_Inf;
 begin
@@ -198,13 +211,26 @@ begin
      gotoxy(22,1); Write('FECHA');
      gotoxy(37,1); Write('INFRACCION');
      gotoxy(52,1); Write('DESCUENTO');
-     gotoxy(57,1); Write('APELADA');
+     gotoxy(70,1); Write('APELADA');
      textcolor(15);
 end;
+
+procedure muestraFecha(inf:T_Dato_Infraccion);
+var
+  anio:string[4];
+  mes,dia:string[2];
+
+begin
+     anio:=copy(inf.fecha,1,4);
+     mes:=copy(inf.fecha,5,6);
+     dia:=copy(inf.fecha,7,8);
+     writeln(dia,'/',mes,'/',anio);
+end;
+
 procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
 begin
       gotoxy(1, y);  write(inf.DNI);
-      gotoxy(19, y); write(inf.Fecha);
+      gotoxy(19, y); muestraFecha(inf);
       gotoxy(39, y); write(inf.Tipo);
       gotoxy(56, y); write(inf.Descontar);
       gotoxy(60, y); write(inf.Apelada);
@@ -212,12 +238,12 @@ end;
 Procedure IngresaFecha(var f: string);
 var d,m,a,comp:string;
   sd,sm,sa:word;
+  opx,opy:byte;
 begin
   comp:='1';
   f:='0';
   DecodeDate(Date,sa,sm,sd);
   repeat
-     Writeln('Ingrese fecha: ');
      if (StrToInt(f))>(StrToInt(comp)) then
      begin
           clrscr;
@@ -225,15 +251,18 @@ begin
           readkey;
      end;
            repeat
-                 readln(d);
+                 opx:=whereX; opy:=whereY; readln(d);
            until (Length(d) = 2) and EsNumero(d) and (StrToInt(d) >= 1) and (StrToInt(d) <= 31);
-     Write('/');
+           gotoxy(opx+2,opy); Write('/');
            repeat
-                  readln(m);
+                 opx:=whereX;
+           gotoxy(opx,opy); opy:=whereY; opx:=whereX;  readln(m);
            until (Length(m) = 2) and EsNumero(m) and (StrToInt(m) >= 1) and (StrToInt(m) <= 12);
-     Write('/');
+                 //op:=whereX;
+           gotoxy(opx+2,opy); opx:=whereX;  Write('/');
            repeat
-                  readln(a);
+                 opx:=whereX;
+                 gotoxy(opx,opy);  readln(a);
            until (Length(a) = 4) and EsNumero(a) and (StrToInt(a) >= 1900) and (StrToInt(a) <=sa);
      f:= a+m+d;
      comp:=ComparadorFecha(sa,sm,sd);
@@ -257,4 +286,6 @@ function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vem
   Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
   Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
  end;
+
+
 end.

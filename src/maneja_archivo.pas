@@ -22,7 +22,7 @@ procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;
 procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
 procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
-Procedure IngresaFecha(var inf: T_Dato_Infraccion);
+
 
 {estadisticas}
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
@@ -31,10 +31,6 @@ function porcentaje_infapeladas(var Arch_I: T_Archivo_I): real;
 procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
 
 
-{validación}
-function esNumerico(x:T_Dato_Conductor):boolean;
-function EsNumero(s: string): boolean;
-function ComparadorFecha(sa,sm,sd:word):string;
 implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
@@ -158,7 +154,7 @@ begin
   begin
 
     writeln('El conductor posee score 0.');
-    gotoxy(2,13);
+    gotoxy(2,4);
     writeln('¿Cumplió con los cursos obligatorios?');
     readln(op);
     if (upcase(op)) = 'S' then
@@ -237,15 +233,12 @@ begin
     13..18: inf.Descontar := 10;
 
     19, 20: inf.Descontar := 20;
-  else
-    inf.Descontar := 0;
   end;
 
 end;
 
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);     {registrar infracción a un conductor}
 begin
-
   writeln('infracciones');
    writeln('1- Circular sin placas de identificación');
    writeln('2- Estacionar en lugares prohibidos');
@@ -282,39 +275,39 @@ begin
        x.Score := 0;
        x.Hab := 'N';
        writeln('Score restante: 0');
-     end
-     else
+     end else
      begin
        x.Hab := 'S';
        writeln('Score restante: ', x.Score);
      end;
 
-  writeln('Estado del conductor: ');
+  write('Estado del conductor: ');
   if x.Hab = 'S' then
     writeln('Conductor habilitado')
   else
     writeln('Conductor inhabilitado');
 end;
 
+
 procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);      {generar infraccion a un conductor}
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
+  f:string;
 begin
   seek(Arch_C, pos);
   read(Arch_C, x);
   clrscr;
 
   registrarinf(x, inf);
-
+  if inf.tipo<>0 then
+  begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
-
- { write('Ingrese fecha (DD/MM/AAAA): ');
-  readln(inf.Fecha);} //viejo, lo dejo por las dudas si lo mío no funca
-  IngresaFecha(inf);
+  Write('Ingrese fecha: '); IngresaFecha(f);
 
   seek(Arch_C, pos);
+  inf.fecha:=f;
   write(Arch_C, x);
 
   inf.Id := IntToStr(FileSize(Arch_I) + 1);
@@ -324,7 +317,7 @@ begin
 
   writeln;
   writeln('Infracción registrada correctamente');
-
+  end;
   delay(1500);
   clrscr;
 end;
@@ -344,7 +337,7 @@ begin
   gotoxy(37,1); Write('FECHA');
   gotoxy(52,1); Write('INFRACCION');
   gotoxy(67,1); Write('DESCUENTO');
-  gotoxy(72,1); Write('APELADA');
+  gotoxy(82,1); Write('APELADA');
   textcolor(15);
   seek(Arch_I, 0);
   while not eof(Arch_I) do
@@ -355,25 +348,24 @@ begin
       infraccion := true;
       gotoxy(1, y);  write(inf.ID);
       gotoxy(19, y);  write(inf.DNI);
-      gotoxy(36, y); write(inf.Fecha);
+
+      gotoxy(36, y); muestraFecha(inf);
       gotoxy(56, y); write(inf.Tipo);
       gotoxy(71, y); write(inf.Descontar);
-      gotoxy(75, y); write(inf.Apelada);
+      gotoxy(83, y); write(inf.Apelada);
       inc(y);
     end;
 
  end;
-
   if not infraccion then
   begin
     writeln;
     writeln('El conductor no posee infracciones registradas.');
   end;
-
   writeln;
-  writeln('Presione una tecla para continuar...');
   readkey;
 end;
+
 procedure Buscar_Infraccion_ID(var Arch_I: T_Archivo_I;id_bus: string;var pos: longint;var encontrado: boolean);
 var
   inf: T_Dato_Infraccion;
@@ -401,11 +393,12 @@ begin
 end;
 procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 var op1:byte;
+  f:string;
 begin
 
-  writeln('1 Cambiar tipo de infraccion');
-  writeln('2 modificar fecha de infraccion');
-  readln(op1);
+  writeln('1. Cambiar tipo de infraccion');
+  writeln('2. modificar fecha de infraccion');
+  write('Opción: '); readln(op1);
   case op1 of
      1: begin clrscr;
         write('Nuevo tipo de infracción: ');
@@ -418,7 +411,7 @@ begin
 
       2: begin
          clrscr;
-         IngresaFecha(inf);
+         IngresaFecha(f);
          seek(Arch_I, pos_i);
          write(Arch_I, inf);
          writeln;
@@ -498,9 +491,13 @@ var
   pos: longint;
   encontrado: boolean;
   inf: T_Dato_Infraccion;
-  op: char;
+  op,op1: char;
 begin
-  write('Ingrese ID de la infracción: ');
+  writeln;
+  write('Desea realizar alguna modificación? S/N'); readln(op);
+  if upcase(op)='S' then
+  begin
+       write('Ingrese ID de la infracción: ');
   readln(id_bus);
 
   Buscar_Infraccion_ID(Arch_I, id_bus, pos, encontrado);
@@ -526,6 +523,8 @@ begin
     writeln('ID inexistente');
     readkey;
   end;
+  end;
+
 end;
 
 
@@ -547,33 +546,31 @@ begin
          end
              else
              begin
-         Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
+         Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln;
 
-          gotoxy(30,6); writeln('1: Agregar infraccion');
-          gotoxy(30,8); writeln('2: Modificar infraccion');
-          gotoxy(30,10); writeln('3: Consultar infracciones');
-          gotoxy(30,12);writeln('0: Regresar');
+          gotoxy(30,6); writeln('1: Agregar infraccion a un conductor');
+          gotoxy(30,8); writeln('2: Modificar infracciones de un conductor');
+          gotoxy(30,10);writeln('3: Consultar infracciones de un conductor');
+          gotoxy(30,12); writeln('0: Regresar');
           gotoxy(30,14); write('Opción: ');
-          gotoxy(38,14); readln(op2);
+          gotoxy(38,14); readln(op2); clrscr;
           case op2 of
               '1': begin
-                  clrscr;
                   Alta_Infraccion(Arch_C, Arch_I, pos);
                   clrscr;
                  end;
               '2': begin
-                   clrscr;
-                   Modificar_Infraccion(Arch_C,Arch_I);
+                   consulta_infracciones(Arch_I,buscado); //mostrar id de las infracciones que se le asocian a un conductor
+
+                   Modificar_Infraccion(Arch_C,Arch_I);   //se usa el id para apelar la infraccion (aceptada/rechazada)
                    clrscr;
               end;
-            '3': begin
-              clrscr;
-                consulta_infracciones(Arch_I,buscado);
-               clrscr;
-               end;
+              '3':begin
+                        Consulta_Infracciones(arch_i,buscado); clrscr;
+              end;
             end;
           end;
-             end;
+end;
 
 
 {estadísticas debe ir en otra unit, de momento lo pongo acá, luego organizamos bien}
@@ -677,80 +674,5 @@ begin
      writeln('Cantidad de infracciones entre 31 a 50 años: ',cont2);
      writeln('Cantidad de infracciones a mayores de 50 años: ',cont3);
 end;
-
-{validaciones}
-
-function esNumerico(x:T_Dato_Conductor):boolean;
-var
-   i:byte;
-   estado:boolean;
-begin
-     i:=1;
-     if (length(x.dni)=7) or (length(x.dni)=8) then        {dni de 7 u 8 digitos}
-     begin
-          estado:=true;
-          for i:=1 to length(x.dni) do                    {hasta la longitud del dni}
-          begin
-               if not(x.dni[i] in ['0'..'9']) then         {rango numerico del dni}
-               begin
-                    estado:=false;
-               end;
-          end;
-     end else
-         estado:=false;
-esNumerico:=estado
-end;
-
-Procedure IngresaFecha(var inf: T_Dato_Infraccion);
-var d,m,a,comp,f: string;
-  sd,sm,sa:word;
-begin
-  comp:='1';
-  f:='0';
-  DecodeDate(Date,sa,sm,sd);
-  repeat
-     Writeln('Ingrese fecha: ');
-     if (StrToInt(f))>(StrToInt(comp)) then
-     begin
-          clrscr;
-          Writeln('Ingrese la fecha actual o una pasada.');
-          readkey;
-     end;
-           repeat
-                 readln(d);
-           until (Length(d) = 2) and EsNumero(d) and (StrToInt(d) >= 1) and (StrToInt(d) <= 31);
-     Write('/');
-           repeat
-                  readln(m);
-           until (Length(m) = 2) and EsNumero(m) and (StrToInt(m) >= 1) and (StrToInt(m) <= 12);
-     Write('/');
-           repeat
-                  readln(a);
-           until (Length(a) = 4) and EsNumero(a) and (StrToInt(a) >= 1900) and (StrToInt(a) <=sa);
-     f:= a+m+d;
-     comp:=ComparadorFecha(sa,sm,sd);
-     until (StrToInt(f))<=(StrToInt(comp));
-     inf.Fecha:=f;
-end;
-
-function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vemos como unificar
-  var
-    i: integer;
-  begin
-    EsNumero := true;
-    for i := 1 to Length(s) do
-      if not (s[i] in ['0'..'9']) then
-      begin
-        EsNumero := false;
-      end;
-  end;
- function ComparadorFecha(sa,sm,sd:word):string;
- begin
- ComparadorFecha:=IntToStr(sa) +
-  Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
-  Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
- end;
 end.
-
-
 

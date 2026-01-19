@@ -27,12 +27,11 @@ begin
 Repeat
       gotoxy(30,4);writeln('1. ABMC Conductores');
       gotoxy(30,6);writeln('2. AMC Infracciones');
-      gotoxy(30,8);writeln('3. Actualización por infracción');
-      gotoxy(30,10);writeln('4. Listados conductores/infracciones');
-      gotoxy(30,12); writeln('5. Estadísticas');
-      gotoxy(30,14);writeln('0. Salir');
-      gotoxy(30,16); write('Opción: ');
-      gotoxy(38,16); readln(op); clrscr;
+      gotoxy(30,8);writeln('3. Listados conductores/infracciones');
+      gotoxy(30,10); writeln('4. Estadísticas');
+      gotoxy(30,12);writeln('0. Salir');
+      gotoxy(30,14); write('Opción: ');
+      gotoxy(38,14); readln(op); clrscr;
 
       case op of
            '1':begin
@@ -42,23 +41,15 @@ Repeat
                   AMC (Arch_C, Arch_I,arbol_dni,arbol_apynom); clrscr;
            end;
            '3':begin
-                  //Actualización por infracción
+                  Submenu_Listados(arch_c,arbol_apynom,l); clrscr;
            end;
            '4':begin
-                    Submenu_Listados(arch_c,arbol_apynom,l); clrscr;
-                    //listado fecha infracciones
-                    //por período
-                    //por período de un conductor
-
-           end;
-           '5':begin
-                    //estadisticas
                     submenu_estadisticas(arch_i,arch_c);
            end;
-
       end;
 until op='0';
 close(arch_c);
+close(arch_i);
 end;
 
 procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt;l:T_lista); {submenú de los listados de un conductores-infracción}
@@ -68,6 +59,7 @@ var
    x:t_dato_conductor;
    fecha_desde,fecha_hasta:string;
 begin
+     p:=l.cab;
      fecha_desde:=#0;                                  //necesito la variable antes para poder detectar si ya se habían ingresado datos en el primer procedimiento
      fecha_hasta:=#0;
 Repeat
@@ -86,11 +78,11 @@ end;
          conductores_inhab(arch_c); clrscr;
 end;
 '3':begin
-         InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta);
+         InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta); clrscr;
          //infracciones entre 2 fechas
 end;
 '4':begin
-         InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta);
+         InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta); clrscr;
          //infracciones conductor 2 fechas
 end;
 '5':begin
@@ -112,7 +104,7 @@ Repeat
      gotoxy(30,4); writeln('1. Infracciones entre fechas');
      gotoxy(30,6); writeln('2. Porcentaje de conductores con reincidencia');
      gotoxy(30,8); writeln('3. Porcentaje de conductores con scoring 0');
-     gotoxy(30,10); writeln('4. Total'); // elegir entre los 3 una estadistica a implementar para el municipio
+     gotoxy(30,10); writeln('4. Porcentaje de apelaciones'); // elegir entre los 3 una estadistica a implementar para el municipio
      gotoxy(30,12); writeln('5. Rango etario con más infracciones');
      gotoxy(30,14); writeln('0. Regresar');
      gotoxy(30,16); write('Opción: '); readln(op); clrscr;
@@ -130,7 +122,7 @@ Repeat
      end;
      '4':begin
               //porcentaje de infracciones apeladas
-              writeln('Porcentaje de infracciones apeladas: ', porcentaje_infapeladas(Arch_I):0:2, '%');
+              writeln('Porcentaje de infracciones apeladas: ', porcentaje_infapeladas(Arch_I):0:2, '%'); readkey; clrscr;
 
      end;
      '5':begin
