@@ -293,7 +293,7 @@ procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
-  f:string;
+  f,mensaje:string;
 begin
   seek(Arch_C, pos);
   read(Arch_C, x);
@@ -304,7 +304,7 @@ begin
   begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
-  Write('Ingrese fecha: '); IngresaFecha(f);
+  mensaje:='Ingrese fecha: '; IngresaFecha(f,mensaje);
 
   seek(Arch_C, pos);
   inf.fecha:=f;
@@ -392,7 +392,7 @@ begin
 end;
 procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 var op1:byte;
-  f:string;
+  f,mensaje:string;
 begin
 
   writeln('1. Cambiar tipo de infraccion');
@@ -410,7 +410,8 @@ begin
 
       2: begin
          clrscr;
-         IngresaFecha(f);
+         mensaje:='Ingrese fecha (DD/MM/AAAA): ';
+         IngresaFecha(f,mensaje);
          seek(Arch_I, pos_i);
          write(Arch_I, inf);
          writeln;

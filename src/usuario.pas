@@ -16,11 +16,11 @@ Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_h
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 procedure Titulos_List_Inf;
 procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
-Procedure IngresaFecha(var f: string);
+Procedure IngresaFecha(var f: string;mensaje:string);
 function EsNumero(s: string): boolean;
 function ComparadorFecha(sa,sm,sd:word):string;
 procedure muestraFecha(inf:T_Dato_Infraccion);
-
+Function EsFecha(x:string;long,min,max:integer):boolean;
 implementation
 
 procedure Titulos_List_Cond;           {títulos arriba de todo en la pantalla}
@@ -147,14 +147,14 @@ begin
 end;
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);    //evalua si es el conductor buscado, falta hacer busqueda por nombre
 var conductor:string[8];                                                             //relacionando DNI en Arch_C con DNI en Arch_I
-    f:string;
+    f,mensaje:string;
 begin
       conductor:=#0;
-      Write('Ingrese fecha inicial (DD/MM/AAAA): ');
-      IngresaFecha(f);
+      mensaje:='Ingrese fecha inicial (DD/MM/AAAA): ';
+      IngresaFecha(f,mensaje);
       fecha_desde:=f;
-      Write('Ingrese fecha final (DD/MM/AAAA): ');
-      IngresaFecha(f);
+      mensaje:='Ingrese fecha final (DD/MM/AAAA): ';
+      IngresaFecha(f,mensaje);
       fecha_hasta:=f;
       Writeln('Ingrese DNI del conductor: '); Readln(conductor);
       while not fin_lista(l) do
@@ -171,16 +171,16 @@ end;
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 var inf:T_Dato_Infraccion;
     Y:byte;
-    f:string;
+    f,mensaje:string;
 begin
 
   If fecha_desde=#0 then                 //si no se ingresaron datos en el anterior procedimiento de conductor, significa que esto
   begin                                      //es listado general entre fechas, debe detectar que no haya datos ingresados y permitir
-  Write('Ingrese fecha inicial (DD/MM/AAAA): ');        //que ahora se ingresen datos
-  IngresaFecha(f);
+  mensaje:='Ingrese fecha inicial (DD/MM/AAAA): ';        //que ahora se ingresen datos
+  IngresaFecha(f,mensaje);
   fecha_desde:=f;
-  Write('Ingrese fecha final (DD/MM/AAAA): ');
-  IngresaFecha(f);
+  mensaje:='Ingrese fecha final (DD/MM/AAAA): ';
+  IngresaFecha(f,mensaje);
   fecha_hasta:=f;
   end;
   clrscr;
@@ -235,7 +235,7 @@ begin
       gotoxy(56, y); write(inf.Descontar);
       gotoxy(60, y); write(inf.Apelada);
 end;
-Procedure IngresaFecha(var f: string);
+Procedure IngresaFecha(var f: string;mensaje:string);
 var d,m,a,comp:string;
   sd,sm,sa:word;
   opx,opy:byte;
@@ -249,21 +249,23 @@ begin
           clrscr;
           Writeln('Ingrese la fecha actual o una pasada.');
           readkey;
+          clrscr;
      end;
+     write(mensaje);
+     opx:=whereX; opy:=whereY;
            repeat
-                 opx:=whereX; opy:=whereY; readln(d);
-           until (Length(d) = 2) and EsNumero(d) and (StrToInt(d) >= 1) and (StrToInt(d) <= 31);
+                 gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(d);
+           until EsFecha(d,2,1,31);
            gotoxy(opx+2,opy); Write('/');
+           opx:=whereX; opy:=whereY;
            repeat
-                 opx:=whereX;
-           gotoxy(opx,opy); opy:=whereY; opx:=whereX;  readln(m);
-           until (Length(m) = 2) and EsNumero(m) and (StrToInt(m) >= 1) and (StrToInt(m) <= 12);
-                 //op:=whereX;
+                 gotoxy(opx,opy); clreol; opy:=whereY; opx:=whereX;  readln(m);
+           until EsFecha(m,2,1,12);
            gotoxy(opx+2,opy); opx:=whereX;  Write('/');
+           opx:=whereX; opy:=whereY;
            repeat
-                 opx:=whereX;
-                 gotoxy(opx,opy);  readln(a);
-           until (Length(a) = 4) and EsNumero(a) and (StrToInt(a) >= 1900) and (StrToInt(a) <=sa);
+                 gotoxy(opx,opy); clreol;opy:=whereY; opx:=whereX; readln(a);
+           until EsFecha(a,4,1900,sa);
      f:= a+m+d;
      comp:=ComparadorFecha(sa,sm,sd);
      until (StrToInt(f))<=(StrToInt(comp));
@@ -286,6 +288,11 @@ function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vem
   Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
   Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
  end;
-
+Function EsFecha(x:string;long,min,max:integer):boolean;
+begin
+if (Length(x) = long) and EsNumero(x) and (StrToInt(x) >= min) and (StrToInt(x) <= max) then
+EsFecha:=true
+else EsFecha:=false;
+end;
 
 end.
