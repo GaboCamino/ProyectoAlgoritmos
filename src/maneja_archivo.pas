@@ -555,8 +555,16 @@ begin
 
        Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
        writeln;
-
+       if x.Hab = 'N' then
+       begin
+       textcolor(black);
        gotoxy(30,6);  writeln('1: Agregar infracción a un conductor');
+       end else
+       begin
+         textcolor(white);
+         gotoxy(30,6);  writeln('1: Agregar infracción a un conductor');
+       end;
+       textcolor(white);
        gotoxy(30,8);  writeln('2: Modificar infracciones de un conductor');
        gotoxy(30,10); writeln('3: Consultar infracciones de un conductor');
        gotoxy(30,12); writeln('0: Regresar');
