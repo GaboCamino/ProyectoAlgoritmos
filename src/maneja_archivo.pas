@@ -332,12 +332,12 @@ begin
 
   clrscr;
   textcolor(black);
-  gotoxy(1,1); Write('ID');
+  gotoxy(1,1);  Write('ID');
   gotoxy(22,1); Write('DNI');
   gotoxy(37,1); Write('FECHA');
-  gotoxy(52,1); Write('INFRACCION');
-  gotoxy(67,1); Write('DESCUENTO');
-  gotoxy(82,1); Write('APELADA');
+  gotoxy(52,1); Write('TIPO DE INFRACCION');
+  gotoxy(75,1); Write('DESCUENTO');
+  gotoxy(92,1); Write('APELADA');
   textcolor(15);
   seek(Arch_I, 0);
   while not eof(Arch_I) do
@@ -347,12 +347,11 @@ begin
     begin
       infraccion := true;
       gotoxy(1, y);  write(inf.ID);
-      gotoxy(19, y);  write(inf.DNI);
-
+      gotoxy(19, y); write(inf.DNI);
       gotoxy(36, y); muestraFecha(inf);
-      gotoxy(56, y); write(inf.Tipo);
+      gotoxy(62, y); write(inf.Tipo);
       gotoxy(71, y); write(inf.Descontar);
-      gotoxy(83, y); write(inf.Apelada);
+      gotoxy(96, y); write(inf.Apelada);
       inc(y);
     end;
 
@@ -529,48 +528,66 @@ end;
 
 
 
-procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);      {menú alta-modificacion-consulta del archivo de infracciones}
+procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
 var
    buscado:string[50];
    pos:longint;
    op:boolean;
    op2:char;
+   x: T_Dato_Conductor;
 begin
      pos:=0;
-     Write('Búsqueda por DNI del conductor: '); Readln(Buscado); clrscr;
-     Busqueda(arbol_dni, buscado, pos,op);
-     if pos=-1 then                                                           {siempre distinto de -1}
+     Write('Búsqueda por DNI del conductor: ');
+     Readln(Buscado);
+     clrscr;
+
+     Busqueda(arbol_dni, buscado, pos, op);
+
+     if pos = -1 then
      begin
-       writeln('conductor no encontrado');
+       writeln('Conductor no encontrado');
+       readkey;
+     end
+     else
+     begin
+       seek(Arch_C, pos);
+       read(Arch_C, x);
 
-         end
-             else
-             begin
-         Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln;
+       Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
+       writeln;
 
-          gotoxy(30,6); writeln('1: Agregar infraccion a un conductor');
-          gotoxy(30,8); writeln('2: Modificar infracciones de un conductor');
-          gotoxy(30,10);writeln('3: Consultar infracciones de un conductor');
-          gotoxy(30,12); writeln('0: Regresar');
-          gotoxy(30,14); write('Opción: ');
-          gotoxy(38,14); readln(op2); clrscr;
-          case op2 of
-              '1': begin
+       gotoxy(30,6);  writeln('1: Agregar infracción a un conductor');
+       gotoxy(30,8);  writeln('2: Modificar infracciones de un conductor');
+       gotoxy(30,10); writeln('3: Consultar infracciones de un conductor');
+       gotoxy(30,12); writeln('0: Regresar');
+       gotoxy(30,14); write('Opción: ');
+       gotoxy(38,14); readln(op2);
+       clrscr;
+
+       case op2 of
+         '1': begin
+                if x.Hab = 'N' then
+                begin
+                  writeln('Conductor inhabilitado');
+                  writeln('No es posible registrar nuevas infracciones');
+                  readkey;
+                end
+                else
                   Alta_Infraccion(Arch_C, Arch_I, pos);
-                  clrscr;
-                 end;
-              '2': begin
-                   consulta_infracciones(Arch_I,buscado); //mostrar id de las infracciones que se le asocian a un conductor
+              end;
 
-                   Modificar_Infraccion(Arch_C,Arch_I);   //se usa el id para apelar la infraccion (aceptada/rechazada)
-                   clrscr;
+         '2': begin
+                Consulta_Infracciones(Arch_I, buscado);
+                Modificar_Infraccion(Arch_C, Arch_I);
               end;
-              '3':begin
-                        Consulta_Infracciones(arch_i,buscado); clrscr;
+
+         '3': begin
+                Consulta_Infracciones(Arch_I, buscado);
               end;
-            end;
-          end;
+       end;
+     end;
 end;
+
 
 
 {estadísticas debe ir en otra unit, de momento lo pongo acá, luego organizamos bien}
