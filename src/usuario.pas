@@ -21,6 +21,8 @@ function EsNumero(s: string): boolean;
 function ComparadorFecha(sa,sm,sd:word):string;
 procedure muestraFecha(inf:T_Dato_Infraccion);
 Function EsFecha(x:string;long,min,max:integer):boolean;
+Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
+Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
 implementation
 
 procedure Titulos_List_Cond;           {títulos arriba de todo en la pantalla}
@@ -145,9 +147,11 @@ begin
      end;
      readkey;
 end;
-Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);    //evalua si es el conductor buscado, falta hacer busqueda por nombre
-var conductor:string[8];                                                             //relacionando DNI en Arch_C con DNI en Arch_I
+Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);    //evalua si es el conductor buscado
+var conductor:string[8];
     f,mensaje:string;
+    inf:T_Dato_Infraccion;
+    Y:byte;
 begin
       conductor:=#0;
       mensaje:='Ingrese fecha inicial (DD/MM/AAAA): ';
@@ -157,61 +161,76 @@ begin
       IngresaFecha(f,mensaje);
       fecha_hasta:=f;
       Writeln('Ingrese DNI del conductor: '); Readln(conductor);
-      while not fin_lista(l) do
+      clrscr;
+      Titulos_List_Inf;
+      writeln;
+      y:=3;
+      while p<> nil do
            begin
            if (p^.info.DNI <> conductor) then
-              p := p^.sig
+           p := p^.sig
            else
            if (p^.info.DNI = conductor) then
-           InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta);                                                     //pasa a evaluar si pertenece al rango de fechas
+           RecorrePorFecha(p,fecha_desde,fecha_hasta,Inf,Y);                                                     //pasa a evaluar si pertenece al rango de fechas
       end;
       readkey;
 end;
-
-Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
-var inf:T_Dato_Infraccion;
-    Y:byte;
-    f,mensaje:string;
+Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
+var f,mensaje:string;
 begin
-
-  If fecha_desde=#0 then                 //si no se ingresaron datos en el anterior procedimiento de conductor, significa que esto
-  begin                                      //es listado general entre fechas, debe detectar que no haya datos ingresados y permitir
-  mensaje:='Ingrese fecha inicial (DD/MM/AAAA): ';        //que ahora se ingresen datos
+  mensaje:='Ingrese fecha inicial (DD/MM/AAAA): ';           //que ahora se ingresen datos
   IngresaFecha(f,mensaje);
   fecha_desde:=f;
   mensaje:='Ingrese fecha final (DD/MM/AAAA): ';
   IngresaFecha(f,mensaje);
   fecha_hasta:=f;
-  end;
+end;
+
+Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
+var inf:T_Dato_Infraccion;
+    Y:byte;
+begin
+
+  If fecha_desde=#0 then                                     //si no se ingresaron datos en el anterior procedimiento de conductor, significa que esto
+  begin                                                      //es listado general entre fechas, debe detectar que no haya datos ingresados y permitir
+  IntervaloFechas(fecha_desde,fecha_hasta);
   clrscr;
   Titulos_List_Inf;
   writeln;
   y:=3;
-  while not fin_lista(l) do
+  while p<>nil do
   begin
+        RecorrePorFecha(p,fecha_desde,fecha_hasta,Inf,Y);
+  end;
+readkey;
+end;
+end;
+
+Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
+begin
   if  (p^.info.Fecha < fecha_desde) then
   begin
        p := p^.sig
-  end;
-  if  (p^.info.Fecha <= fecha_hasta) then
+  end
+  else
+  if  (p^.info.Fecha >= fecha_desde) and (p^.info.Fecha <= fecha_hasta)then
   begin
-        Recuperar(l,Inf);
+        Inf:=p^.info;
         Mostrar_Inf_planilla(Inf,Y);
         Inc(Y);
         p := p^.sig;
     end;
 end;
-readkey;
-end;
 procedure Titulos_List_Inf;
 begin
      clrscr;
      textcolor(black);
-     gotoxy(1,1); Write('DNI');
-     gotoxy(22,1); Write('FECHA');
-     gotoxy(37,1); Write('INFRACCION');
-     gotoxy(52,1); Write('DESCUENTO');
-     gotoxy(70,1); Write('APELADA');
+  gotoxy(1,1);  Write('ID');
+  gotoxy(22,1); Write('DNI');
+  gotoxy(37,1); Write('FECHA');
+  gotoxy(52,1); Write('TIPO DE INFRACCION');
+  gotoxy(75,1); Write('DESCUENTO');
+  gotoxy(92,1); Write('APELADA');
      textcolor(15);
 end;
 
@@ -229,11 +248,12 @@ end;
 
 procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
 begin
-      gotoxy(1, y);  write(inf.DNI);
-      gotoxy(19, y); muestraFecha(inf);
-      gotoxy(39, y); write(inf.Tipo);
-      gotoxy(56, y); write(inf.Descontar);
-      gotoxy(60, y); write(inf.Apelada);
+      gotoxy(1, y);  write(inf.ID);
+      gotoxy(19, y); write(inf.DNI);
+      gotoxy(36, y); muestraFecha(inf);
+      gotoxy(62, y); write(inf.Tipo);
+      gotoxy(79, y); write(inf.Descontar);
+      gotoxy(96, y); write(inf.Apelada);
 end;
 Procedure IngresaFecha(var f: string;mensaje:string);
 var d,m,a,comp:string;

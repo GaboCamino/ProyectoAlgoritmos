@@ -6,7 +6,7 @@ uses
 
 procedure Menu;
 procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt;l:T_lista);
-procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);
+procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c;var l:T_lista);
 
 implementation
 
@@ -44,7 +44,7 @@ Repeat
                   Submenu_Listados(arch_c,arbol_apynom,l); clrscr;
            end;
            '4':begin
-                    submenu_estadisticas(arch_i,arch_c);
+                    submenu_estadisticas(arch_i,arch_c,l);
            end;
       end;
 until op='0';
@@ -59,10 +59,11 @@ var
    x:t_dato_conductor;
    fecha_desde,fecha_hasta:string;
 begin
-     p:=l.cab;
+
      fecha_desde:=#0;                                  //necesito la variable antes para poder detectar si ya se habían ingresado datos en el primer procedimiento
      fecha_hasta:=#0;
 Repeat
+    p:=l.cab;
     gotoxy(30,4); Writeln('1. Conductores habilitados');
     gotoxy(30,6); Writeln('2. Conductores inhabilitados');
     gotoxy(30,8); Writeln('3. Infracciones entre 2 fechas');
@@ -94,7 +95,7 @@ until op='0';
 
 end;
 
-procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c);   {submenú de las estadísticas de un conductor respecto a las infracciones otorgadas}
+procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c;var l:T_lista);   {submenú de las estadísticas de un conductor respecto a las infracciones otorgadas}
 var
    op:char;
    x:T_Dato_Conductor;
@@ -111,6 +112,7 @@ Repeat
      case op of
      '1':begin
               //infracciones entre 2 fechas
+              EstadisticaFechas(l);readkey;clrscr;
      end;
      '2':begin
               //porcentaje de conductores con reincidencia

@@ -2,7 +2,7 @@ unit maneja_archivo;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos, SysUtils;
+    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos, SysUtils,lista_fecha;
 
 {ambc conductores}
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
@@ -29,7 +29,7 @@ function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
 function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
 function porcentaje_infapeladas(var Arch_I: T_Archivo_I): real;
 procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
-
+Procedure EstadisticaFechas(var l:T_lista);
 
 implementation
 
@@ -329,16 +329,7 @@ var
 begin
   infraccion := false;
   y := 3;
-
-  clrscr;
-  textcolor(black);
-  gotoxy(1,1);  Write('ID');
-  gotoxy(22,1); Write('DNI');
-  gotoxy(37,1); Write('FECHA');
-  gotoxy(52,1); Write('TIPO DE INFRACCION');
-  gotoxy(75,1); Write('DESCUENTO');
-  gotoxy(92,1); Write('APELADA');
-  textcolor(15);
+  Titulos_List_Inf;
   seek(Arch_I, 0);
   while not eof(Arch_I) do
   begin
@@ -346,15 +337,9 @@ begin
     if inf.DNI = dni_bus then
     begin
       infraccion := true;
-      gotoxy(1, y);  write(inf.ID);
-      gotoxy(19, y); write(inf.DNI);
-      gotoxy(36, y); muestraFecha(inf);
-      gotoxy(62, y); write(inf.Tipo);
-      gotoxy(71, y); write(inf.Descontar);
-      gotoxy(96, y); write(inf.Apelada);
+      Mostrar_Inf_planilla(Inf,Y);
       inc(y);
     end;
-
  end;
   if not infraccion then
   begin
@@ -699,6 +684,32 @@ begin
      writeln('Cantidad de infracciones a menores de 30 años: ',cont1);
      writeln('Cantidad de infracciones entre 31 a 50 años: ',cont2);
      writeln('Cantidad de infracciones a mayores de 50 años: ',cont3);
+end;
+Procedure EstadisticaFechas(var l:T_lista);
+var fecha_desde,fecha_hasta:string;
+contador:integer;
+p:T_punt_F;
+begin
+     fecha_desde:=#0;
+     fecha_hasta:=#0;
+     contador:=0;
+     p:=l.cab;
+     clrscr;
+     IntervaloFechas(fecha_desde,fecha_hasta);
+     while p<>nil do
+     begin
+          if  (p^.info.Fecha < fecha_desde) then
+          begin
+               p := p^.sig
+          end
+          else
+          if  (p^.info.Fecha >= fecha_desde) and (p^.info.Fecha <= fecha_hasta)then
+          begin
+          contador:=contador+1;
+          p := p^.sig;
+          end;
+     end;
+     Writeln('Total de infracciones entre fechas: ',contador);
 end;
 end.
 

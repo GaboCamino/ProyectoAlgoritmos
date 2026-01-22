@@ -22,8 +22,8 @@ type
  Procedure CrearLista(var l:T_lista);
  Procedure siguiente(var l:T_lista);
  Procedure Crear_Lista_Fecha(var l:T_lista;var Arch_I:T_Archivo_I);
- Procedure Agregar_A_Lista(var l:T_lista;var Arch_I:T_Archivo_I;x:T_Dato_Infraccion);
- procedure buscar(var l: t_lista; buscado: string; var enc: boolean);
+ Procedure Agregar_A_Lista(var l:T_lista;x:T_Dato_Infraccion);
+// procedure buscar(var l: t_lista; buscado: string; var enc: boolean);
  procedure primero( var l:t_lista);
  procedure recuperar(l:t_lista;var x:T_Dato_Infraccion);
  function fin_lista(l:t_lista):boolean;
@@ -47,10 +47,10 @@ var
          while filepos(Arch_I) < filesize(Arch_I) do
                begin
                     read(Arch_I,x);
-                    Agregar_A_Lista(l,Arch_I,x);
+                    Agregar_A_Lista(l,x);
                     end;
          end;
-Procedure Agregar_A_Lista(var l:T_lista;var Arch_I:T_Archivo_I;x:T_Dato_Infraccion);
+Procedure Agregar_A_Lista(var l:T_lista;x:T_Dato_Infraccion);
 var nodo,ant:T_punt_F;
 begin
      new(nodo);
@@ -74,22 +74,6 @@ begin
      l.tam:=l.tam+1;
 end;
 
-procedure buscar(var l: t_lista; buscado: string; var enc: boolean);
-var
-    x: T_Dato_Infraccion;
-begin
-    primero(l);
-    enc := false;
-    while (not fin_lista(l)) and (enc=false) do
-    begin
-        recuperar(l,x);
-        if x.Fecha=buscado then
-        begin
-            enc:=true;
-        end else
-            siguiente(l);
-    end;
-end;
 procedure primero( var l:t_lista);
 begin
      l.act:=l.cab;
