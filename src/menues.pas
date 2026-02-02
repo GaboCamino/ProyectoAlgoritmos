@@ -20,11 +20,11 @@ var
 begin
      Abrircond(arch_c);
      Abririnf(Arch_I);
-     Crear_Arbol_DNI(Arch_C, Arbol_DNI);
-     Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
-     Crear_Lista_Fecha(l,Arch_I);
      textbackground(LightGreen); TextColor(White); clrscr;
 Repeat
+      Crear_Arbol_DNI(Arch_C, Arbol_DNI);
+      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
+      Crear_Lista_Fecha(l,Arch_I);
       gotoxy(30,4);writeln('1. ABMC Conductores');
       gotoxy(30,6);writeln('2. AMC Infracciones');
       gotoxy(30,8);writeln('3. Listados conductores/infracciones');
