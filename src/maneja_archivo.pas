@@ -33,42 +33,54 @@ Procedure EstadisticaFechas(var l:T_lista);
 
 implementation
 
-procedure Ingresa_Cond(var x: T_Dato_Conductor;  buscado: shortstring);    {cargar datos de un conductor y verifica si se encuentra existente}
+procedure Ingresa_Cond(var x: T_Dato_Conductor; buscado: shortstring);
 var
-   i:longint;
-   op:boolean;
+   i: longint;
+   op: boolean;
+   f, mensaje: string;
 begin
-     for i:=1 to length(buscado) do
-     begin                                                     {itera para validar si es de tipo caracter el buscado}
-          if buscado[i] in ['a'..'z','A'..'Z'] then
-          begin
-               op:=true;
-          end else
-          op:=false;
+     op := true;
+     for i := 1 to length(buscado) do
+     begin
+          if not (buscado[i] in ['a'..'z','A'..'Z',' ']) then
+               op := false;
      end;
 
-     if op=true then
+     if op = true then
      begin
-          x.Apynom:=buscado;
-          gotoxy(30,4); write('Apellido y nombre: ',buscado);        {en el caso de ser caracter considera que es un apynom}
-          gotoxy(30,6); write('DNI: '); readln(x.dni);
-     end else
-     if op=false then
+          x.Apynom := buscado;
+          gotoxy(30,4); write('Apellido y nombre: ', buscado);
+
+          repeat
+               gotoxy(30,6); clreol;
+               write('DNI: ');
+               readln(x.dni);
+          until (Length(x.dni) = 8) and EsNumero(x.dni);
+     end
+     else
      begin
           gotoxy(30,4); write('DNI: ', buscado);
-          x.dni:=buscado;                                                   {si es numerico es el dni}
-          gotoxy(30,6); write('Apellido y nombre: '); readln(x.apynom);
+          x.dni := buscado;
+
+          gotoxy(30,6); write('Apellido y nombre: ');
+          readln(x.apynom);
      end;
 
-     gotoxy(30,8); write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.nacim);     //ver cómo usar IngresaFecha
-     gotoxy(30,10); write('Telefono: '); readln(x.tel);
-     gotoxy(30,12); write('Email: '); readln(x.mail);
+     gotoxy(30,8);
+     mensaje := 'Ingrese fecha de nacimiento: ';IngresaFecha(f, mensaje);
+     x.Nacim := f;
 
-     x.Score:= 20;
-     x.Hab:= 'S';
- //  x.fecha_hab:=fecha;
-     x.Reincidencias:= 0;
+     gotoxy(30,10); write('Telefono: ');
+     readln(x.tel);
+
+     gotoxy(30,12); write('Email: ');
+     readln(x.mail);
+
+     x.Score := 20;
+     x.Hab := 'S';
+     x.Reincidencias := 0;
 end;
+
 
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);     {crea un nuevo conductor en el archivo de conductores}
 var
@@ -178,11 +190,14 @@ begin
   readkey;
 end;
 
-procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);     {actualiza los datos de un conductor en el archivo}
+procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);{actualiza los datos de un conductor en el archivo}
+var
+f,mensaje:string;
 begin
      case op of
           '1':begin
-                   write('Fecha de nacimiento (DD/MM/AAAA): '); readln(x.Nacim);
+                   mensaje:='Ingrese fecha de nacimiento: '; IngresaFecha(f,mensaje);
+                   x.Nacim:= f;
           end;
           '2':begin
                    write('Telefono: '); readln(x.tel);
@@ -293,7 +308,7 @@ procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
-  f,mensaje:string;
+   f,mensaje:string;
 begin
   seek(Arch_C, pos);
   read(Arch_C, x);
