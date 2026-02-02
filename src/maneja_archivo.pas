@@ -544,18 +544,18 @@ begin
        if x.Hab = 'N' then
        begin
        textcolor(black);
-       gotoxy(30,6);  writeln('1: Agregar infracción a un conductor');
+       gotoxy(30,16);  writeln('1: Agregar infracción a un conductor');
        end else
        begin
          textcolor(white);
-         gotoxy(30,6);  writeln('1: Agregar infracción a un conductor');
+         gotoxy(30,16);  writeln('1: Agregar infracción a un conductor');
        end;
        textcolor(white);
-       gotoxy(30,8);  writeln('2: Modificar infracciones de un conductor');
-       gotoxy(30,10); writeln('3: Consultar infracciones de un conductor');
-       gotoxy(30,12); writeln('0: Regresar');
-       gotoxy(30,14); write('Opción: ');
-       gotoxy(38,14); readln(op2);
+       gotoxy(30,18);  writeln('2: Modificar infracciones de un conductor');
+       gotoxy(30,20); writeln('3: Consultar infracciones de un conductor');
+       gotoxy(30,22); writeln('0: Regresar');
+       gotoxy(30,24); write('Opción: ');
+       gotoxy(38,24); readln(op2);
        clrscr;
 
        case op2 of
