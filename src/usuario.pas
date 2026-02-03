@@ -24,6 +24,7 @@ Function EsFecha(x:string;long,min,max:integer):boolean;
 Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
 procedure FechaActual(var fecha: string);
+function edadactual(fechaNac: string): integer;
 implementation
 
 procedure Titulos_List_Cond;           {títulos arriba de todo en la pantalla}
@@ -31,30 +32,30 @@ begin
   clrscr;
   textcolor(black);
   gotoxy(1,1); Write('APELLIDO Y NOMBRE');
-  gotoxy(33,1); Write('DNI');
-  gotoxy(45,1); Write('SCORING');
-  gotoxy(65,1); Write('HABILITADO');
-  gotoxy(85,1); Write('Fecha HABILITACION.');
-  gotoxy(105,1); Write('CANT. REINC.');
-  gotoxy(125,1); write('TELEFONO');
+  gotoxy(28,1); Write('DNI');
+  gotoxy(38,1); Write('SCORING');
+  gotoxy(53,1); Write('HABILITADO');
+  gotoxy(70,1); Write('Fecha HABILITACION.');
+  gotoxy(95,1); Write('CANT. REINC.');
+  gotoxy(110,1); write('TELEFONO');
   textcolor(15);
 end;
 
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);   {planilla por filas}
 begin
      gotoxy(1,Y); write(x.Apynom);
-     gotoxy(30,Y); write(x.DNI);
-     gotoxy(48,Y);  gotoxy(48,Y); if x.score <= 0 then
+     gotoxy(25,Y); write(x.DNI);
+     gotoxy(40,Y);if x.score <= 0 then
      begin
           x.score:=0;
           write(x.score);
           end
         else
           Write(x.score);
-     gotoxy(70,Y); Write(x.Hab);
-     gotoxy(90,Y); Write(x.Fecha_hab);
-     gotoxy(100,Y); Write(x.Reincidencias);
-     gotoxy(125,Y); write(x.Tel);
+     gotoxy(58,Y); Write(x.Hab);
+     gotoxy(74,Y); Write(x.Fecha_hab);
+     gotoxy(101,Y); Write(x.Reincidencias);
+     gotoxy(109,Y); write(x.Tel);
 end;
 
 procedure conductores_hab(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
@@ -320,20 +321,45 @@ end;
 procedure FechaActual(var fecha: string);
 var
    year, mont, mday, wday: word;
-   aux: string;
+   a, m, d: string;
 begin
      getdate(year, mont, mday, wday);
 
-     Str(year, fecha);
+     Str(year, a);
 
-     Str(mont, aux);
-     if mont < 10 then aux := '0' + aux;
-     fecha := fecha + aux;
+     Str(mont, m);
+     if mont < 10 then m := '0' + m;
 
-     Str(mday, aux);
-     if mday < 10 then aux := '0' + aux;
-     fecha := fecha + aux;
+     Str(mday, d);
+     if mday < 10 then d := '0' + d;
+
+     fecha := a + m + d;
 end;
+
+function edadactual(fechaNac: string): integer;
+var
+  year, month, day, wday: word;
+  anac, mnac, dnac, edad: integer;
+begin
+  // Obtengo la fecha actual
+  getdate(year, month, day, wday);
+
+  // Extraigo año, mes y día de la fecha de nacimiento
+  anac := StrToInt(copy(fechaNac, 1, 4));
+  mnac := StrToInt(copy(fechaNac, 5, 2));
+  dnac := StrToInt(copy(fechaNac, 7, 2));
+
+  // Calculo la edad
+  edad := year - anac;
+  if (month < mnac) or ((month = mnac) and (day < dnac)) then
+    dec(edad);
+
+  edadactual := edad;
+end;
+
+
+
+
 
 
 end.

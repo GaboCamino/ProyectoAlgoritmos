@@ -129,7 +129,7 @@ Repeat
      end;
      '5':begin
               //rango etario con mas infracciones
-              rangoEtario(arch_c, x); readkey; clrscr;
+              rangoEtario(arch_c,arch_i); readkey; clrscr;
      end;
      end;
 until op='0';

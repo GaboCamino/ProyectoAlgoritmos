@@ -28,7 +28,7 @@ procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arb
 function conductoresScoreCero(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
 function conductoresPorcentajeReincidencias(var arch_c:T_Archivo_C; x:T_Dato_Conductor):real;
 function porcentaje_infapeladas(var Arch_I: T_Archivo_I): real;
-procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
+procedure rangoEtario(var Arch_C: T_Archivo_C; var Arch_I: T_Archivo_I);
 Procedure EstadisticaFechas(var l:T_lista);
 
 implementation
@@ -70,6 +70,13 @@ begin
      mensaje := 'Ingrese fecha de nacimiento: ';IngresaFecha(f, mensaje);
      x.Nacim := f;
 
+     if edadactual(f)< 18 then
+     begin
+          clrscr;
+          writeln('conductor menor de edad');
+          readkey;
+     end   else
+    begin
      gotoxy(30,10); write('Telefono: ');
      readln(x.tel);
 
@@ -79,16 +86,21 @@ begin
      x.Score := 20;
      x.Hab := 'S';
      x.Reincidencias := 0;
+
+     gotoxy(30,14); writeln('¡Alta registrada!');
 end;
 
+end;
 
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);     {crea un nuevo conductor en el archivo de conductores}
 var
    x: T_Dato_Conductor;
    x1: t_dato_arbol;
+   fecha:string;
 begin
      ingresa_cond(x,buscado);
-     x.FechaHab := FechaActual;
+     FechaActual(fecha);
+     x.Fecha_Hab := fecha;
      x1.pos:= filesize(Arch_C);  //indica la posición donde se agregará el último registro
      seek(arch_c,x1.pos);
      write(arch_c,x);
@@ -96,8 +108,6 @@ begin
      agregar(arbol_dni,x1);
      x1.clave:= x.apynom;
      agregar(arbol_apynom,x1);
-
-     gotoxy(30,14); writeln('¡Alta registrada!');
 
 delay(1000);
 end;
@@ -162,6 +172,7 @@ end;
 procedure reincidencia_cond(var x: T_Dato_Conductor);
 var
   op: char;
+  fecha:string;
 begin
   if x.Score <= 0 then
   begin
@@ -175,7 +186,8 @@ begin
       x.Score := 20;
       x.Hab := 'S';
       x.Reincidencias:= x.Reincidencias + 1;
-      x.Fecha_hab := FechaActual;
+      FechaActual(fecha);
+      x.Fecha_hab := fecha;
       writeln('Reincidencia aplicada correctamente.');
       writeln('Score restaurado a 20.');
     end
@@ -670,38 +682,45 @@ begin
 end;
 
 
-procedure rangoEtario(var arch_c:T_Archivo_C; x:T_Dato_Conductor);
+procedure rangoEtario(var Arch_C: T_Archivo_C; var Arch_I: T_Archivo_I);
 var
-        cont1,cont2,cont3,edad:integer;
-        year,mont,mday,wday:word;
-        nac:word;
-        anioNac:shortstring;
+  x: T_Dato_Conductor;
+  inf: T_Dato_Infraccion;
+  edad: integer;
+  cont1, cont2, cont3: integer;
+  pos_c: longint;
 begin
-     cont1:=0; cont2:=0; cont3:=0;
-     getdate(year,mont,mday,wday);           {funcion que obtiene el año}
-     seek(arch_c,0);
-     while not eof(arch_c) do
-     begin
-          read(arch_c,x);
-          anioNac:=copy(x.nacim,7,10);             {extraigo el año}
-          edad:=year-StrToInt(anioNac);            {calculo la edad actual y a su vez convierto la cadena en un entero}
-          if (edad>=18) and (edad<=30) then
-          begin
-               inc(cont1);
-          end else
-          if (edad>31) and (edad<=50) then
-          begin
-               inc(cont2);
-          end else
-          if (edad>50) and (edad<=110) then
-          begin
-               inc(cont3);
-          end;
-     end;
-     writeln('Cantidad de infracciones a menores de 30 años: ',cont1);
-     writeln('Cantidad de infracciones entre 31 a 50 años: ',cont2);
-     writeln('Cantidad de infracciones a mayores de 50 años: ',cont3);
+  cont1 := 0; cont2 := 0; cont3 := 0;
+  seek(Arch_I, 0);
+  while not eof(Arch_I) do
+  begin
+    read(Arch_I, inf);
+    pos_c := 0;
+    seek(Arch_C, 0);
+    while not eof(Arch_C) do
+    begin
+      read(Arch_C, x);
+      if x.DNI = inf.DNI then
+      begin
+        edad := edadactual(x.Nacim);
+
+        if (edad >= 18) and (edad <= 30) then
+          inc(cont1)
+        else if (edad > 30) and (edad <= 50) then
+          inc(cont2)
+        else if (edad > 50) and (edad <= 110) then
+          inc(cont3);
+
+      end;
+      inc(pos_c);
+    end;
+  end;
+
+  writeln('Cantidad de infracciones a menores de 30 años: ', cont1);
+  writeln('Cantidad de infracciones entre 31 y 50 años: ', cont2);
+  writeln('Cantidad de infracciones a mayores de 50 años: ', cont3);
 end;
+
 Procedure EstadisticaFechas(var l:T_lista);
 var fecha_desde,fecha_hasta:string;
 contador:integer;
