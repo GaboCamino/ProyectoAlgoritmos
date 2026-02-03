@@ -87,7 +87,8 @@ var
    x: T_Dato_Conductor;
    x1: t_dato_arbol;
 begin
-     ingresa_cond(x,buscado);         {el buscado se podría usar para agregar mediante el arbol de apynom}
+     ingresa_cond(x,buscado);
+     x.FechaHab := FechaActual;
      x1.pos:= filesize(Arch_C);  //indica la posición donde se agregará el último registro
      seek(arch_c,x1.pos);
      write(arch_c,x);
@@ -174,6 +175,7 @@ begin
       x.Score := 20;
       x.Hab := 'S';
       x.Reincidencias:= x.Reincidencias + 1;
+      x.Fecha_hab := FechaActual;
       writeln('Reincidencia aplicada correctamente.');
       writeln('Score restaurado a 20.');
     end

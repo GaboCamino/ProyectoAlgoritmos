@@ -23,6 +23,7 @@ procedure muestraFecha(inf:T_Dato_Infraccion);
 Function EsFecha(x:string;long,min,max:integer):boolean;
 Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
+procedure FechaActual(var fecha: string);
 implementation
 
 procedure Titulos_List_Cond;           {títulos arriba de todo en la pantalla}
@@ -33,8 +34,9 @@ begin
   gotoxy(33,1); Write('DNI');
   gotoxy(45,1); Write('SCORING');
   gotoxy(65,1); Write('HABILITADO');
-  gotoxy(85,1); Write('CANT. REINC.');
-  gotoxy(105,1); write('TELEFONO');
+  gotoxy(85,1); Write('Fecha HABILITACION.');
+  gotoxy(105,1); Write('CANT. REINC.');
+  gotoxy(125,1); write('TELEFONO');
   textcolor(15);
 end;
 
@@ -50,8 +52,9 @@ begin
         else
           Write(x.score);
      gotoxy(70,Y); Write(x.Hab);
-     gotoxy(90,Y); Write(x.Reincidencias);
-     gotoxy(105,Y); write(x.Tel);
+     gotoxy(90,Y); Write(x.Fecha_hab);
+     gotoxy(100,Y); Write(x.Reincidencias);
+     gotoxy(125,Y); write(x.Tel);
 end;
 
 procedure conductores_hab(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
@@ -314,5 +317,23 @@ if (Length(x) = long) and EsNumero(x) and (StrToInt(x) >= min) and (StrToInt(x) 
 EsFecha:=true
 else EsFecha:=false;
 end;
+procedure FechaActual(var fecha: string);
+var
+   year, mont, mday, wday: word;
+   aux: string;
+begin
+     getdate(year, mont, mday, wday);
+
+     Str(year, fecha);
+
+     Str(mont, aux);
+     if mont < 10 then aux := '0' + aux;
+     fecha := fecha + aux;
+
+     Str(mday, aux);
+     if mday < 10 then aux := '0' + aux;
+     fecha := fecha + aux;
+end;
+
 
 end.
