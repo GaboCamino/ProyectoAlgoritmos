@@ -3,7 +3,7 @@ unit Usuario;
 interface
 
 uses
-    crt,dos,Arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
+    crt,dos,maneja_arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
 
 procedure Titulos_List_Cond;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
@@ -127,16 +127,16 @@ writeln('DNI: ',x.DNI);
 if x.score <= 0 then
 begin
      x.score:=0;
-     write(x.score);
+     writeln('Score: ', x.score);
 end else
-        Write(x.score);
+        Writeln('Score: ',x.score);
 writeln('Habilitación: ', x.hab);
 writeln('Fecha de habilitación: ',x.Fecha_hab);
 writeln('Reincidencias: ',x.Reincidencias);
 writeln('Telefóno: ',x.Tel);
 writeln('Mail: ',x.Mail);
 writeln('Fecha de nacimiento: ',x.Nacim);
-writeln('Estado: '); //readln()
+writeln('Estado: ', x.Estado);
 end else
      writeln('Posición inválida o no encontrada');
 end;

@@ -67,7 +67,7 @@ begin
      end;
 
      gotoxy(30,8);
-     mensaje := 'Ingrese fecha de nacimiento: ';IngresaFecha(f, mensaje);
+     mensaje := 'Ingrese fecha de nacimiento (DD/MM/AAAA): ';IngresaFecha(f, mensaje);
      x.Nacim := f;
 
      if edadactual(f)< 18 then
@@ -153,22 +153,26 @@ var
 begin
       //Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
       conductor_modificado(arch_c, pos,arbol_dni,arbol_apynom, x, Y);
-      gotoxy(1,11); writeln('MODIFICAR DATOS DEL CONDUCTOR');
-      gotoxy(1,12); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
-      gotoxy(1,13); writeln('2. Telefóno');
-      gotoxy(1,14); writeln('3. Dirección de mail');
-      gotoxy(1,15); writeln('4. Dar de baja');
-      gotoxy(1,16); writeln('5. Aplicar reincidencia');
-      gotoxy(1,17); Writeln('0. Regresar');
-      gotoxy(1,18); write('Que desea modificar? '); readln(op);
+
+      gotoxy(1,12); writeln('MODIFICAR DATOS DEL CONDUCTOR');
+      gotoxy(1,13); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
+      gotoxy(1,14); writeln('2. Telefóno');
+      gotoxy(1,15); writeln('3. Dirección de mail');
+      gotoxy(1,16); writeln('4. Dar de baja');
+      gotoxy(1,17); writeln('5. Aplicar reincidencia');
+      gotoxy(1,18); Writeln('0. Regresar');
+      gotoxy(1,19); write('Que desea modificar? '); readln(op);
       if op in ['1'..'5'] then
       begin
            seek(arch_c, pos);read(arch_c, x);
-           clrscr;
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
-           seek(Arch_c, pos);
-           write(Arch_C,x);
-           writeln('Modificación registrada');
+           gotoxy(1,21);write('Confirmar modificación? S/N: '); readln(op);
+           if upcase(op)='S' then
+           begin
+                seek(Arch_c, pos);
+                write(Arch_C,x);
+                gotoxy(1,22); writeln('¡Modificación registrada!');
+           end;
       end;
       delay(1000);clrscr;
 end;
@@ -220,14 +224,14 @@ f,mensaje:string;
 begin
      case op of
           '1':begin
-                   mensaje:='Ingrese fecha de nacimiento: '; IngresaFecha(f,mensaje);
+                   mensaje:=''; gotoxy(22,9); clreol; IngresaFecha(f,mensaje);
                    x.Nacim:= f;
           end;
           '2':begin
-                   write('Telefono: '); readln(x.tel);
+                   gotoxy(11,7); clreol; readln(x.tel);
           end;
           '3':begin
-                   write('Email: '); readln(x.mail);
+                   gotoxy(7,8); clreol; readln(x.mail);
           end;
           '4':begin
                    Baja_Cond(Arch_C, pos,x,arbol_dni,arbol_apynom);
@@ -343,7 +347,7 @@ begin
   begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
-  mensaje:='Ingrese fecha: '; IngresaFecha(f,mensaje);
+  write('Ingrese fecha: '); FechaActual(f);
 
   seek(Arch_C, pos);
   inf.fecha:=f;
