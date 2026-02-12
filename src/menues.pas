@@ -20,7 +20,7 @@ var
 begin
      Abrircond(arch_c);
      Abririnf(Arch_I);
-     textbackground(LightGreen); TextColor(White); clrscr;
+     textbackground(LightGray); TextColor(black); clrscr;
 Repeat
       Crear_Arbol_DNI(Arch_C, Arbol_DNI);
       Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);

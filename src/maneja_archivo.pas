@@ -72,7 +72,6 @@ begin
 
      if edadactual(f)< 18 then
      begin
-          clrscr;
           writeln('conductor menor de edad');
           readkey;
      end   else
@@ -86,6 +85,7 @@ begin
      x.Score := 20;
      x.Hab := 'S';
      x.Reincidencias := 0;
+     x.Estado:='S';
 
      gotoxy(30,14); writeln('¡Alta registrada!');
 end;
@@ -118,13 +118,14 @@ begin
      Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom);
      writeln;
      seek(Arch_C, pos); read(Arch_C, x);
-     write('Confirmar baja? S/N: '); readln(op);
+     write('Confirmar baja por defuncion?(S/N) : '); readln(op);
      if upcase(op)='S' then
      begin
           x.Hab:='N';
+          x.Estado:='N';
           seek(arch_c,pos);
           write(Arch_C,x);
-          writeln('¡Baja registrada!');
+          writeln('Baja registrada');
      end;
 delay(1000);
 clrscr;
@@ -148,16 +149,18 @@ procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbo
 var
    x: T_Dato_Conductor;
    op:char;
+   y:byte;
 begin
-      Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
-      gotoxy(1,6); writeln('MODIFICAR DATOS DEL CONDUCTOR');
-      gotoxy(1,10); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
-      gotoxy(1,12); writeln('2. Telefóno');
+      //Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
+      conductor_modificado(arch_c, pos,arbol_dni,arbol_apynom, x, Y);
+      gotoxy(1,11); writeln('MODIFICAR DATOS DEL CONDUCTOR');
+      gotoxy(1,12); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
+      gotoxy(1,13); writeln('2. Telefóno');
       gotoxy(1,14); writeln('3. Dirección de mail');
-      gotoxy(1,16); writeln('4. Dar de baja');
-      gotoxy(1,18); writeln('5. Aplicar reincidencia');
-      gotoxy(1,20); Writeln('0. Regresar');
-      gotoxy(1,22); write('Que desea modificar? '); readln(op);
+      gotoxy(1,15); writeln('4. Dar de baja');
+      gotoxy(1,16); writeln('5. Aplicar reincidencia');
+      gotoxy(1,17); Writeln('0. Regresar');
+      gotoxy(1,18); write('Que desea modificar? '); readln(op);
       if op in ['1'..'5'] then
       begin
            seek(arch_c, pos);read(arch_c, x);
@@ -174,7 +177,7 @@ var
   op: char;
   fecha:string;
 begin
-  if x.Score <= 0 then
+  if (x.Score <= 0) and (x.Estado= 'S') then
   begin
 
     writeln('El conductor posee score 0.');
@@ -186,6 +189,13 @@ begin
       x.Score := 20;
       x.Hab := 'S';
       x.Reincidencias:= x.Reincidencias + 1;
+      if (x.Reincidencias > 5) then
+      begin
+        x.Estado:= 'N';
+        x.Hab:= 'N';
+        writeln('el conductor llego al maximo de reincidencias');
+        writeln('conductor Inhabilitado permanentemente')
+      end;
       FechaActual(fecha);
       x.Fecha_hab := fecha;
       writeln('Reincidencia aplicada correctamente.');
@@ -198,7 +208,7 @@ begin
   end
   else
   begin
-    writeln('El conductor no posee score 0, No requiere reincidencia');
+    writeln('El conductor no puede aplicar a la reincidencia');
   end;
 
   readkey;

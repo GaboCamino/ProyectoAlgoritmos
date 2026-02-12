@@ -17,6 +17,7 @@ type
       Hab:char;
       Fecha_hab:string[10];
       Reincidencias:byte;
+      Estado:char;
 end;
 
    T_Archivo_C=File OF T_Dato_Conductor;

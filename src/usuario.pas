@@ -6,6 +6,7 @@ uses
     crt,dos,Arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
 
 procedure Titulos_List_Cond;
+procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
 procedure conductores_hab(var arch_c: T_Archivo_C);
@@ -112,7 +113,33 @@ begin
     inorden_listado_apynom(arch_c,raiz^.sad,Y);
   end;
 end;
+procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
+begin
+y:=2;
 
+if (pos >= 0) then
+     begin
+          seek(Arch_C, pos);
+          read(Arch_C, x);
+
+writeln('Apellido y nombre: ',x.apynom);
+writeln('DNI: ',x.DNI);
+if x.score <= 0 then
+begin
+     x.score:=0;
+     write(x.score);
+end else
+        Write(x.score);
+writeln('Habilitación: ', x.hab);
+writeln('Fecha de habilitación: ',x.Fecha_hab);
+writeln('Reincidencias: ',x.Reincidencias);
+writeln('Telefóno: ',x.Tel);
+writeln('Mail: ',x.Mail);
+writeln('Fecha de nacimiento: ',x.Nacim);
+writeln('Estado: '); //readln()
+end else
+     writeln('Posición inválida o no encontrada');
+end;
 
 procedure Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);   {muestra un unico conductor de la planilla}
 var
