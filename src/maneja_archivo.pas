@@ -152,9 +152,10 @@ var
    y:byte;
 begin
       //Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
+      clreol; textbackground(green); writeln('Datos del conductor'); textbackground(white); clreol;
       conductor_modificado(arch_c, pos,arbol_dni,arbol_apynom, x, Y);
 
-      gotoxy(1,12); writeln('MODIFICAR DATOS DEL CONDUCTOR');
+      gotoxy(1,12); clreol; textbackground(green); writeln('MODIFICAR DATOS DEL CONDUCTOR'); textbackground(white); clreol;
       gotoxy(1,13); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
       gotoxy(1,14); writeln('2. Telefóno');
       gotoxy(1,15); writeln('3. Dirección de mail');
@@ -166,6 +167,8 @@ begin
       begin
            seek(arch_c, pos);read(arch_c, x);
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
+           if op<>'5' then
+           begin
            gotoxy(1,21);write('Confirmar modificación? S/N: '); readln(op);
            if upcase(op)='S' then
            begin
@@ -174,7 +177,7 @@ begin
                 gotoxy(1,22); writeln('¡Modificación registrada!');
            end;
       end;
-      delay(1000);clrscr;
+      end;
 end;
 procedure reincidencia_cond(var x: T_Dato_Conductor);
 var
@@ -212,7 +215,8 @@ begin
   end
   else
   begin
-    writeln('El conductor no puede aplicar a la reincidencia');
+       writeln;
+       writeln('El conductor no puede aplicar a la reincidencia');
   end;
 
   readkey;
@@ -522,11 +526,10 @@ var
   op,op1: char;
 begin
   writeln;
-  write('Desea realizar alguna modificación? S/N'); readln(op);
+  write('Desea realizar alguna modificación? S/N: '); readln(op);
   if upcase(op)='S' then
   begin
-       write('Ingrese ID de la infracción: ');
-  readln(id_bus);
+       write('Ingrese ID de la infracción: ');readln(id_bus);
 
   Buscar_Infraccion_ID(Arch_I, id_bus, pos, encontrado);
 
@@ -586,14 +589,13 @@ begin
        writeln;
        if x.Hab = 'N' then
        begin
-       textcolor(black);
-       gotoxy(30,16);  writeln('1: Agregar infracción a un conductor');
+       gotoxy(30,16); clreol; textcolor(blue);  writeln('1: Agregar infracción a un conductor (Inhabilitado)');
        end else
        begin
-         textcolor(white);
+         textcolor(black);
          gotoxy(30,16);  writeln('1: Agregar infracción a un conductor');
        end;
-       textcolor(white);
+       textcolor(black);
        gotoxy(30,18);  writeln('2: Modificar infracciones de un conductor');
        gotoxy(30,20); writeln('3: Consultar infracciones de un conductor');
        gotoxy(30,22); writeln('0: Regresar');

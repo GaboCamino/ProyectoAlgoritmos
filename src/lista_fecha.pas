@@ -2,7 +2,7 @@ unit Lista_fecha;
 
 interface
 
-uses crt,infracciones;
+uses infracciones;
 const
   N=10000;
 type

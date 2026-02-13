@@ -39,7 +39,6 @@ begin
   gotoxy(70,1); Write('Fecha HABILITACION.');
   gotoxy(95,1); Write('CANT. REINC.');
   gotoxy(110,1); write('TELEFONO');
-  textcolor(15);
 end;
 
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);   {planilla por filas}
@@ -262,7 +261,6 @@ begin
   gotoxy(52,1); Write('TIPO DE INFRACCION');
   gotoxy(75,1); Write('DESCUENTO');
   gotoxy(92,1); Write('APELADA');
-     textcolor(15);
 end;
 
 procedure muestraFecha(inf:T_Dato_Infraccion);
@@ -383,10 +381,5 @@ begin
 
   edadactual := edad;
 end;
-
-
-
-
-
 
 end.
