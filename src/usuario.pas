@@ -9,8 +9,7 @@ procedure Titulos_List_Cond;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
-procedure conductores_hab(var arch_c: T_Archivo_C);
-procedure conductores_inhab(var arch_c: T_Archivo_C);
+procedure conductores_planilla(var arch_c: T_Archivo_C);
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);
@@ -52,66 +51,45 @@ begin
           end
         else
           Write(x.score);
-     gotoxy(58,Y); Write(x.Hab);
+     gotoxy(58,Y);
+     if x.hab='N' then
+     begin
+          clreol; textcolor(blue); Write(x.Hab); //se vuelve azul
+          clreol; textcolor(black); //regresa al color pred
+     end else
+         write(x.hab);
      gotoxy(74,Y); Write(x.Fecha_hab);
      gotoxy(101,Y); Write(x.Reincidencias);
      gotoxy(109,Y); write(x.Tel);
 end;
 
-procedure conductores_hab(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
+procedure conductores_planilla(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
 var
   x: T_Dato_Conductor;
   y: byte;
+  raiz:t_punt;
 begin
   y := 2;
   Titulos_List_Cond;
   seek(arch_c, 0);
-
   while not eof(arch_c) do
   begin
-    read(arch_c, x);
-    if x.Hab = 'S' then
-    begin
-      Mostrar_Cond_planilla(x, y);
-      inc(y);
-    end;
+       read(arch_c, x);
+       Mostrar_Cond_planilla(x, y);
+       inc(y);
   end;
-
-  readkey;
-end;
-
-
-procedure conductores_inhab(var arch_c: T_Archivo_C);      {evalúa si un conductor se halla inhabilitado}
-var
-  x: T_Dato_Conductor;
-  y: byte;
-begin
-  y := 2;
-  Titulos_List_Cond;
-  seek(arch_c, 0);
-
-  while not eof(arch_c) do
-  begin
-    read(arch_c, x);
-    if x.Hab = 'N' then
-    begin
-      Mostrar_Cond_planilla(x, y);
-      inc(y);
-    end;
-  end;
-
   readkey;
 end;
 
 procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);   {recorre el arbol y muestra de SAI-Raiz-SAD}
 begin
-  if raiz <> nil then
-  begin
-    inorden_listado_apynom(arch_c,raiz^.sai,Y);
-    muestra_cond_apynom(arch_c,raiz,Y);                //recursividad aplicada
-    inorden_listado_apynom(arch_c,raiz^.sad,Y);
+     if raiz <> nil then
+     begin
+          inorden_listado_apynom(arch_c,raiz^.sai,Y);
+          muestra_cond_apynom(arch_c,raiz,Y);                //recursividad aplicada
+          inorden_listado_apynom(arch_c,raiz^.sad,Y);
+     end;
   end;
-end;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
 begin
 y:=2;
