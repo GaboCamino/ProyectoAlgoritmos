@@ -1,10 +1,7 @@
 unit Conductores;
 {$codepage utf8}
 interface
-uses
-    crt;
 Const
-     N=100000;
       Ruta1='Conductores.dat';
 type
    T_Dato_Conductor= record

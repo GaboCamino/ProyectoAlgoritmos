@@ -1,10 +1,7 @@
 unit Infracciones;
 {$codepage utf8}
 interface
-uses
-    crt;
 Const
-     N=100000;
      Ruta2='Infracciones.dat';
 type
    T_Dato_Infraccion = record

@@ -3,7 +3,7 @@ unit Usuario;
 interface
 
 uses
-    crt,dos,maneja_arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
+    crt,dos,maneja_arboles,Conductores,Lista_fecha,Infracciones,Sysutils,validaciones;
 
 procedure Titulos_List_Cond;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
@@ -16,14 +16,9 @@ Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_h
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 procedure Titulos_List_Inf;
 procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
-Procedure IngresaFecha(var f: string;mensaje:string);
-function EsNumero(s: string): boolean;
-function ComparadorFecha(sa,sm,sd:word):string;
-procedure muestraFecha(inf:T_Dato_Infraccion);
-Function EsFecha(x:string;long,min,max:integer):boolean;
+procedure muestraFecha(inf:string);
 Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
-procedure FechaActual(var fecha: string);
 function edadactual(fechaNac: string): integer;
 implementation
 
@@ -57,8 +52,8 @@ begin
           clreol; textcolor(blue); Write(x.Hab); //se vuelve azul
           clreol; textcolor(black); //regresa al color pred
      end else
-         write(x.hab);
-     gotoxy(74,Y); Write(x.Fecha_hab);
+     write(x.hab);
+     gotoxy(74,Y);  muestraFecha(x.Fecha_hab);
      gotoxy(101,Y); Write(x.Reincidencias);
      gotoxy(109,Y); write(x.Tel);
 end;
@@ -108,7 +103,7 @@ begin
 end else
         Writeln('Score: ',x.score);
 writeln('Habilitación: ', x.hab);
-writeln('Fecha de habilitación: ',x.Fecha_hab);
+writeln('Fecha de habilitación: '); muestraFecha(x.Fecha_hab);
 writeln('Reincidencias: ',x.Reincidencias);
 writeln('Telefóno: ',x.Tel);
 writeln('Mail: ',x.Mail);
@@ -241,15 +236,15 @@ begin
   gotoxy(92,1); Write('APELADA');
 end;
 
-procedure muestraFecha(inf:T_Dato_Infraccion);
+procedure muestraFecha(inf:string);
 var
   anio:string[4];
   mes,dia:string[2];
 
 begin
-     anio:=copy(inf.fecha,1,4);
-     mes:=copy(inf.fecha,5,6);
-     dia:=copy(inf.fecha,7,8);
+     anio:=copy(inf,1,4);
+     mes:=copy(inf,5,6);
+     dia:=copy(inf,7,8);
      writeln(dia,'/',mes,'/',anio);
 end;
 
@@ -257,87 +252,13 @@ procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
 begin
       gotoxy(1, y);  write(inf.ID);
       gotoxy(19, y); write(inf.DNI);
-      gotoxy(36, y); muestraFecha(inf);
+      gotoxy(36, y); muestraFecha(inf.Fecha);
       gotoxy(62, y); write(inf.Tipo);
       gotoxy(79, y); write(inf.Descontar);
       gotoxy(96, y); write(inf.Apelada);
 end;
-Procedure IngresaFecha(var f: string;mensaje:string);
-var d,m,a,comp:string;
-  sd,sm,sa:word;
-  opx,opy:byte;
-begin
-  comp:='1';
-  f:='0';
-  DecodeDate(Date,sa,sm,sd);
-  repeat
-     if (StrToInt(f))>(StrToInt(comp)) then
-     begin
-          clrscr;
-          Writeln('Ingrese la fecha actual o una pasada.');
-          readkey;
-          clrscr;
-     end;
-     write(mensaje);
-     opx:=whereX; opy:=whereY;
-           repeat
-                 gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(d);
-           until EsFecha(d,2,1,31);
-           gotoxy(opx+2,opy); Write('/');
-           opx:=whereX; opy:=whereY;
-           repeat
-                 gotoxy(opx,opy); clreol; opy:=whereY; opx:=whereX;  readln(m);
-           until EsFecha(m,2,1,12);
-           gotoxy(opx+2,opy); opx:=whereX;  Write('/');
-           opx:=whereX; opy:=whereY;
-           repeat
-                 gotoxy(opx,opy); clreol;opy:=whereY; opx:=whereX; readln(a);
-           until EsFecha(a,4,1900,sa);
-     f:= a+m+d;
-     comp:=ComparadorFecha(sa,sm,sd);
-     until (StrToInt(f))<=(StrToInt(comp));
-end;
 
-function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vemos como unificar
-  var
-    i: integer;
-  begin
-    EsNumero := true;
-    for i := 1 to Length(s) do
-      if not (s[i] in ['0'..'9']) then
-      begin
-        EsNumero := false;
-      end;
-  end;
- function ComparadorFecha(sa,sm,sd:word):string;
- begin
- ComparadorFecha:=IntToStr(sa) +
-  Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
-  Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
- end;
-Function EsFecha(x:string;long,min,max:integer):boolean;
-begin
-if (Length(x) = long) and EsNumero(x) and (StrToInt(x) >= min) and (StrToInt(x) <= max) then
-EsFecha:=true
-else EsFecha:=false;
-end;
-procedure FechaActual(var fecha: string);
-var
-   year, mont, mday, wday: word;
-   a, m, d: string;
-begin
-     getdate(year, mont, mday, wday);
 
-     Str(year, a);
-
-     Str(mont, m);
-     if mont < 10 then m := '0' + m;
-
-     Str(mday, d);
-     if mday < 10 then d := '0' + d;
-
-     fecha := a + m + d;
-end;
 
 function edadactual(fechaNac: string): integer;
 var

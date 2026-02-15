@@ -21,10 +21,12 @@ begin
      Abrircond(arch_c);
      Abririnf(Arch_I);
      textbackground(LightGray); TextColor(black); clrscr;
+
+     Crear_Arbol_DNI(Arch_C, Arbol_DNI);
+     Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
+     Crear_Lista_Fecha(l,Arch_I);
 Repeat
-      Crear_Arbol_DNI(Arch_C, Arbol_DNI);
-      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
-      Crear_Lista_Fecha(l,Arch_I);
+
       gotoxy(30,4);writeln('1. ABMC Conductores');
       gotoxy(30,6);writeln('2. AMC Infracciones');
       gotoxy(30,8);writeln('3. Listados conductores/infracciones');
@@ -38,7 +40,7 @@ Repeat
                   ABMC(Arch_c,arbol_dni,arbol_apynom); clrscr;
            end;
            '2':begin
-                  AMC (Arch_C, Arch_I,arbol_dni,arbol_apynom); clrscr;
+                  AMC (Arch_C, Arch_I,arbol_dni,arbol_apynom,l); clrscr;
            end;
            '3':begin
                   Submenu_Listados(arch_c,arbol_apynom,l); clrscr;

@@ -2,7 +2,7 @@ unit maneja_archivo;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos, SysUtils,lista_fecha;
+    crt,Maneja_arboles,Conductores,Infracciones,usuario,dos, SysUtils,lista_fecha,validaciones;
 
 {ambc conductores}
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
@@ -15,13 +15,13 @@ Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 {amc infracciones}
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint; var l:T_lista);
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
 procedure Buscar_Infraccion_ID(var Arch_I: T_Archivo_I;id_bus: string;var pos: longint;var encontrado: boolean);
 procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
-procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
+procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt;var l:T_lista);
 
 
 {estadisticas}
@@ -35,17 +35,11 @@ implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor; buscado: shortstring);
 var
-   i: longint;
    op: boolean;
-   f, mensaje: string;
+   f, mensaje,telefono: string;
 begin
      op := true;
-     for i := 1 to length(buscado) do
-     begin
-          if not (buscado[i] in ['a'..'z','A'..'Z',' ']) then
-               op := false;
-     end;
-
+     ValidaNombre(op,buscado);
      if op = true then
      begin
           x.Apynom := buscado;
@@ -76,8 +70,9 @@ begin
           readkey;
      end   else
     begin
-     gotoxy(30,10); write('Telefono: ');
-     readln(x.tel);
+    telefono:=#0;
+     gotoxy(30,10); write('Telefono: '); ValidaTelefono(telefono);
+     x.tel:=telefono;
 
      gotoxy(30,12); write('Email: ');
      readln(x.mail);
@@ -224,15 +219,15 @@ end;
 
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);{actualiza los datos de un conductor en el archivo}
 var
-f,mensaje:string;
+f,mensaje,telefono:string;
 begin
      case op of
           '1':begin
-                   mensaje:=''; gotoxy(22,9); clreol; IngresaFecha(f,mensaje);
+                   mensaje:=''; gotoxy(1,7); clreol; IngresaFecha(f,mensaje);
                    x.Nacim:= f;
           end;
           '2':begin
-                   gotoxy(11,7); clreol; readln(x.tel);
+                   gotoxy(10,8); ValidaTelefono(telefono); x.tel:=telefono;
           end;
           '3':begin
                    gotoxy(7,8); clreol; readln(x.mail);
@@ -336,11 +331,11 @@ begin
 end;
 
 
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);      {generar infraccion a un conductor}
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint; var l:T_lista);      {generar infraccion a un conductor}
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
-   f,mensaje:string;
+   f:string;
 begin
   seek(Arch_C, pos);
   read(Arch_C, x);
@@ -351,7 +346,7 @@ begin
   begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
-  write('Ingrese fecha: '); FechaActual(f);
+  FechaActual(f);
 
   seek(Arch_C, pos);
   inf.fecha:=f;
@@ -360,12 +355,12 @@ begin
   inf.Id := IntToStr(FileSize(Arch_I) + 1);
   seek(Arch_I, FileSize(Arch_I));
   write(Arch_I, inf);
-
+  Agregar_A_Lista(l,inf);
 
   writeln;
   writeln('Infracción registrada correctamente');
   end;
-  delay(1500);
+  readkey;
   clrscr;
 end;
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
@@ -560,7 +555,7 @@ end;
 
 
 
-procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
+procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt;var l:T_lista);
 var
    buscado:string[50];
    pos:longint;
@@ -612,7 +607,7 @@ begin
                   readkey;
                 end
                 else
-                  Alta_Infraccion(Arch_C, Arch_I, pos);
+                  Alta_Infraccion(Arch_C, Arch_I, pos,l);
               end;
 
          '2': begin

@@ -3,8 +3,6 @@ unit Lista_fecha;
 interface
 
 uses infracciones;
-const
-  N=10000;
 type
 
  T_punt_F=^T_nodo;
@@ -16,14 +14,12 @@ type
 
  T_lista=record
    cab,act:T_punt_F;
-   tam:0..N;
  end;
 
  Procedure CrearLista(var l:T_lista);
  Procedure siguiente(var l:T_lista);
  Procedure Crear_Lista_Fecha(var l:T_lista;var Arch_I:T_Archivo_I);
  Procedure Agregar_A_Lista(var l:T_lista;x:T_Dato_Infraccion);
-// procedure buscar(var l: t_lista; buscado: string; var enc: boolean);
  procedure primero( var l:t_lista);
  procedure recuperar(l:t_lista;var x:T_Dato_Infraccion);
  function fin_lista(l:t_lista):boolean;
@@ -31,7 +27,6 @@ implementation
 
 Procedure CrearLista(var l:T_lista);
 begin
-     l.tam:=0;
      l.cab:=nil;
 end;
 Procedure siguiente(var l:T_lista);
@@ -71,7 +66,6 @@ begin
          nodo^.sig:=l.act;
          ant^.sig:=nodo;
      end;
-     l.tam:=l.tam+1;
 end;
 
 procedure primero( var l:t_lista);
