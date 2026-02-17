@@ -35,29 +35,22 @@ implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor; buscado: shortstring);
 var
-   op: boolean;
    f, mensaje,telefono: string;
 begin
-     op := true;
-     ValidaNombre(op,buscado);
-     if op = true then
+
+     if validaNombre(buscado) = true then
      begin
           x.Apynom := buscado;
           gotoxy(30,4); write('Apellido y nombre: ', buscado);
-
-          repeat
-               gotoxy(30,6); clreol;
-               write('DNI: ');
-               readln(x.dni);
-          until (Length(x.dni) = 8) and EsNumero(x.dni);
+          gotoxy(30,6);  write('DNI: ');
+          esDNI(x);
      end
      else
      begin
           gotoxy(30,4); write('DNI: ', buscado);
           x.dni := buscado;
-
           gotoxy(30,6); write('Apellido y nombre: ');
-          readln(x.apynom);
+          esNombre(x);
      end;
 
      gotoxy(30,8);
@@ -103,7 +96,6 @@ begin
      agregar(arbol_dni,x1);
      x1.clave:= x.apynom;
      agregar(arbol_apynom,x1);
-
 delay(1000);
 end;
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);   {inhabilita un conductor en el archivo de conductores}
@@ -240,6 +232,7 @@ begin
           end;
      end;
 end;
+
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);                       {menú de alta-baja-modificacion-consulta}
 var
    buscado:string[50];
@@ -247,7 +240,7 @@ var
    op:boolean;
 begin
      pos:=0;
-     Write('Búsqueda por DNI/Apellido y nombre: '); Readln(Buscado); clrscr;
+     Write('Búsqueda por DNI/Apellido y nombre: '); validaBuscado(buscado); clrscr;
      Busqueda(arbol_dni, buscado, pos,op);  //dni               {buscar forma para que si existe no se haga la alta nuevamente}
      if pos=-1 then
      begin

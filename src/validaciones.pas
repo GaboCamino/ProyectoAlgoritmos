@@ -3,24 +3,53 @@ unit Validaciones;
 interface
 
 uses
-  crt,sysutils,dos;
-Procedure ValidaNombre(var op:boolean; buscado: shortstring);
+  crt,sysutils,dos, conductores;
+Function ValidaNombre(buscado: shortstring):boolean;
+Function validaDNI(buscado:shortstring):boolean;
+Procedure esNombre(var x: T_Dato_Conductor);
+Procedure esDNI(var x: T_Dato_Conductor);
 Procedure IngresaFecha(var f: string;mensaje:string);
 function EsNumero(s: string): boolean;
 function ComparadorFecha(sa,sm,sd:word):string;
 Function EsFecha(x:string;long,min,max:integer):boolean;
 procedure FechaActual(var fecha: string);
 Procedure ValidaTelefono(var telefono:string);
+procedure validaBuscado(var buscado: shortstring);
 implementation
 
-Procedure ValidaNombre(var op:boolean; buscado: shortstring);
+Function ValidaNombre(buscado: shortstring):boolean;
 var i:byte;
 begin
+  validaNombre:=true;
 for i := 1 to length(buscado) do
      begin
           if not (buscado[i] in ['a'..'z','A'..'Z',' ']) then
-               op := false;
+          validaNombre:=false;
      end;
+end;
+Function validaDNI(buscado:shortstring):boolean;
+begin
+validaDNI:=false;
+if (esNumero(buscado)) and (length(buscado)=8) then
+validaDNI:=true;
+end;
+
+Procedure esNombre(var x: T_Dato_Conductor);
+var opx,opy:byte;
+begin
+opx:=whereX; opy:=whereY;
+       repeat
+       gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(x.apynom);
+       until validaNombre(x.apynom);
+end;
+
+Procedure esDNI(var x: T_Dato_Conductor);
+var opx,opy:byte;
+begin
+opx:=whereX; opy:=whereY;
+       repeat
+       gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(x.dni);
+       until validaDNI(x.dni);
 end;
 Procedure IngresaFecha(var f: string;mensaje:string);
 var d,m,a,comp:string;
@@ -65,6 +94,15 @@ opx:=whereX; opy:=whereY;
        gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(telefono);
        until EsNumero(telefono);
 end;
+procedure validaBuscado(var buscado: shortstring);
+var
+opy,opx:byte;
+begin
+  repeat
+  gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; Readln(Buscado);
+  until validaNombre(buscado) or validaDNI(buscado);
+end;
+
 function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vemos como unificar
   var
     i: integer;
@@ -76,18 +114,21 @@ function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vem
         EsNumero := false;
       end;
   end;
+
  function ComparadorFecha(sa,sm,sd:word):string;
  begin
  ComparadorFecha:=IntToStr(sa) +
   Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
   Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
  end;
+
 Function EsFecha(x:string;long,min,max:integer):boolean;
 begin
 if (Length(x) = long) and EsNumero(x) and (StrToInt(x) >= min) and (StrToInt(x) <= max) then
 EsFecha:=true
 else EsFecha:=false;
 end;
+
 procedure FechaActual(var fecha: string);
 var
    year, mont, mday, wday: word;
@@ -105,5 +146,7 @@ begin
 
      fecha := a + m + d;
 end;
+
+
 end.
 

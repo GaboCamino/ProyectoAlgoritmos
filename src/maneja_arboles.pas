@@ -20,11 +20,7 @@ procedure agregar(var raiz: t_punt; x:t_dato_arbol);
 function preorden(var raiz: t_punt; buscado:string): t_punt;                     {ordena}
 procedure Busqueda(arbol: t_punt; buscado: string; var pos: longint; op:boolean);            {buscado}
 
-procedure Crear_Arbol_DNI(var Arch_C: T_Archivo_C; var arbol: t_punt);
-procedure Crear_Arbol_Apynom(var Arch_C: T_Archivo_C; var arbol: t_punt);
-
-procedure Transf_Dato_DNI(var Arch_C: T_Archivo_C; var x: t_dato_arbol);
-procedure Transf_Dato_Apynom(var Arch_C: T_Archivo_C; var x: t_dato_arbol);
+procedure Crear_Arboles(var Arch_C: T_Archivo_C; var Arbol_DNI,arbol_Apynom: t_punt);    {procedimiento unificado de creacion de arboles al ejecutar programa}
 
 implementation
 
@@ -67,48 +63,27 @@ begin
           end;
 end;
 
-procedure Crear_Arbol_Apynom(var Arch_C: T_Archivo_C; var arbol: t_punt);
+ procedure Crear_Arboles(var Arch_C: T_Archivo_C; var Arbol_DNI,arbol_Apynom: t_punt);
 var
-   x: t_dato_arbol;
+   y,z: t_dato_arbol;
+   x1: T_Dato_Conductor;
 begin
-     crear_arbol(arbol);
+     crear_arbol(arbol_DNI);
+     crear_arbol(arbol_Apynom);
      seek(arch_c,0);
      while filepos(Arch_C) < filesize(Arch_C) do
      begin
-          transf_dato_DNI(Arch_C,x);
-          agregar(arbol,x)
+          read(Arch_C,x1);
+          y.clave:= x1.DNI;
+          y.pos:= filepos(Arch_C) - 1;
+          z.clave:= x1.DNI;
+          z.pos:= filepos(Arch_C) - 1;
+          agregar(arbol_DNI,y);
+          agregar(arbol_Apynom,z);
      end;
 end;
 
-procedure Transf_Dato_Apynom(var Arch_C: T_Archivo_C; var x: t_dato_arbol);
-var
-   x1: T_Dato_Conductor;
-begin
-     read(Arch_C,x1);
-     x.clave:= x1.Apynom;
-     x.pos:= filepos(Arch_C) - 1;
-end;
- procedure Crear_Arbol_DNI(var Arch_C: T_Archivo_C; var arbol: t_punt);
-var
-   x: t_dato_arbol;
-begin
-     crear_arbol(arbol);
-     seek(arch_c,0);
-     while filepos(Arch_C) < filesize(Arch_C) do
-     begin
-          transf_dato_DNI(Arch_C,x);
-          agregar(arbol,x)
-     end;
-end;
 
-procedure Transf_Dato_DNI(var Arch_C: T_Archivo_C; var x: t_dato_arbol);
-var
-   x1: T_Dato_Conductor;
-begin
-     read(Arch_C,x1);
-     x.clave:= x1.DNI;
-     x.pos:= filepos(Arch_C) - 1;
-end;
 procedure Busqueda(arbol: t_punt; buscado: string; var pos: longint; op:boolean);
 var aux: t_punt;
 begin

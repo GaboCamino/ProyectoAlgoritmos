@@ -22,8 +22,7 @@ begin
      Abririnf(Arch_I);
      textbackground(LightGray); TextColor(black); clrscr;
 
-     Crear_Arbol_DNI(Arch_C, Arbol_DNI);
-     Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
+     Crear_Arboles(Arch_C, Arbol_DNI,arbol_Apynom);
      Crear_Lista_Fecha(l,Arch_I);
 Repeat
 

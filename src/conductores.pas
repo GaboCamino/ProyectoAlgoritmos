@@ -5,7 +5,7 @@ Const
       Ruta1='Conductores.dat';
 type
    T_Dato_Conductor= record
-      DNI:String[8];
+      DNI:String[9];
       Apynom:string[80];
       Nacim:string[10];
       Tel:string[11];

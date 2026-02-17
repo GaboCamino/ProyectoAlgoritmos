@@ -19,6 +19,7 @@ procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
 procedure muestraFecha(inf:string);
 Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
+procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
 function edadactual(fechaNac: string): integer;
 implementation
 
@@ -258,7 +259,26 @@ begin
       gotoxy(96, y); write(inf.Apelada);
 end;
 
+procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
+var
+   Y: byte;
+begin
+     clrscr;
 
+     Titulos_List_Cond;
+
+     Y := 2;
+
+     reset(arch_c);
+
+     Inorden_Listado_Apynom(arch_c, arbol_apynom, Y);
+
+     close(arch_c);
+
+
+     writeln('Presiona para salir');
+     readkey;
+end;
 
 function edadactual(fechaNac: string): integer;
 var
