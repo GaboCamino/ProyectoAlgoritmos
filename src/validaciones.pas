@@ -39,7 +39,7 @@ var opx,opy:byte;
 begin
 opx:=whereX; opy:=whereY;
        repeat
-       gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(x.apynom);
+       gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(upcase(x.apynom));
        until validaNombre(x.apynom);
 end;
 

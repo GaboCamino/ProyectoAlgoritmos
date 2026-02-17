@@ -56,38 +56,46 @@ procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt;l:T_l
 var
    p:T_punt_F;
    op:char;
+   x:t_dato_conductor;
    fecha_desde,fecha_hasta:string;
+   Y:byte;
+
 begin
 
      fecha_desde:=#0;                                  //necesito la variable antes para poder detectar si ya se habían ingresado datos en el primer procedimiento
      fecha_hasta:=#0;
 Repeat
     p:=l.cab;
-    gotoxy(30,4); Writeln('1. Listado ordenado por apellido y nombre');
-      gotoxy(30,6); Writeln('2. Infracciones entre 2 fechas');
-      gotoxy(30,8); Writeln('3. Infracciones de un conductor entre 2 fechas');
-      gotoxy(30,10); Writeln('4. Conductores con 0 scoring');
-      gotoxy(30,12); Writeln('0. Regresar');
-      gotoxy(30,14); Write('Opción: '); readln(op); clrscr;
+    gotoxy(30,4); Writeln('1. Conductores ');
+    gotoxy(30,6); Writeln('2. Conductores inhabilitados');
+    gotoxy(30,8); Writeln('3. Infracciones entre 2 fechas');
+    gotoxy(30,10); Writeln('4. Infracciones de un conductor entre 2 fechas');
+    gotoxy(30,12); Writeln('5. Conductores con 0 scoring');
+    gotoxy(30,14); Writeln('0. Regresar');
+    gotoxy(30,16); Write('Opción: '); readln(op); clrscr;
 case op of
 '1':begin
-            textcolor(black);
-           ListarConductores(arbol_apynom, arch_c);
-           clrscr;
+
+           ListarConductores(arbol_apynom, arch_c); clrscr;
 end;
 '2':begin
-          InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta); clrscr;
-         //infracciones entre 2 fechas
+         conductores_inhab(arch_c); clrscr;
 end;
 '3':begin
-          InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta); clrscr;
-         //infracciones conductor 2 fechas
+         InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta); clrscr;
+         //infracciones entre 2 fechas
 end;
 '4':begin
-          conductores_Scoring(arch_c); clrscr;
+         InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta); clrscr;
+         //infracciones conductor 2 fechas
+end;
+'5':begin
+         conductores_Scoring(arch_c); clrscr;
 end;
 end;
+
 until op='0';
+
 end;
 
 procedure submenu_estadisticas(var arch_i:T_Archivo_I;var arch_c:t_archivo_c;var l:T_lista);   {submenú de las estadísticas de un conductor respecto a las infracciones otorgadas}

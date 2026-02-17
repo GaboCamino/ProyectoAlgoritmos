@@ -14,6 +14,7 @@ procedure listadocond(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
+procedure conductores_inhab(var arch_c: T_Archivo_C);
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 procedure Titulos_List_Inf;
@@ -22,7 +23,6 @@ procedure muestraFecha(inf:string);
 Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
 procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
-procedure conductores_inhab(var arch_c: T_Archivo_C);
 function edadactual(fechaNac: string): integer;
 implementation
 
@@ -60,7 +60,7 @@ begin
           clreol; textcolor(black); //regresa al color pred
      end else
      write(x.hab);
-     gotoxy(78,Y);  muestraFecha(x.Fecha_hab);
+     gotoxy(78,Y);  muestraFecha(x.nacim);
      gotoxy(101,Y); Write(x.Reincidencias);
      gotoxy(109,Y); write(x.Tel);
 end;
@@ -112,8 +112,6 @@ begin
   readkey;
 end;
 
-
-
 procedure conductores_inhab(var arch_c: T_Archivo_C);      {evalúa si un conductor se halla inhabilitado}
 var
   x: T_Dato_Conductor;
@@ -135,6 +133,19 @@ begin
   end;
 
   readkey;
+end;
+
+procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
+var
+   Y: byte;
+begin
+     clrscr;
+     Titulos_List_Cond;
+     Y := 2;
+     Inorden_Listado_Apynom(arch_c, arbol_apynom, Y);
+     gotoxy(1,y);
+     write('Presiona para salir');
+     readkey;
 end;
 
 procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);   {recorre el arbol y muestra de SAI-Raiz-SAD}
@@ -319,18 +330,7 @@ begin
       gotoxy(96, y); write(inf.Apelada);
 end;
 
-procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
-var
-   Y: byte;
-begin
-     clrscr;
-     Titulos_List_Cond;
-     Y := 2;
-     Inorden_Listado_Apynom(arch_c, arbol_apynom, Y);
-     gotoxy(1,y);
-     write('Presiona para salir');
-     readkey;
-end;
+
 
 function edadactual(fechaNac: string): integer;
 var

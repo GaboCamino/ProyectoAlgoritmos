@@ -13,6 +13,8 @@ procedure Modifica_Cond(var Arch_C: T_Archivo_C; pos: longint;var arbol_dni,arbo
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 
+
+
 {amc infracciones}
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
@@ -41,7 +43,7 @@ begin
 
      if validaNombre(buscado) = true then
      begin
-          x.Apynom := buscado;
+          x.Apynom := upcase(buscado);
           gotoxy(30,4); write('Apellido y nombre: ', buscado);
           gotoxy(30,6);  write('DNI: ');
           esDNI(x);
@@ -49,13 +51,13 @@ begin
      else
      begin
           gotoxy(30,4); write('DNI: ', buscado);
-          x.dni := buscado;
+          x.dni :=buscado;
           gotoxy(30,6); write('Apellido y nombre: ');
           esNombre(x);
      end;
 
      gotoxy(30,8);
-     mensaje := 'Ingrese fecha de nacimiento: ';IngresaFecha(f, mensaje);
+     mensaje := 'Ingrese fecha de nacimiento (DD/MM/AAAA): ';IngresaFecha(f, mensaje);
      x.Nacim := f;
 
      if edadactual(f)< 18 then
@@ -69,7 +71,7 @@ begin
      x.tel:=telefono;
 
      gotoxy(30,12); write('Email: ');
-     readln(x.mail);
+     readln(upcase(x.mail));
 
      x.Score := 20;
      x.Hab := 'S';
@@ -176,6 +178,29 @@ begin
       end;
       end;
       until op='0';
+end;
+
+procedure conductores_inhab(var arch_c: T_Archivo_C);      {evalúa si un conductor se halla inhabilitado}
+var
+  x: T_Dato_Conductor;
+  y: byte;
+begin
+   reset(arch_c);
+  y := 2;
+  Titulos_List_Cond;
+  seek(arch_c, 0);
+
+  while not eof(arch_c) do
+  begin
+    read(arch_c, x);
+    if x.Hab = 'N' then
+    begin
+      Mostrar_Cond_planilla(x, y);
+      inc(y);
+    end;
+  end;
+
+  readkey;
 end;
 
 procedure reincidencia_cond(var x: T_Dato_Conductor);
