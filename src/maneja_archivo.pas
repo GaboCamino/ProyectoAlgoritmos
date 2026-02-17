@@ -150,12 +150,14 @@ begin
       gotoxy(1,16); writeln('4. Dar de baja');
       gotoxy(1,17); writeln('5. Aplicar reincidencia');
       gotoxy(1,18); Writeln('0. Regresar');
-      gotoxy(1,19); write('Que desea modificar? '); readln(op);
+      repeat
+      gotoxy(1,19); write('Que desea modificar? '); clreol; readln(op);
 
+
+begin
       if op in ['1'..'5'] then
       begin
            seek(arch_c, pos);read(arch_c, x);
-           clrscr;
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
 
            if op<>'5' then
@@ -166,13 +168,16 @@ begin
                 seek(Arch_c, pos);
                 write(Arch_C,x);
                 gotoxy(1,22); writeln('¡Modificación registrada!');
+                delay(1500);
+                gotoxy(1,21); clreol; gotoxy(1,22);  clreol;
            end;
 
       end;
       end;
-
       end;
+      until op='0';
 end;
+
 procedure reincidencia_cond(var x: T_Dato_Conductor);
 var
   op: char;
@@ -222,14 +227,15 @@ f,mensaje,telefono:string;
 begin
      case op of
           '1':begin
-                   mensaje:=''; gotoxy(1,7); clreol; IngresaFecha(f,mensaje);
+                   f:=#0;
+                   mensaje:=''; gotoxy(22,10); IngresaFecha(f,mensaje);
                    x.Nacim:= f;
           end;
           '2':begin
-                   gotoxy(10,8); ValidaTelefono(telefono); x.tel:=telefono;
+                   gotoxy(11,8); ValidaTelefono(telefono); x.tel:=telefono;
           end;
           '3':begin
-                   write('Email: '); readln(x.mail);
+                  gotoxy(7,9); write('Email: '); readln(x.mail);
           end;
           '4':begin
                    Baja_Cond(Arch_C, pos,x,arbol_dni,arbol_apynom);
