@@ -1,18 +1,8 @@
 unit Maneja_arboles;
 interface
-uses
-  crt, Conductores;
-type
-  t_dato_arbol = record
-    clave: string[50];
-    pos: integer;
-  end;
-  t_punt = ^t_nodo_arbol;
-  t_nodo_arbol = record
-    info: t_dato_arbol;
-    sai,sad: t_punt;
-  end;
 
+uses
+  crt, Conductores, Arboles;
 
 procedure crear_arbol(var raiz: t_punt);
 procedure agregar(var raiz: t_punt; x:t_dato_arbol);

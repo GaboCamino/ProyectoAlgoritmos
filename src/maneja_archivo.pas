@@ -5,6 +5,7 @@ uses
     crt,Maneja_arboles,Conductores,Infracciones,usuario,dos, SysUtils,lista_fecha,validaciones;
 
 {ambc conductores}
+procedure Ingresa_Cond(var x: T_Dato_Conductor; buscado: shortstring);
 procedure Alta_Cond(var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt; buscado: shortstring; op:boolean);
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);
 procedure Consulta_Cond(var Arch_C: T_Archivo_C; pos: longint; var arbol_dni,arbol_apynom: t_punt);
@@ -54,7 +55,7 @@ begin
      end;
 
      gotoxy(30,8);
-     mensaje := 'Ingrese fecha de nacimiento (DD/MM/AAAA): ';IngresaFecha(f, mensaje);
+     mensaje := 'Ingrese fecha de nacimiento: ';IngresaFecha(f, mensaje);
      x.Nacim := f;
 
      if edadactual(f)< 18 then
@@ -150,10 +151,13 @@ begin
       gotoxy(1,17); writeln('5. Aplicar reincidencia');
       gotoxy(1,18); Writeln('0. Regresar');
       gotoxy(1,19); write('Que desea modificar? '); readln(op);
+
       if op in ['1'..'5'] then
       begin
            seek(arch_c, pos);read(arch_c, x);
+           clrscr;
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
+
            if op<>'5' then
            begin
            gotoxy(1,21);write('Confirmar modificación? S/N: '); readln(op);
@@ -163,7 +167,10 @@ begin
                 write(Arch_C,x);
                 gotoxy(1,22); writeln('¡Modificación registrada!');
            end;
+
       end;
+      end;
+
       end;
 end;
 procedure reincidencia_cond(var x: T_Dato_Conductor);
@@ -222,7 +229,7 @@ begin
                    gotoxy(10,8); ValidaTelefono(telefono); x.tel:=telefono;
           end;
           '3':begin
-                   gotoxy(7,8); clreol; readln(x.mail);
+                   write('Email: '); readln(x.mail);
           end;
           '4':begin
                    Baja_Cond(Arch_C, pos,x,arbol_dni,arbol_apynom);
@@ -340,7 +347,6 @@ begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
   FechaActual(f);
-
   seek(Arch_C, pos);
   inf.fecha:=f;
   write(Arch_C, x);
