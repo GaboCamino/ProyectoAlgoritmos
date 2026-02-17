@@ -1,15 +1,12 @@
 unit Infracciones;
 {$codepage utf8}
 interface
-uses
-    crt;
 Const
-     N=100000;
      Ruta2='Infracciones.dat';
 type
    T_Dato_Infraccion = record
       ID:string[8];
-      DNI:String[8];
+      DNI:String[9];
       Descontar:1..20;
       Fecha:string[10];
       Tipo:0..20;

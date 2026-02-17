@@ -2,7 +2,7 @@ unit maneja_archivo;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,Conductores,Infracciones,usuario,dos, SysUtils,lista_fecha;
+    crt,Maneja_arboles,Conductores,Infracciones,usuario,dos, SysUtils,lista_fecha,validaciones;
 
 {ambc conductores}
 procedure Ingresa_Cond(var x: T_Dato_Conductor; buscado: shortstring);
@@ -16,13 +16,13 @@ Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);
 {amc infracciones}
 procedure asignarDescuento(var inf: t_dato_infraccion);
 procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint; var l:T_lista);
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
 procedure Buscar_Infraccion_ID(var Arch_I: T_Archivo_I;id_bus: string;var pos: longint;var encontrado: boolean);
 procedure Modificar_datosinf(var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Apelar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var inf: T_Dato_Infraccion;pos_i: longint);
 procedure Modificar_Infraccion(var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I);
-procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
+procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt;var l:T_lista);
 
 
 {estadisticas}
@@ -36,35 +36,22 @@ implementation
 
 procedure Ingresa_Cond(var x: T_Dato_Conductor; buscado: shortstring);
 var
-   i: longint;
-   op: boolean;
-   f, mensaje: string;
+   f, mensaje,telefono: string;
 begin
-     op := true;
-     for i := 1 to length(buscado) do
-     begin
-          if not (buscado[i] in ['a'..'z','A'..'Z',' ']) then
-               op := false;
-     end;
 
-     if op = true then
+     if validaNombre(buscado) = true then
      begin
           x.Apynom := buscado;
           gotoxy(30,4); write('Apellido y nombre: ', buscado);
-
-          repeat
-               gotoxy(30,6); clreol;
-               write('DNI: ');
-               readln(x.dni);
-          until (Length(x.dni) = 8) and EsNumero(x.dni);
+          gotoxy(30,6);  write('DNI: ');
+          esDNI(x);
      end
      else
      begin
           gotoxy(30,4); write('DNI: ', buscado);
           x.dni := buscado;
-
           gotoxy(30,6); write('Apellido y nombre: ');
-          readln(x.apynom);
+          esNombre(x);
      end;
 
      gotoxy(30,8);
@@ -77,8 +64,9 @@ begin
           readkey;
      end   else
     begin
-     gotoxy(30,10); write('Telefono: ');
-     readln(x.tel);
+    telefono:=#0;
+     gotoxy(30,10); write('Telefono: '); ValidaTelefono(telefono);
+     x.tel:=telefono;
 
      gotoxy(30,12); write('Email: ');
      readln(x.mail);
@@ -109,7 +97,6 @@ begin
      agregar(arbol_dni,x1);
      x1.clave:= x.apynom;
      agregar(arbol_apynom,x1);
-
 delay(1000);
 end;
 procedure Baja_Cond(var Arch_C: T_Archivo_C; pos: longint;var x: T_Dato_Conductor;var arbol_dni,arbol_apynom: t_punt);   {inhabilita un conductor en el archivo de conductores}
@@ -153,7 +140,9 @@ var
    y:byte;
 begin
       //Consulta_Cond(Arch_C,pos,arbol_dni,arbol_apynom); writeln();
+      clreol; textbackground(green); writeln('Datos del conductor'); textbackground(white); clreol;
       conductor_modificado(arch_c, pos,arbol_dni,arbol_apynom, x, Y);
+<<<<<<< HEAD
       gotoxy(1,11); writeln('MODIFICAR DATOS DEL CONDUCTOR');
       gotoxy(1,12); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
       gotoxy(1,13); writeln('2. Telefóno');
@@ -162,16 +151,39 @@ begin
       gotoxy(1,16); writeln('5. Aplicar reincidencia');
       gotoxy(1,17); Writeln('0. Regresar');
       gotoxy(1,18); write('Que desea modificar? '); readln(op);
+=======
+
+      gotoxy(1,12); clreol; textbackground(green); writeln('MODIFICAR DATOS DEL CONDUCTOR'); textbackground(white); clreol;
+      gotoxy(1,13); writeln('1. Fecha de nacimiento (DD/MM/AAAA)');
+      gotoxy(1,14); writeln('2. Telefóno');
+      gotoxy(1,15); writeln('3. Dirección de mail');
+      gotoxy(1,16); writeln('4. Dar de baja');
+      gotoxy(1,17); writeln('5. Aplicar reincidencia');
+      gotoxy(1,18); Writeln('0. Regresar');
+      gotoxy(1,19); write('Que desea modificar? '); readln(op);
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
       if op in ['1'..'5'] then
       begin
            seek(arch_c, pos);read(arch_c, x);
            clrscr;
            Actualizar_cond(x,arch_c,pos,arbol_dni,arbol_apynom,op);
+<<<<<<< HEAD
            seek(Arch_c, pos);
            write(Arch_C,x);
            writeln('Modificación registrada');
+=======
+           if op<>'5' then
+           begin
+           gotoxy(1,21);write('Confirmar modificación? S/N: '); readln(op);
+           if upcase(op)='S' then
+           begin
+                seek(Arch_c, pos);
+                write(Arch_C,x);
+                gotoxy(1,22); writeln('¡Modificación registrada!');
+           end;
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
       end;
-      delay(1000);clrscr;
+      end;
 end;
 procedure reincidencia_cond(var x: T_Dato_Conductor);
 var
@@ -209,7 +221,8 @@ begin
   end
   else
   begin
-    writeln('El conductor no puede aplicar a la reincidencia');
+       writeln;
+       writeln('El conductor no puede aplicar a la reincidencia');
   end;
 
   readkey;
@@ -217,15 +230,23 @@ end;
 
 procedure Actualizar_Cond(var x: t_dato_conductor; var arch_c:t_archivo_c; pos: longint;var arbol_dni,arbol_apynom: t_punt;op:char);{actualiza los datos de un conductor en el archivo}
 var
-f,mensaje:string;
+f,mensaje,telefono:string;
 begin
      case op of
           '1':begin
+<<<<<<< HEAD
                    mensaje:='Ingrese fecha de nacimiento: '; IngresaFecha(f,mensaje);
                    x.Nacim:= f;
           end;
           '2':begin
                    write('Telefono: '); readln(x.tel);
+=======
+                   mensaje:=''; gotoxy(1,7); clreol; IngresaFecha(f,mensaje);
+                   x.Nacim:= f;
+          end;
+          '2':begin
+                   gotoxy(10,8); ValidaTelefono(telefono); x.tel:=telefono;
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
           end;
           '3':begin
                    write('Email: '); readln(x.mail);
@@ -238,6 +259,7 @@ begin
           end;
      end;
 end;
+
 Procedure ABMC (var Arch_C: T_Archivo_C; var arbol_dni,arbol_apynom: t_punt);                       {menú de alta-baja-modificacion-consulta}
 var
    buscado:string[50];
@@ -245,7 +267,7 @@ var
    op:boolean;
 begin
      pos:=0;
-     Write('Búsqueda por DNI/Apellido y nombre: '); Readln(Buscado); clrscr;
+     Write('Búsqueda por DNI/Apellido y nombre: '); validaBuscado(buscado); clrscr;
      Busqueda(arbol_dni, buscado, pos,op);  //dni               {buscar forma para que si existe no se haga la alta nuevamente}
      if pos=-1 then
      begin
@@ -329,11 +351,11 @@ begin
 end;
 
 
-procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint);      {generar infraccion a un conductor}
+procedure Alta_Infraccion(var Arch_C: T_Archivo_C; var Arch_I : T_Archivo_I; pos: longint; var l:T_lista);      {generar infraccion a un conductor}
 var
   x: T_Dato_Conductor;
   inf: T_Dato_Infraccion;
-   f,mensaje:string;
+   f:string;
 begin
   seek(Arch_C, pos);
   read(Arch_C, x);
@@ -344,7 +366,11 @@ begin
   begin
   inf.DNI := x.DNI;
   inf.Apelada := 'N';
+<<<<<<< HEAD
   mensaje:='Ingrese fecha: '; IngresaFecha(f,mensaje);
+=======
+  FechaActual(f);
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
 
   seek(Arch_C, pos);
   inf.fecha:=f;
@@ -353,12 +379,12 @@ begin
   inf.Id := IntToStr(FileSize(Arch_I) + 1);
   seek(Arch_I, FileSize(Arch_I));
   write(Arch_I, inf);
-
+  Agregar_A_Lista(l,inf);
 
   writeln;
   writeln('Infracción registrada correctamente');
   end;
-  delay(1500);
+  readkey;
   clrscr;
 end;
 procedure Consulta_Infracciones(var Arch_I: T_Archivo_I; dni_bus: string);
@@ -519,11 +545,10 @@ var
   op,op1: char;
 begin
   writeln;
-  write('Desea realizar alguna modificación? S/N'); readln(op);
+  write('Desea realizar alguna modificación? S/N: '); readln(op);
   if upcase(op)='S' then
   begin
-       write('Ingrese ID de la infracción: ');
-  readln(id_bus);
+       write('Ingrese ID de la infracción: ');readln(id_bus);
 
   Buscar_Infraccion_ID(Arch_I, id_bus, pos, encontrado);
 
@@ -554,7 +579,7 @@ end;
 
 
 
-procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt);
+procedure AMC (var Arch_C: T_Archivo_C;var Arch_I: T_Archivo_I;var arbol_dni,arbol_apynom: t_punt;var l:T_lista);
 var
    buscado:string[50];
    pos:longint;
@@ -583,14 +608,13 @@ begin
        writeln;
        if x.Hab = 'N' then
        begin
-       textcolor(black);
-       gotoxy(30,16);  writeln('1: Agregar infracción a un conductor');
+       gotoxy(30,16); clreol; textcolor(blue);  writeln('1: Agregar infracción a un conductor (Inhabilitado)');
        end else
        begin
-         textcolor(white);
+         textcolor(black);
          gotoxy(30,16);  writeln('1: Agregar infracción a un conductor');
        end;
-       textcolor(white);
+       textcolor(black);
        gotoxy(30,18);  writeln('2: Modificar infracciones de un conductor');
        gotoxy(30,20); writeln('3: Consultar infracciones de un conductor');
        gotoxy(30,22); writeln('0: Regresar');
@@ -607,7 +631,7 @@ begin
                   readkey;
                 end
                 else
-                  Alta_Infraccion(Arch_C, Arch_I, pos);
+                  Alta_Infraccion(Arch_C, Arch_I, pos,l);
               end;
 
          '2': begin

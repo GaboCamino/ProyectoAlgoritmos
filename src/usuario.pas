@@ -3,30 +3,34 @@ unit Usuario;
 interface
 
 uses
+<<<<<<< HEAD
     crt,dos,Arboles,Conductores,Lista_fecha,Infracciones,Sysutils;
+=======
+    crt,dos,maneja_arboles,Conductores,Lista_fecha,Infracciones,Sysutils,validaciones;
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
 
 procedure Titulos_List_Cond;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure listadocond(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
+<<<<<<< HEAD
 procedure conductores_hab(var arch_c: T_Archivo_C);
 procedure conductores_inhab(var arch_c: T_Archivo_C);
 procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
+=======
+procedure conductores_planilla(var arch_c: T_Archivo_C);
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 procedure Titulos_List_Inf;
 procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
-Procedure IngresaFecha(var f: string;mensaje:string);
-function EsNumero(s: string): boolean;
-function ComparadorFecha(sa,sm,sd:word):string;
-procedure muestraFecha(inf:T_Dato_Infraccion);
-Function EsFecha(x:string;long,min,max:integer):boolean;
+procedure muestraFecha(inf:string);
 Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var inf: T_Dato_Infraccion; var Y: byte);
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
-procedure FechaActual(var fecha: string);
+procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
 function edadactual(fechaNac: string): integer;
 implementation
 
@@ -41,7 +45,6 @@ begin
   gotoxy(70,1); Write('Fecha Nacimiento.');
   gotoxy(95,1); Write('CANT. REINC.');
   gotoxy(110,1); write('TELEFONO');
-  textcolor(15);
 end;
 
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);   {planilla por filas}
@@ -55,8 +58,19 @@ begin
           end
         else
           Write(x.score);
+
      gotoxy(58,Y); Write(x.Hab);
      gotoxy(74,Y); Write(x.Nacim);
+
+     gotoxy(58,Y);
+     if x.hab='N' then
+     begin
+          clreol; textcolor(blue); Write(x.Hab); //se vuelve azul
+          clreol; textcolor(black); //regresa al color pred
+     end else
+     write(x.hab);
+     gotoxy(74,Y);  muestraFecha(x.Fecha_hab);
+
      gotoxy(101,Y); Write(x.Reincidencias);
      gotoxy(109,Y); write(x.Tel);
 end;
@@ -90,24 +104,22 @@ begin
      textcolor(black);
 end;
 
-procedure conductores_hab(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
+procedure conductores_planilla(var arch_c: T_Archivo_C);       {evalúa si un conductor se halla habilitado}
 var
   x: T_Dato_Conductor;
   y: byte;
+  raiz:t_punt;
 begin
   y := 2;
   Titulos_List_Cond;
   seek(arch_c, 0);
-
   while not eof(arch_c) do
   begin
-    read(arch_c, x);
-    if x.Hab = 'S' then
-    begin
-      Mostrar_Cond_planilla(x, y);
-      inc(y);
-    end;
+       read(arch_c, x);
+       Mostrar_Cond_planilla(x, y);
+       inc(y);
   end;
+<<<<<<< HEAD
 
   readkey;
 end;
@@ -158,13 +170,13 @@ end;
 
 procedure Inorden_Listado_apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);   {recorre el arbol y muestra de SAI-Raiz-SAD}
 begin
-  if raiz <> nil then
-  begin
-    inorden_listado_apynom(arch_c,raiz^.sai,Y);
-    muestra_cond_apynom(arch_c,raiz,Y);                //recursividad aplicada
-    inorden_listado_apynom(arch_c,raiz^.sad,Y);
+     if raiz <> nil then
+     begin
+          inorden_listado_apynom(arch_c,raiz^.sai,Y);
+          muestra_cond_apynom(arch_c,raiz,Y);                //recursividad aplicada
+          inorden_listado_apynom(arch_c,raiz^.sad,Y);
+     end;
   end;
-end;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
 begin
 y:=2;
@@ -183,7 +195,7 @@ begin
 end else
         Write(x.score);
 writeln('Habilitación: ', x.hab);
-writeln('Fecha de habilitación: ',x.Fecha_hab);
+writeln('Fecha de habilitación: '); muestraFecha(x.Fecha_hab);
 writeln('Reincidencias: ',x.Reincidencias);
 writeln('Telefóno: ',x.Tel);
 writeln('Mail: ',x.Mail);
@@ -314,18 +326,17 @@ begin
   gotoxy(52,1); Write('TIPO DE INFRACCION');
   gotoxy(75,1); Write('DESCUENTO');
   gotoxy(92,1); Write('APELADA');
-     textcolor(15);
 end;
 
-procedure muestraFecha(inf:T_Dato_Infraccion);
+procedure muestraFecha(inf:string);
 var
   anio:string[4];
   mes,dia:string[2];
 
 begin
-     anio:=copy(inf.fecha,1,4);
-     mes:=copy(inf.fecha,5,6);
-     dia:=copy(inf.fecha,7,8);
+     anio:=copy(inf,1,4);
+     mes:=copy(inf,5,6);
+     dia:=copy(inf,7,8);
      writeln(dia,'/',mes,'/',anio);
 end;
 
@@ -333,86 +344,31 @@ procedure Mostrar_Inf_planilla(var inf: T_Dato_Infraccion; Y: byte);
 begin
       gotoxy(1, y);  write(inf.ID);
       gotoxy(19, y); write(inf.DNI);
-      gotoxy(36, y); muestraFecha(inf);
+      gotoxy(36, y); muestraFecha(inf.Fecha);
       gotoxy(62, y); write(inf.Tipo);
       gotoxy(79, y); write(inf.Descontar);
       gotoxy(96, y); write(inf.Apelada);
 end;
-Procedure IngresaFecha(var f: string;mensaje:string);
-var d,m,a,comp:string;
-  sd,sm,sa:word;
-  opx,opy:byte;
-begin
-  comp:='1';
-  f:='0';
-  DecodeDate(Date,sa,sm,sd);
-  repeat
-     if (StrToInt(f))>(StrToInt(comp)) then
-     begin
-          clrscr;
-          Writeln('Ingrese la fecha actual o una pasada.');
-          readkey;
-          clrscr;
-     end;
-     write(mensaje);
-     opx:=whereX; opy:=whereY;
-           repeat
-                 gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(d);
-           until EsFecha(d,2,1,31);
-           gotoxy(opx+2,opy); Write('/');
-           opx:=whereX; opy:=whereY;
-           repeat
-                 gotoxy(opx,opy); clreol; opy:=whereY; opx:=whereX;  readln(m);
-           until EsFecha(m,2,1,12);
-           gotoxy(opx+2,opy); opx:=whereX;  Write('/');
-           opx:=whereX; opy:=whereY;
-           repeat
-                 gotoxy(opx,opy); clreol;opy:=whereY; opx:=whereX; readln(a);
-           until EsFecha(a,4,1900,sa);
-     f:= a+m+d;
-     comp:=ComparadorFecha(sa,sm,sd);
-     until (StrToInt(f))<=(StrToInt(comp));
-end;
 
-function EsNumero(s: string): boolean;     //vi que hay otro para DNI, luego vemos como unificar
-  var
-    i: integer;
-  begin
-    EsNumero := true;
-    for i := 1 to Length(s) do
-      if not (s[i] in ['0'..'9']) then
-      begin
-        EsNumero := false;
-      end;
-  end;
- function ComparadorFecha(sa,sm,sd:word):string;
- begin
- ComparadorFecha:=IntToStr(sa) +
-  Copy('0' + IntToStr(sm), Length(IntToStr(sm)), 2) +
-  Copy('0' + IntToStr(sd), Length(IntToStr(sd)), 2);
- end;
-Function EsFecha(x:string;long,min,max:integer):boolean;
-begin
-if (Length(x) = long) and EsNumero(x) and (StrToInt(x) >= min) and (StrToInt(x) <= max) then
-EsFecha:=true
-else EsFecha:=false;
-end;
-procedure FechaActual(var fecha: string);
+procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
 var
-   year, mont, mday, wday: word;
-   a, m, d: string;
+   Y: byte;
 begin
-     getdate(year, mont, mday, wday);
+     clrscr;
 
-     Str(year, a);
+     Titulos_List_Cond;
 
-     Str(mont, m);
-     if mont < 10 then m := '0' + m;
+     Y := 2;
 
-     Str(mday, d);
-     if mday < 10 then d := '0' + d;
+     reset(arch_c);
 
-     fecha := a + m + d;
+     Inorden_Listado_Apynom(arch_c, arbol_apynom, Y);
+
+     close(arch_c);
+
+
+     writeln('Presiona para salir');
+     readkey;
 end;
 
 function edadactual(fechaNac: string): integer;
@@ -435,10 +391,5 @@ begin
 
   edadactual := edad;
 end;
-
-
-
-
-
 
 end.

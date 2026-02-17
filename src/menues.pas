@@ -2,7 +2,7 @@ unit menues;
 {$codepage utf8}
 interface
 uses
-    crt,Maneja_arboles,arboles,conductores,maneja_archivo,usuario,infracciones,Lista_fecha;
+    crt,Maneja_arboles,conductores,maneja_archivo,usuario,infracciones,Lista_fecha;
 
 procedure Menu;
 procedure Submenu_Listados(var arch_c:t_archivo_c; var arbol_apynom:t_punt;l:T_lista);
@@ -21,10 +21,11 @@ begin
      Abrircond(arch_c);
      Abririnf(Arch_I);
      textbackground(LightGray); TextColor(black); clrscr;
+
+     Crear_Arboles(Arch_C, Arbol_DNI,arbol_Apynom);
+     Crear_Lista_Fecha(l,Arch_I);
 Repeat
-      Crear_Arbol_DNI(Arch_C, Arbol_DNI);
-      Crear_Arbol_Apynom(Arch_C, Arbol_Apynom);
-      Crear_Lista_Fecha(l,Arch_I);
+
       gotoxy(30,4);writeln('1. ABMC Conductores');
       gotoxy(30,6);writeln('2. AMC Infracciones');
       gotoxy(30,8);writeln('3. Listados conductores/infracciones');
@@ -38,7 +39,7 @@ Repeat
                   ABMC(Arch_c,arbol_dni,arbol_apynom); clrscr;
            end;
            '2':begin
-                  AMC (Arch_C, Arch_I,arbol_dni,arbol_apynom); clrscr;
+                  AMC (Arch_C, Arch_I,arbol_dni,arbol_apynom,l); clrscr;
            end;
            '3':begin
                   Submenu_Listados(arch_c,arbol_apynom,l); clrscr;
@@ -58,14 +59,20 @@ var
    op:char;
    x:t_dato_conductor;
    fecha_desde,fecha_hasta:string;
+<<<<<<< HEAD
    Y:byte;
 
+=======
+   raiz:t_punt;
+   y:byte;
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
 begin
 
      fecha_desde:=#0;                                  //necesito la variable antes para poder detectar si ya se habían ingresado datos en el primer procedimiento
      fecha_hasta:=#0;
 Repeat
     p:=l.cab;
+<<<<<<< HEAD
     gotoxy(30,4); Writeln('1. Conductores ');
     gotoxy(30,6); Writeln('2. Conductores inhabilitados');
     gotoxy(30,8); Writeln('3. Infracciones entre 2 fechas');
@@ -78,20 +85,28 @@ case op of
             textcolor(black);
            ListarConductores(arbol_apynom, arch_c);
            clrscr;
+=======
+    gotoxy(30,4); Writeln('1. Listado ordenado por apellido y nombre');
+    gotoxy(30,6); Writeln('2. Infracciones entre 2 fechas');
+    gotoxy(30,8); Writeln('3. Infracciones de un conductor entre 2 fechas');
+    gotoxy(30,10); Writeln('4. Conductores con 0 scoring');
+    gotoxy(30,12); Writeln('0. Regresar');
+    gotoxy(30,14); Write('Opción: '); readln(op); clrscr;
+case op of
+'1':begin
+          conductores_planilla(arch_c); clrscr;
+>>>>>>> 457186a01622481b2e8723916c50074629998e10
 end;
 '2':begin
-         conductores_inhab(arch_c); clrscr;
-end;
-'3':begin
-         InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta); clrscr;
+          InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta); clrscr;
          //infracciones entre 2 fechas
 end;
-'4':begin
-         InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta); clrscr;
+'3':begin
+          InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta); clrscr;
          //infracciones conductor 2 fechas
 end;
-'5':begin
-         conductores_Scoring(arch_c); clrscr;
+'4':begin
+          conductores_Scoring(arch_c); clrscr;
 end;
 end;
 
