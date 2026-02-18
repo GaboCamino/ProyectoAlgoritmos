@@ -76,7 +76,7 @@ begin
           read(Arch_C,x1);
           y.clave:= x1.DNI;
           y.pos:= filepos(Arch_C) - 1;
-          z.clave:= x1.DNI;
+          z.clave:= x1.Apynom;
           z.pos:= filepos(Arch_C) - 1;
           agregar(arbol_DNI,y);
           agregar(arbol_Apynom,z);

@@ -14,7 +14,6 @@ procedure listadocond(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
-procedure conductores_inhab(var arch_c: T_Archivo_C);
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);
 Procedure InfraccionesEntreFechas(l:T_lista; p: T_punt_F;var fecha_desde,fecha_hasta:string);
 procedure Titulos_List_Inf;
@@ -24,6 +23,7 @@ Procedure RecorrePorFecha(var p: T_punt_F;var fecha_desde,fecha_hasta:string;var
 Procedure IntervaloFechas(var fecha_desde,fecha_hasta:string);
 procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
 function edadactual(fechaNac: string): integer;
+Procedure ColorRenglon(fondo, letra,Y:byte);
 implementation
 
 procedure Titulos_List_Cond;           {títulos arriba de todo en la pantalla}
@@ -31,38 +31,49 @@ begin
   clrscr;
   textcolor(black);
   gotoxy(1,1); Write('APELLIDO Y NOMBRE');
-  gotoxy(32,1); Write('DNI');
-  gotoxy(42,1); Write('SCORING');
-  gotoxy(57,1); Write('HABILITADO');
-  gotoxy(74,1); Write('Fecha Nacimiento.');
-  gotoxy(95,1); Write('CANT. REINC.');
+  gotoxy(37,1); Write('DNI');
+  gotoxy(47,1); Write('SCORING');
+
+  gotoxy(61,1); Write('FECHA NACIMIENTO');
+  gotoxy(82,1); Write('CANTIDAD REINCIDENCIAS');
   gotoxy(110,1); write('TELEFONO');
 end;
 
+Procedure ColorRenglon(fondo, letra,Y:byte);
+var i:byte;
+  begin
+      gotoxy(1,Y);
+      TextBackground(fondo);
+      TextColor(letra);
+      for i := 1 to WindMaxX do
+      begin
+      write(' ');
+      end;
+      end;
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);   {planilla por filas}
 begin
+     if x.hab='N' then
+     begin
+     ColorRenglon(4,15,Y);
+     end
+     else if (x.Estado = 'S') and (x.Hab = 'N') then
+     begin
+     ColorRenglon(1,15,Y);
+     end;
      gotoxy(1,Y); write(x.Apynom);
-     gotoxy(29,Y); write(x.DNI);
-     gotoxy(44,Y);if x.score <= 0 then
+     gotoxy(34,Y); write(x.DNI);
+     gotoxy(50,Y);if x.score <= 0 then
      begin
           x.score:=0;
           write(x.score);
           end
         else
           Write(x.score);
-     gotoxy(62,Y); Write(x.Hab);
-     gotoxy(78,Y); Write(x.Nacim);
-
-     gotoxy(62,Y);
-     if x.hab='N' then
-     begin
-          clreol; textcolor(blue); Write(x.Hab); //se vuelve azul
-          clreol; textcolor(black); //regresa al color pred
-     end else
-     write(x.hab);
-     gotoxy(78,Y);  muestraFecha(x.nacim);
-     gotoxy(101,Y); Write(x.Reincidencias);
+     gotoxy(64,Y);  muestraFecha(x.nacim);
+     gotoxy(92,Y); Write(x.Reincidencias);
      gotoxy(109,Y); write(x.Tel);
+     TextBackground(white);       {restaurar color}
+     TextColor(black);
 end;
    procedure listadocond(var x: T_Dato_Conductor; Y: byte);
 begin
@@ -98,7 +109,6 @@ procedure conductores_planilla(var arch_c: T_Archivo_C);       {evalúa si un co
 var
   x: T_Dato_Conductor;
   y: byte;
-  raiz:t_punt;
 begin
   y := 2;
   Titulos_List_Cond;
@@ -112,29 +122,6 @@ begin
   readkey;
 end;
 
-procedure conductores_inhab(var arch_c: T_Archivo_C);      {evalúa si un conductor se halla inhabilitado}
-var
-  x: T_Dato_Conductor;
-  y: byte;
-begin
-   reset(arch_c);
-  y := 2;
-  Titulos_List_Cond;
-  seek(arch_c, 0);
-
-  while not eof(arch_c) do
-  begin
-    read(arch_c, x);
-    if x.Hab = 'N' then
-    begin
-      Mostrar_Cond_planilla(x, y);
-      inc(y);
-    end;
-  end;
-
-  readkey;
-end;
-
 procedure ListarConductores(var arbol_apynom: t_punt;var arch_c: T_Archivo_C);
 var
    Y: byte;
@@ -144,6 +131,7 @@ begin
      Y := 2;
      Inorden_Listado_Apynom(arch_c, arbol_apynom, Y);
      gotoxy(1,y);
+     textbackground(white);
      write('Presiona para salir');
      readkey;
 end;

@@ -43,7 +43,7 @@ begin
 
      if validaNombre(buscado) = true then
      begin
-          x.Apynom := upcase(buscado);
+          x.Apynom := buscado;
           gotoxy(30,4); write('Apellido y nombre: ', buscado);
           gotoxy(30,6);  write('DNI: ');
           esDNI(x);

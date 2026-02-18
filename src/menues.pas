@@ -67,29 +67,26 @@ begin
 Repeat
     p:=l.cab;
     gotoxy(30,4); Writeln('1. Conductores ');
-    gotoxy(30,6); Writeln('2. Conductores inhabilitados');
-    gotoxy(30,8); Writeln('3. Infracciones entre 2 fechas');
-    gotoxy(30,10); Writeln('4. Infracciones de un conductor entre 2 fechas');
-    gotoxy(30,12); Writeln('5. Conductores con 0 scoring');
-    gotoxy(30,14); Writeln('0. Regresar');
-    gotoxy(30,16); Write('Opción: '); readln(op); clrscr;
+    gotoxy(30,6); Writeln('2. Infracciones entre 2 fechas');
+    gotoxy(30,8); Writeln('3. Infracciones de un conductor entre 2 fechas');
+    gotoxy(30,10); Writeln('4. Conductores con 0 scoring');
+    gotoxy(30,12); Writeln('0. Regresar');
+    gotoxy(30,14); Write('Opción: '); readln(op); clrscr;
 case op of
 '1':begin
 
            ListarConductores(arbol_apynom, arch_c); clrscr;
 end;
+
 '2':begin
-         conductores_inhab(arch_c); clrscr;
-end;
-'3':begin
          InfraccionesEntreFechas(l,p,fecha_desde,fecha_hasta); clrscr;
          //infracciones entre 2 fechas
 end;
-'4':begin
+'3':begin
          InfraccionesDeConductor(l,p,fecha_desde,fecha_hasta); clrscr;
          //infracciones conductor 2 fechas
 end;
-'5':begin
+'4':begin
          conductores_Scoring(arch_c); clrscr;
 end;
 end;
