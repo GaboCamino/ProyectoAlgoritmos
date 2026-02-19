@@ -15,6 +15,8 @@ type
       Fecha_hab:string[10];
       Reincidencias:byte;
       Estado:char;
+      fecha_inhab:string[10];
+      dias_inhab:integer;
 end;
 
    T_Archivo_C=File OF T_Dato_Conductor;

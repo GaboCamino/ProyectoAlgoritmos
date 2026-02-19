@@ -12,6 +12,9 @@ procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,a
 procedure Mostrar_Cond_planilla(var x: T_Dato_Conductor; Y: byte);
 procedure listadocond(var x: T_Dato_Conductor; Y: byte);
 procedure Inorden_Listado_Apynom(var arch_c: T_Archivo_C; var raiz: t_punt; var Y: byte);
+procedure Inorden_fecha_inhab(var arch_c: T_Archivo_C; var raiz: t_punt);
+Procedure Actualiza_fecha_inhab(var arch_c: T_Archivo_C; var raiz: t_punt);
+function DiasDesde(f: string): Integer;
 procedure  Muestra_Cond_Apynom(var arch_c: T_Archivo_C; raiz: t_punt; var Y: byte);
 procedure conductores_Scoring(var arch_c:T_Archivo_C);
 Procedure InfraccionesDeConductor(l:T_lista;p: T_punt_F; var fecha_desde,fecha_hasta:string);
@@ -145,6 +148,41 @@ begin
           inorden_listado_apynom(arch_c,raiz^.sad,Y);
      end;
   end;
+procedure Inorden_fecha_inhab(var arch_c: T_Archivo_C; var raiz: t_punt);
+begin
+     if raiz <> nil then
+     begin
+          Inorden_fecha_inhab(arch_c,raiz^.sai);
+          Actualiza_fecha_inhab(arch_c,raiz);
+          Inorden_fecha_inhab(arch_c,raiz^.sad);
+     end;
+  end;
+Procedure Actualiza_fecha_inhab(var arch_c: T_Archivo_C; var raiz: t_punt);
+var
+x: T_Dato_Conductor;
+pos:integer;
+begin
+  pos := raiz^.info.pos;
+  Seek(arch_c, pos);
+  Read(arch_c, x);
+  x.dias_inhab:=DiasDesde(x.fecha_inhab);
+  if x.dias_inhab>60 then
+  begin
+  x.hab:='S';
+  end;
+  write(arch_c,x);
+end;
+function DiasDesde(f: string): Integer;
+var
+  anio, mes, dia: Word;
+  fechaPasada: TDateTime;
+begin
+  anio := StrToInt(Copy(f, 1, 4));
+  mes  := StrToInt(Copy(f, 5, 2));
+  dia  := StrToInt(Copy(f, 7, 2));
+  fechaPasada := EncodeDate(anio, mes, dia);
+  DiasDesde:= Trunc(Date - fechaPasada);
+end;
 procedure conductor_modificado(var arch_c:T_Archivo_C; pos: longint; arbol_dni,arbol_apynom:t_punt; var x: T_Dato_Conductor; Y: byte);
 begin
 y:=2;

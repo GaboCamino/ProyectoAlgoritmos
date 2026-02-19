@@ -71,13 +71,14 @@ begin
      x.tel:=telefono;
 
      gotoxy(30,12); write('Email: ');
-     readln(upcase(x.mail));
+     readln(x.mail);
 
      x.Score := 20;
      x.Hab := 'S';
      x.Reincidencias := 0;
      x.Estado:='S';
-
+     x.fecha_inhab:='19000101';
+     x.dias_inhab:=100;
      gotoxy(30,14); writeln('¡Alta registrada!');
 end;
 
@@ -310,7 +311,8 @@ begin
 
 end;
 
-procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);     {registrar infracción a un conductor}
+procedure registrarinf(var x: t_dato_conductor; var Inf: t_dato_infraccion);{registrar infracción a un conductor}
+var f:string;
 begin
   writeln('infracciones');
    writeln('1- Circular sin placas de identificación');
@@ -347,6 +349,9 @@ begin
      begin
        x.Score := 0;
        x.Hab := 'N';
+       fechaActual(f);
+       x.fecha_inhab:=f;
+       x.dias_inhab:=0;
        writeln('Score restante: 0');
      end else
      begin
@@ -788,5 +793,6 @@ begin
      end;
      Writeln('Total de infracciones entre fechas: ',contador);
 end;
+
 end.
 

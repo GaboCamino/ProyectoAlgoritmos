@@ -23,6 +23,7 @@ begin
      textbackground(LightGray); TextColor(black); clrscr;
      Crear_Arboles(Arch_C, Arbol_DNI,arbol_Apynom);
      Crear_Lista_Fecha(l,Arch_I);
+     Inorden_fecha_inhab(arch_c,arbol_apynom);
 Repeat
 
       gotoxy(30,4);writeln('1. ABMC Conductores');
