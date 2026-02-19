@@ -43,7 +43,7 @@ begin
 
      if validaNombre(buscado) = true then
      begin
-          x.Apynom := buscado;
+          x.Apynom := upcase(buscado);
           gotoxy(30,4); write('Apellido y nombre: ', buscado);
           gotoxy(30,6);  write('DNI: ');
           esDNI(x);
@@ -261,7 +261,7 @@ begin
                    gotoxy(11,8); ValidaTelefono(telefono); x.tel:=telefono;
           end;
           '3':begin
-                  gotoxy(7,9); write('Email: '); readln(x.mail);
+                  gotoxy(7,9); clreol; readln(x.mail);
           end;
           '4':begin
                    Baja_Cond(Arch_C, pos,x,arbol_dni,arbol_apynom);

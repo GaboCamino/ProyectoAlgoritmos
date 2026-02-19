@@ -40,6 +40,7 @@ begin
 opx:=whereX; opy:=whereY;
        repeat
        gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; readln(x.apynom);
+       x.apynom:=upcase(x.apynom)
        until validaNombre (x.apynom);
 end;
 
@@ -98,8 +99,10 @@ procedure validaBuscado(var buscado: shortstring);
 var
 opy,opx:byte;
 begin
+
   repeat
   gotoxy(opx,opy); clreol; opx:=whereX; opy:=whereY; Readln(Buscado);
+  buscado:=upcase(buscado);
   until validaNombre(buscado) or validaDNI(buscado);
 end;
 

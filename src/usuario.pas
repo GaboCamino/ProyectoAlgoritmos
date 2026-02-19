@@ -170,6 +170,7 @@ begin
   begin
   x.hab:='S';
   end;
+  Seek(arch_c, pos);
   write(arch_c,x);
 end;
 function DiasDesde(f: string): Integer;
@@ -243,8 +244,10 @@ begin
      begin
           read(arch_c,x);
           if x.Score=0 then
-          Mostrar_Cond_planilla(x,y);
-          inc(y);
+          begin
+               Mostrar_Cond_planilla(x,y);
+               inc(y);
+          end;
      end;
      readkey;
 end;
